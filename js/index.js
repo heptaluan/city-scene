@@ -51,108 +51,99 @@ function setCityChart() {
 
     // 图表配置项
     var option = {
-      selectedMode: 'multiple', // 选中效果固话
-      tooltip: {
-        // 提示框
-        show: true,
-        trigger: 'item',
-        formatter: function (params) {
-          return params.name
+      geo3D: {
+        map: mapName,
+        label: {
+          // 标签的相关设置
+          show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
+          // distance: 5, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
+          //formatter:, // 标签内容格式器
+          textStyle: {
+            // 标签的字体样式
+            color: '#ffffff', // 地图初始化区域字体颜色
+            fontSize: 14, // 字体大小
+            opacity: 1, // 字体透明度
+            backgroundColor: 'rgba(0,23,11,0.5)', // 字体背景色
+          },
+          // normal:{
+          //   show:true,
+          //   formatter:function(params){ //标签内容
+          //     // console.log(params)
+          //     return  params.name;
+          //   },
+          //   // lineHeight: 20,
+          //   backgroundColor:'rgba(255,255,255,.9)',
+          //   borderColor:'#80cffd',
+          //   borderWidth:'1',
+          //   padding:[5,15,4],
+          //   color:'#000000',
+          //   fontSize: 12,
+          //   fontWeight:'normal',
+          // },
+          emphasis: {
+            show: true,
+          },
         },
+        tooltip: {
+          alwaysShowContent: true,
+          hoverAnimation: true,
+          trigger: 'item', //触发类型 散点图
+          enterable: true, //鼠标是否可进入提示框
+          transitionDuration: 1, //提示框移动动画过渡时间
+          triggerOn: 'click',
+          formatter: function (params) {
+            // console.log(params.name, 'params.name')
+            if (params.name) {
+              var str = `
+                <div class="map-tooltip">
+                  <div class="city-name">${params.name}</div>
+                  <div class="city-info">志愿者人数：<span class="city-num">${params.data.volunteerNumber}</span></div>
+                  <div class="city-info">活动总数：<span class="city-num">${params.data.taskNumber}</span></div>
+                </div>
+                `
+              return str
+            }
+          },
+          // backgroundColor: 'rgba(30, 54, 124,1)',
+          // backgroundColor: '#01FEDD',
+          borderWidth: '1px',
+          borderRadius: '4',
+          borderColor: '#00B2AC',
+          textStyle: {
+            color: 'rgba(255,255,255,1)',
+          },
+          padding: [5, 10],
+        },
+        itemStyle: {
+          // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
+          // areaColor: 'rgba(95,158,160,0.5)', // 地图板块的颜色
+          areaColor: '#10786c', // 地图板块的颜色
+          opacity: 0.3, // 图形的不透明度 [ default: 1 ]
+          borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
+          borderColor: '#5CFFE0', // 图形描边的颜色。[ default: #333 ]
+        },
+
+        data: data,
       },
       series: [
+        //柱状图
         {
-          name: 'map3D',
-          type: 'map3D', // map3D / map
-          map: mapName,
+          name: 'bar3D',
+          type: 'bar3D',
+          coordinateSystem: 'geo3D',
+          barSize: 2, //柱子粗细
+          shading: 'lambert',
+          opacity: 0.8,
+          bevelSize: 0.3,
           label: {
-            // 标签的相关设置
-            show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-            // distance: 5, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
-            //formatter:, // 标签内容格式器
-            textStyle: {
-              // 标签的字体样式
-              color: '#ffffff', // 地图初始化区域字体颜色
-              fontSize: 14, // 字体大小
-              opacity: 1, // 字体透明度
-              backgroundColor: 'rgba(0,23,11,0.5)', // 字体背景色
-            },
-            // normal:{
-            //   show:true,
-            //   formatter:function(params){ //标签内容
-            //     // console.log(params)
-            //     return  params.name;
-            //   },
-            //   // lineHeight: 20,
-            //   backgroundColor:'rgba(255,255,255,.9)',
-            //   borderColor:'#80cffd',
-            //   borderWidth:'1',
-            //   padding:[5,15,4],
-            //   color:'#000000',
-            //   fontSize: 12,
-            //   fontWeight:'normal',
-            // },
-            emphasis: {
-              show: true,
-            },
+            show: false,
+            formatter: '{b}',
           },
-          tooltip: {
-            //提示框组件。
-            alwaysShowContent: true,
-            hoverAnimation: true,
-            trigger: 'item', //触发类型 散点图
-            enterable: true, //鼠标是否可进入提示框
-            transitionDuration: 1, //提示框移动动画过渡时间
-            triggerOn: 'click',
-            formatter: function (params) {
-              // console.log(params.name, 'params.name')
-              if (params.name) {
-                var str = `
-                  <div class="map-tooltip">
-                    <div class="city-name">${params.name}</div>
-                    <div class="city-info">志愿者人数：<span class="city-num">${params.data.volunteerNumber}</span></div>
-                    <div class="city-info">活动总数：<span class="city-num">${params.data.taskNumber}</span></div>
-                  </div>
-                  `
-                return str
-              }
-            },
-            // backgroundColor: 'rgba(30, 54, 124,1)',
-            // backgroundColor: '#01FEDD',
-            borderWidth: '1px',
-            borderRadius: '4',
-            borderColor: '#00B2AC',
-            textStyle: {
-              color: 'rgba(255,255,255,1)',
-            },
-            padding: [5, 10],
-          },
-          itemStyle: {
-            // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-            // areaColor: 'rgba(95,158,160,0.5)', // 地图板块的颜色
-            areaColor: '#10786c', // 地图板块的颜色
-            opacity: 0.3, // 图形的不透明度 [ default: 1 ]
-            borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-            borderColor: '#5CFFE0', // 图形描边的颜色。[ default: #333 ]
-          },
-
-          data: data,
-          // 3d地图添加 markPoint 位置不对
-          /*markPoint:{
-            symbolSize: 45,
-            symbol: 'path://m 0,0 h 48 v 20 h -30 l -6,10 l -6,-10 h -6 z',
-            itemStyle: {
-              normal: {
-                borderColor: '#33CBFF',
-                color:'#33CBFF',
-                borderWidth: 1,            // 标注边线线宽，单位px，默认为1
-                label: {
-                  show: true
-                }
-              }
-            },
-            data: data
-          }*/
+          data: [
+            { name: '红旗区', value: [113.87523, 35.30367, (Math.random() * 300).toFixed(2)] },
+            { name: '卫滨区', value: [113.82578, 35.30211, (Math.random() * 300).toFixed(2)] },
+            { name: '凤泉区', value: [113.91507, 35.38399, (Math.random() * 300).toFixed(2)] },
+          ],
         },
       ],
     }
