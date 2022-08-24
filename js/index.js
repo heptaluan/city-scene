@@ -51,7 +51,19 @@ function setCityChart() {
 
     // 图表配置项
     var option = {
+      selectedMode: 'multiple', // 选中效果固话
+      tooltip: {
+        // 提示框
+        show: true,
+        trigger: 'item',
+        formatter: function (params) {
+          debugger
+          return params.name
+        },
+      },
       geo3D: {
+        name: 'map3D',
+        type: 'map3D', // map3D / map
         map: mapName,
         label: {
           // 标签的相关设置
@@ -85,6 +97,7 @@ function setCityChart() {
           },
         },
         tooltip: {
+          //提示框组件。
           alwaysShowContent: true,
           hoverAnimation: true,
           trigger: 'item', //触发类型 散点图
@@ -92,6 +105,7 @@ function setCityChart() {
           transitionDuration: 1, //提示框移动动画过渡时间
           triggerOn: 'click',
           formatter: function (params) {
+            debugger
             // console.log(params.name, 'params.name')
             if (params.name) {
               var str = `
@@ -104,8 +118,6 @@ function setCityChart() {
               return str
             }
           },
-          // backgroundColor: 'rgba(30, 54, 124,1)',
-          // backgroundColor: '#01FEDD',
           borderWidth: '1px',
           borderRadius: '4',
           borderColor: '#00B2AC',
@@ -122,8 +134,16 @@ function setCityChart() {
           borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
           borderColor: '#5CFFE0', // 图形描边的颜色。[ default: #333 ]
         },
-
         data: data,
+        // regions: [{
+        //   name: '长垣县',
+        //   itemStyle: {
+        //     opacity: 1,
+        //   },
+        //   label: {
+        //     show: true
+        //   },
+        // }]
       },
       series: [
         //柱状图
@@ -150,6 +170,16 @@ function setCityChart() {
 
     // 设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表。
     myChart.setOption(option)
+
+  //   let count = 0
+  //   setInterval(function() {
+  //     option.geo3D.regions[0].name = option.geo3D.data[count].name
+  //     myChart.setOption(option);
+  //     count ++
+  //     if (count === option.geo3D.data.length) {
+  //         count = 0
+  //     }
+  // }, 1000);
 
     // 动态显示tootip /*map3D中 不生效*/
     // setTimeout(() => {
