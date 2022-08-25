@@ -6,24 +6,10 @@
     "serve": "vite",
     "build": "vite build",
     "pre": "husky install",
-    "lint-staged": "lint-staged",
     "lint": "eslint --ext  .ts,.vue src --fix",
     "commitlint": "commitlint --config commitlint.config.js",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
     "watch": "postcss ./src/index.css -o dist/style.css --watch "
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged",
-      "commit-msg": "commitlint -e $GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.{js,vue,jsx,tsx,ts}": [
-      "prettier --write",
-      "eslint --ext  .ts,.vue src ",
-      "git add"
-    ]
   },
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.11.4",
@@ -66,7 +52,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^7.20.0",
     "husky": "^4.3.8",
-    "lint-staged": "^12.1.4",
     "prettier": "^2.5.1",
     "vite-plugin-windicss": "^1.6.2",
     "windicss": "^3.4.2"

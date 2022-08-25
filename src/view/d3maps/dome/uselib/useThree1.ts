@@ -531,7 +531,7 @@ function Render3DMode(idNames = 'three-frame') {
     controls.update();
 
     render();
-    // window.requestAnimationFrame(renderanmi);
+    window.requestAnimationFrame(renderanmi);
   }
   // 渲染
   const render = () => {

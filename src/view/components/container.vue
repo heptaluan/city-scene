@@ -8,7 +8,7 @@
 -->
 <template>
   <SreenWarp>
-    <div class="flex w-full h-full space-x-4">
+    <div class="flex w-full h-full space-x-4"> 
       <div
         class="flex-1 flex flex-col h-full justify-center items-center enter-y-r bg-white"
       >

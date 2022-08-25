@@ -48,6 +48,7 @@ const basicRouter: RouterRaws[] = [
     component: () => import('@/view/d3maps/dome/dome1.vue'),
     path: '/d3maps',
   },
+ 
 ];
 /**
  *

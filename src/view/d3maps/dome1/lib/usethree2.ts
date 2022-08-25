@@ -760,8 +760,8 @@ function Render3DMode(idNames = 'three-frame') {
   function renderanmi() {
     const dt = clock.getDelta();
     // 旋转动画
-    numsa += dt * 0.1;
-    numss -= dt * 0.1;
+    numsa += dt*0.1;
+    numss -= dt*0.1;
     if (!keys2.value) {
       // earthGroup.rotation
       // camera.position.set(camera.position.x,dt,camera.position.z)
