@@ -5,7 +5,6 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build",
-    "pre": "husky install",
     "lint": "eslint --ext  .ts,.vue src --fix",
     "commitlint": "commitlint --config commitlint.config.js",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.vue\"",
@@ -51,7 +50,6 @@
     "eslint": "^6.8.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^7.20.0",
-    "husky": "^4.3.8",
     "prettier": "^2.5.1",
     "vite-plugin-windicss": "^1.6.2",
     "windicss": "^3.4.2"
