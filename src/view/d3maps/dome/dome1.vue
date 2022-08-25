@@ -21,16 +21,22 @@ import Comps from './comps.vue';
 import Render3DMode from './uselib/useThree1';
 import { onMounted } from '@vue/runtime-core';
 import { getGeoJsonall } from '@/lib/getGeoJson';
+import { geoData } from './geoData'
+
 let { initMaps, setMapDom, setmapborder } = Render3DMode('three-frame');
 onMounted(() => {
   initMaps();
-  getGeoJsonall('100000_full').then((e) => {
-    setMapDom(e.data.features);
-  });
-  getGeoJsonall('100000').then((e) => {
-    // console.log()
-    setmapborder(e.data.features);
-  });
+  console.log(geoData.features)
+  setMapDom(geoData.features);
+  setmapborder(geoData.features);
+  // getGeoJsonall('100000_full').then((e) => {
+  //   console.log(e)
+  //   setMapDom(e.data.features);
+  // });
+  // getGeoJsonall('100000').then((e) => {
+  //   // console.log()
+  //   setmapborder(e.data.features);
+  // });
 });
 </script>
 
