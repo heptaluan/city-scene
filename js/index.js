@@ -1,6 +1,7 @@
+import { geoData } from './xinxiang.js'
+import { symbolStr, domImgSrc, domImgHoverSrc } from './Icon.js'
+
 var myChart = null
-var loadedDataURL = './map/xinxiang.json'
-let mapName = 'xinxiang'
 
 // 初始化图表
 myChart = echarts.init(document.getElementById('chart-city'))
@@ -10,13 +11,11 @@ myChart.showLoading()
 
 var domImg = document.createElement('img')
 domImg.style.height = domImg.height = domImg.width = domImg.style.width = '8px'
-domImg.src =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAIAAAAmKNuZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE4MTE0OTgyQTdDQzExRUI4Q0RBRkMwQkFGMTY2NDhEIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE4MTE0OTgzQTdDQzExRUI4Q0RBRkMwQkFGMTY2NDhEIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTgxMTQ5ODBBN0NDMTFFQjhDREFGQzBCQUYxNjY0OEQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTgxMTQ5ODFBN0NDMTFFQjhDREFGQzBCQUYxNjY0OEQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4v4trwAAAAVklEQVR42mL0D225cu0hAzWAjpY8C9CsL19/wIV4uDnI5gKNYmKgKhjcxrFAggBZiBIuyDhqRQWQOxoVo1ExGhWjUTEaFYMiKoB1LVq1TXZUAI0CCDAAcAlaxCt7dtQAAAAASUVORK5CYII='
+domImg.src = domImgSrc
 
 var domImgHover = document.createElement('img')
 domImgHover.style.height = domImgHover.height = domImgHover.width = domImgHover.style.width = '8px'
-domImgHover.src =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAIAAAAmKNuZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkFDQ0Q2RjYyQTdDRDExRUI4ODUxRDIxRjkzMEExNzg2IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkFDQ0Q2RjYzQTdDRDExRUI4ODUxRDIxRjkzMEExNzg2Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUNDRDZGNjBBN0NEMTFFQjg4NTFEMjFGOTMwQTE3ODYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QUNDRDZGNjFBN0NEMTFFQjg4NTFEMjFGOTMwQTE3ODYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6FboimAAAASklEQVR42mIUnL9XtHsDAzXA69IARjWtXJYX7+FCfyQEKeEyMVAVDG7jWCB+RhaihAsybjQqRqNiNCpGo2I0KoZZVDBSt9oGCDAAhYNrvRu3DWEAAAAASUVORK5CYII='
+domImgHover.src = domImgHoverSrc
 
 var mapDate = [
   {
@@ -57,24 +56,49 @@ var mapDate = [
   // },
 ]
 
-var img2 = 'image://../images/label-bg.png';
+var img2 = 'image://../images/label-bg.png'
 
-let series = [];
+let series = []
 
-let tempList = [['凤泉区', mapDate]];
+let tempList = [['凤泉区', mapDate]]
+
+var targetGeoCoordMap = {
+  原阳县: [113.946793242188, 35.1873146796876],
+}
+
+const convertData = function (data) {
+  let res = []
+  for (let i = 0; i < data.length; i++) {
+    let dataItem = data[i]
+    let fromCoord = dataItem.value
+    let toCoord = [114.3, 36.3]
+    if (fromCoord && toCoord) {
+      res.push({
+        fromName: dataItem.name,
+        coords: [fromCoord, toCoord],
+        value: dataItem.datas,
+      })
+    }
+  }
+  return res
+}
 
 tempList.map(function (item, i) {
   series.push(
+    // 线条
     {
       type: 'lines',
       zlevel: 2,
       effect: {
         show: true,
         period: 4, //箭头指向速度，值越小速度越快
-        trailLength: 0.02, //特效尾迹长度[0,1]值越大，尾迹越长重
+        trailLength: 0, //特效尾迹长度[0,1]值越大，尾迹越长重
         symbol: 'arrow', //箭头图标
         symbolSize: 5, //图标大小
         color: '#FFE269',
+        symbol: symbolStr,
+        symbolSize: 100,
+        // loop: false
       },
       lineStyle: {
         normal: {
@@ -92,13 +116,14 @@ tempList.map(function (item, i) {
               color: 'rgb(255,226,105,1)',
             },
           ]),
-          width: 1, //尾迹线条宽度
+          width: 0, //尾迹线条宽度
           opacity: 1, //尾迹线条透明度
-          curveness: 0.3, //尾迹线条曲直度
+          curveness: 0, //尾迹线条曲直度
         },
       },
       data: convertData(item[1]),
     },
+    // 起始点
     {
       type: 'effectScatter',
       tooltip: {
@@ -193,6 +218,7 @@ tempList.map(function (item, i) {
       data: mapDate,
       zlevel: 1,
     },
+    // 终点
     {
       type: 'scatter',
       coordinateSystem: 'geo',
@@ -206,234 +232,128 @@ tempList.map(function (item, i) {
       symbolOffset: [0, -20],
       z: 9999,
       data: mapDate,
-    },
-  );
-});
+    }
+  )
+})
 
-
-$.getJSON(loadedDataURL, function (geoJson) {
-  echarts.registerMap('xinxiang', geoJson)
-  myChart.hideLoading()
-
-  var option = {
-    backgroundColor:'rgb(2,30,52)',
-    geo: {
-      map: 'xinxiang',
-      aspectScale: 0.75,
-      zoom: 1.1,
-      roam: false,
-      itemStyle: {
-        normal: {
-          areaColor: '#013c62',
-          shadowColor: '#182f68',
-          shadowOffsetX: 0,
-          shadowOffsetY: 25,
+series.push(
+  // 地图纹理
+  {
+    type: 'map',
+    roam: false,
+    label: {
+      normal: {
+        show: true,
+        textStyle: {
+          color: '#fff',
         },
-        emphasis: {
-          areaColor: '#2ab8ff',
-          borderWidth: 0,
-          color: 'green',
-          label: {
-            show: false,
-          },
+      },
+      emphasis: {
+        textStyle: {
+          color: '#fff',
         },
       },
     },
-    series: [
-      // 地图纹理
-      {
-        type: 'map',
-        roam: false,
-        label: {
-          normal: {
-            show: true,
-            textStyle: {
-              color: '#fff',
-            },
-          },
-          emphasis: {
-            textStyle: {
-              color: '#fff',
-            },
-          },
+    itemStyle: {
+      normal: {
+        borderColor: '#2ab8ff',
+        borderWidth: 1.5,
+        areaColor: {
+          image: domImg,
+          repeat: 'repeat',
         },
-        itemStyle: {
-          normal: {
-            borderColor: '#2ab8ff',
-            borderWidth: 1.5,
-            areaColor: {
-              image: domImg,
-              repeat: 'repeat',
-            },
-          },
-          emphasis: {
-            areaColor: '#2ab8ff',
-            borderWidth: 1.5,
-            color: 'green',
-            areaColor: {
-              image: domImgHover,
-              repeat: 'repeat',
-            },
-          },
-        },
-        zoom: 1.1,
-        roam: false,
-        map: 'xinxiang',
       },
-      // label
-      {
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        label: {
-          normal: {
-            show: true,
-            formatter: function (params) {
-              var name = params.name
-              var value = params.data.datas
-              var text = `{fline|${value}}\n{tline|${name}}`
-              return text
-            },
+      emphasis: {
+        areaColor: '#2ab8ff',
+        borderWidth: 1.5,
+        color: 'green',
+        areaColor: {
+          image: domImgHover,
+          repeat: 'repeat',
+        },
+      },
+    },
+    zoom: 1.1,
+    roam: false,
+    map: 'xinxiang',
+  },
+  // label
+  {
+    type: 'scatter',
+    coordinateSystem: 'geo',
+    label: {
+      normal: {
+        show: true,
+        formatter: function (params) {
+          var name = params.name
+          var value = params.data.datas
+          var text = `{fline|${value}}\n{tline|${name}}`
+          return text
+        },
+        color: '#fff',
+        rich: {
+          fline: {
+            padding: [0, 25],
             color: '#fff',
-            rich: {
-              fline: {
-                padding: [0, 25],
-                color: '#fff',
-                textShadowColor: '#030615',
-                textShadowBlur: '0',
-                textShadowOffsetX: 1,
-                textShadowOffsetY: 1,
-                fontSize: 14,
-                fontWeight: 400,
-              },
-              tline: {
-                padding: [0, 27],
-                color: '#ABF8FF',
-                fontSize: 12,
-              },
-            },
+            textShadowColor: '#030615',
+            textShadowBlur: '0',
+            textShadowOffsetX: 1,
+            textShadowOffsetY: 1,
+            fontSize: 14,
+            fontWeight: 400,
           },
-          emphasis: {
-            show: true,
+          tline: {
+            padding: [0, 27],
+            color: '#ABF8FF',
+            fontSize: 12,
           },
         },
-        itemStyle: {
-          color: '#00FFF6',
-        },
-        symbol: img2,
-        symbolSize: [100, 50],
-        symbolOffset: [0, -60],
-        z: 999,
-        data: mapDate,
       },
-      {
-        type: 'effectScatter',
-        tooltip: {
+      emphasis: {
+        show: true,
+      },
+    },
+    itemStyle: {
+      color: '#00FFF6',
+    },
+    symbol: img2,
+    symbolSize: [100, 50],
+    symbolOffset: [0, -60],
+    z: 999,
+    data: mapDate,
+  }
+)
+
+console.log(series)
+
+echarts.registerMap('xinxiang', geoData)
+myChart.hideLoading()
+
+var option = {
+  backgroundColor: 'rgb(2,30,52)',
+  geo: {
+    map: 'xinxiang',
+    aspectScale: 0.75,
+    zoom: 1.1,
+    roam: false,
+    itemStyle: {
+      normal: {
+        areaColor: '#013c62',
+        shadowColor: '#182f68',
+        shadowOffsetX: 0,
+        shadowOffsetY: 25,
+      },
+      emphasis: {
+        areaColor: '#2ab8ff',
+        borderWidth: 0,
+        color: 'green',
+        label: {
           show: false,
         },
-        coordinateSystem: 'geo',
-        rippleEffect: {
-          scale: 10,
-          brushType: 'stroke',
-        },
-        showEffectOn: 'render',
-        itemStyle: {
-          normal: {
-            shadowColor: '#0ff',
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowOffsetY: 0,
-            color: function (params) {
-              var colorList = [
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  {
-                    offset: 0,
-                    color: '#64fbc5',
-                  },
-                  {
-                    offset: 1,
-                    color: '#018ace',
-                  },
-                ]),
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  {
-                    offset: 0,
-                    color: '#64fbc5',
-                  },
-                  {
-                    offset: 1,
-                    color: '#018ace',
-                  },
-                ]),
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  {
-                    offset: 0,
-                    color: '#168e6d',
-                  },
-                  {
-                    offset: 1,
-                    color: '#c78d7b',
-                  },
-                ]),
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  {
-                    offset: 0,
-                    color: '#61c0f1',
-                  },
-                  {
-                    offset: 1,
-                    color: '#6f2eb6',
-                  },
-                ]),
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  {
-                    offset: 0,
-                    color: '#168e6d',
-                  },
-                  {
-                    offset: 1,
-                    color: '#c78d7b',
-                  },
-                ]),
-                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
-                  {
-                    offset: 0,
-                    color: '#61c0f1',
-                  },
-                  {
-                    offset: 1,
-                    color: '#6f2eb6',
-                  },
-                ]),
-              ]
-              return colorList[params.dataIndex]
-            },
-          },
-        },
-        label: {
-          normal: {
-            color: '#fff',
-          },
-        },
-        symbol: 'circle',
-        symbolSize: [10, 5],
-        data: mapDate,
-        zlevel: 1,
       },
-      {
-        type: 'scatter',
-        coordinateSystem: 'geo',
-        itemStyle: {
-          color: '#f00',
-        },
-        symbol: function (value, params) {
-          return params.data.img
-        },
-        symbolSize: [32, 41],
-        symbolOffset: [0, -20],
-        z: 9999,
-        data: mapDate,
-      },
-    ],
-  }
-  myChart.setOption(option)
-})
+    },
+  },
+  series: series,
+}
+
+myChart.setOption(option)

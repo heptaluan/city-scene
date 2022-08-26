@@ -1,4 +1,4 @@
-﻿{
+﻿export const geoData = {
   "type": "FeatureCollection",
   "features": [
     {
