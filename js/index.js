@@ -20,22 +20,22 @@ domImgHover.src =
 
 var mapDate = [
   {
-    name: '红旗区',
-    value: [113.87523, 35.30367],
+    name: '辉县市',
+    value: [113.685875273438, 35.8323744941406],
     datas: 1354,
-    img: '../images/icon-1.png',
+    img: 'image://../images/icon-1.png',
   },
   {
-    name: '卫滨区',
-    value: [113.82578, 35.30211],
+    name: '长垣县',
+    value: [114.976221953125, 35.2949684882813],
     datas: 1402,
-    img: '../images/icon-2.png',
+    img: 'image://../images/icon-2.png',
   },
   {
     name: '凤泉区',
     value: [113.91507, 35.38399],
     datas: 2468,
-    img: '../images/icon-3.png',
+    img: 'image://../images/icon-3.png',
   },
   // {
   //   name: '定州市',
@@ -57,12 +57,166 @@ var mapDate = [
   // },
 ]
 
+var img2 = 'image://../images/label-bg.png';
+
+let series = [];
+
+let tempList = [['凤泉区', mapDate]];
+
+tempList.map(function (item, i) {
+  series.push(
+    {
+      type: 'lines',
+      zlevel: 2,
+      effect: {
+        show: true,
+        period: 4, //箭头指向速度，值越小速度越快
+        trailLength: 0.02, //特效尾迹长度[0,1]值越大，尾迹越长重
+        symbol: 'arrow', //箭头图标
+        symbolSize: 5, //图标大小
+        color: '#FFE269',
+      },
+      lineStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'rgb(255,226,105,0)',
+            },
+            {
+              offset: 0.5,
+              color: 'rgb(255,226,105,0.5)',
+            },
+            {
+              offset: 1,
+              color: 'rgb(255,226,105,1)',
+            },
+          ]),
+          width: 1, //尾迹线条宽度
+          opacity: 1, //尾迹线条透明度
+          curveness: 0.3, //尾迹线条曲直度
+        },
+      },
+      data: convertData(item[1]),
+    },
+    {
+      type: 'effectScatter',
+      tooltip: {
+        show: false,
+      },
+      coordinateSystem: 'geo',
+      rippleEffect: {
+        scale: 10,
+        brushType: 'stroke',
+      },
+      showEffectOn: 'render',
+      itemStyle: {
+        normal: {
+          shadowColor: '#0ff',
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowOffsetY: 0,
+          color: function (params) {
+            var colorList = [
+              new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                {
+                  offset: 0,
+                  color: '#64fbc5',
+                },
+                {
+                  offset: 1,
+                  color: '#018ace',
+                },
+              ]),
+              new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                {
+                  offset: 0,
+                  color: '#64fbc5',
+                },
+                {
+                  offset: 1,
+                  color: '#018ace',
+                },
+              ]),
+              new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                {
+                  offset: 0,
+                  color: '#168e6d',
+                },
+                {
+                  offset: 1,
+                  color: '#c78d7b',
+                },
+              ]),
+              new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                {
+                  offset: 0,
+                  color: '#61c0f1',
+                },
+                {
+                  offset: 1,
+                  color: '#6f2eb6',
+                },
+              ]),
+              new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                {
+                  offset: 0,
+                  color: '#168e6d',
+                },
+                {
+                  offset: 1,
+                  color: '#c78d7b',
+                },
+              ]),
+              new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                {
+                  offset: 0,
+                  color: '#61c0f1',
+                },
+                {
+                  offset: 1,
+                  color: '#6f2eb6',
+                },
+              ]),
+            ]
+            return colorList[params.dataIndex]
+          },
+        },
+      },
+      label: {
+        normal: {
+          color: '#fff',
+        },
+      },
+      symbol: 'circle',
+      symbolSize: [10, 5],
+      data: mapDate,
+      zlevel: 1,
+    },
+    {
+      type: 'scatter',
+      coordinateSystem: 'geo',
+      itemStyle: {
+        color: '#f00',
+      },
+      symbol: function (value, params) {
+        return params.data.img
+      },
+      symbolSize: [32, 41],
+      symbolOffset: [0, -20],
+      z: 9999,
+      data: mapDate,
+    },
+  );
+});
+
+
 $.getJSON(loadedDataURL, function (geoJson) {
   echarts.registerMap('xinxiang', geoJson)
   myChart.hideLoading()
 
   var option = {
-    backgroundColor: '#020933',
+    backgroundColor:'rgb(2,30,52)',
     geo: {
       map: 'xinxiang',
       aspectScale: 0.75,
@@ -85,8 +239,8 @@ $.getJSON(loadedDataURL, function (geoJson) {
         },
       },
     },
-
     series: [
+      // 地图纹理
       {
         type: 'map',
         roam: false,
@@ -103,7 +257,6 @@ $.getJSON(loadedDataURL, function (geoJson) {
             },
           },
         },
-
         itemStyle: {
           normal: {
             borderColor: '#2ab8ff',
@@ -127,21 +280,138 @@ $.getJSON(loadedDataURL, function (geoJson) {
         roam: false,
         map: 'xinxiang',
       },
+      // label
+      {
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        label: {
+          normal: {
+            show: true,
+            formatter: function (params) {
+              var name = params.name
+              var value = params.data.datas
+              var text = `{fline|${value}}\n{tline|${name}}`
+              return text
+            },
+            color: '#fff',
+            rich: {
+              fline: {
+                padding: [0, 25],
+                color: '#fff',
+                textShadowColor: '#030615',
+                textShadowBlur: '0',
+                textShadowOffsetX: 1,
+                textShadowOffsetY: 1,
+                fontSize: 14,
+                fontWeight: 400,
+              },
+              tline: {
+                padding: [0, 27],
+                color: '#ABF8FF',
+                fontSize: 12,
+              },
+            },
+          },
+          emphasis: {
+            show: true,
+          },
+        },
+        itemStyle: {
+          color: '#00FFF6',
+        },
+        symbol: img2,
+        symbolSize: [100, 50],
+        symbolOffset: [0, -60],
+        z: 999,
+        data: mapDate,
+      },
       {
         type: 'effectScatter',
-        coordinateSystem: 'geo',
-        showEffectOn: 'render',
-        rippleEffect: {
-          period: 15,
-          scale: 4,
-          brushType: 'fill',
+        tooltip: {
+          show: false,
         },
-        hoverAnimation: true,
+        coordinateSystem: 'geo',
+        rippleEffect: {
+          scale: 10,
+          brushType: 'stroke',
+        },
+        showEffectOn: 'render',
         itemStyle: {
           normal: {
-            color: '#ffff',
+            shadowColor: '#0ff',
             shadowBlur: 10,
-            shadowColor: '#333',
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            color: function (params) {
+              var colorList = [
+                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#64fbc5',
+                  },
+                  {
+                    offset: 1,
+                    color: '#018ace',
+                  },
+                ]),
+                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#64fbc5',
+                  },
+                  {
+                    offset: 1,
+                    color: '#018ace',
+                  },
+                ]),
+                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#168e6d',
+                  },
+                  {
+                    offset: 1,
+                    color: '#c78d7b',
+                  },
+                ]),
+                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#61c0f1',
+                  },
+                  {
+                    offset: 1,
+                    color: '#6f2eb6',
+                  },
+                ]),
+                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#168e6d',
+                  },
+                  {
+                    offset: 1,
+                    color: '#c78d7b',
+                  },
+                ]),
+                new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+                  {
+                    offset: 0,
+                    color: '#61c0f1',
+                  },
+                  {
+                    offset: 1,
+                    color: '#6f2eb6',
+                  },
+                ]),
+              ]
+              return colorList[params.dataIndex]
+            },
+          },
+        },
+        label: {
+          normal: {
+            color: '#fff',
           },
         },
         symbol: 'circle',
