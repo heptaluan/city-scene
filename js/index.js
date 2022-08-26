@@ -2,191 +2,168 @@ var myChart = null
 var loadedDataURL = './map/xinxiang.json'
 let mapName = 'xinxiang'
 
-setCityChart()
+// 初始化图表
+myChart = echarts.init(document.getElementById('chart-city'))
 
-function setCityChart() {
-  const allAreaData = []
-  if (myChart) {
-    myChart.dispose()
-  }
+// 显示加载动画效果,可以在加载数据前手动调用该接口显示加载动画，在数据加载完成后调用 hideLoading 隐藏加载动画。
+myChart.showLoading()
 
-  // 初始化图表
-  myChart = echarts.init(document.getElementById('chart-city'))
+var domImg = document.createElement('img')
+domImg.style.height = domImg.height = domImg.width = domImg.style.width = '8px'
+domImg.src =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAIAAAAmKNuZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkE4MTE0OTgyQTdDQzExRUI4Q0RBRkMwQkFGMTY2NDhEIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkE4MTE0OTgzQTdDQzExRUI4Q0RBRkMwQkFGMTY2NDhEIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QTgxMTQ5ODBBN0NDMTFFQjhDREFGQzBCQUYxNjY0OEQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QTgxMTQ5ODFBN0NDMTFFQjhDREFGQzBCQUYxNjY0OEQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4v4trwAAAAVklEQVR42mL0D225cu0hAzWAjpY8C9CsL19/wIV4uDnI5gKNYmKgKhjcxrFAggBZiBIuyDhqRQWQOxoVo1ExGhWjUTEaFYMiKoB1LVq1TXZUAI0CCDAAcAlaxCt7dtQAAAAASUVORK5CYII='
 
-  // 显示加载动画效果,可以在加载数据前手动调用该接口显示加载动画，在数据加载完成后调用 hideLoading 隐藏加载动画。
-  myChart.showLoading()
+var domImgHover = document.createElement('img')
+domImgHover.style.height = domImgHover.height = domImgHover.width = domImgHover.style.width = '8px'
+domImgHover.src =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAIAAAAmKNuZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkFDQ0Q2RjYyQTdDRDExRUI4ODUxRDIxRjkzMEExNzg2IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkFDQ0Q2RjYzQTdDRDExRUI4ODUxRDIxRjkzMEExNzg2Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QUNDRDZGNjBBN0NEMTFFQjg4NTFEMjFGOTMwQTE3ODYiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QUNDRDZGNjFBN0NEMTFFQjg4NTFEMjFGOTMwQTE3ODYiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6FboimAAAASklEQVR42mIUnL9XtHsDAzXA69IARjWtXJYX7+FCfyQEKeEyMVAVDG7jWCB+RhaihAsybjQqRqNiNCpGo2I0KoZZVDBSt9oGCDAAhYNrvRu3DWEAAAAASUVORK5CYII='
 
-  // 引入JSON文件
-  $.getJSON(loadedDataURL, function (geoJson) {
-    const data = geoJson.features.map((item, index) => {
-      const geoAreaName = item.properties.name
-      const currentArea = allAreaData.find(item => {
-        return item.name == geoAreaName
-      })
-      let taskNumber = index,
-        volunteerNumber = index
-      if (currentArea) {
-        taskNumber = currentArea.taskNumber
-        volunteerNumber = currentArea.volunteerNumber
-      }
-      return {
-        name: geoAreaName,
-        value: volunteerNumber,
-        taskNumber: taskNumber,
-        volunteerNumber: volunteerNumber * 10,
-        // coord: item.properties.center,
-        coord: item.properties.centroid,
-        selected: true,
-        // x: 150,
-        // y: 150
-      }
-    })
-    console.log('geoJson:', geoJson)
-    // 注册地图名字(tongren)和数据(geoJson)
+var mapDate = [
+  {
+    name: '红旗区',
+    value: [113.87523, 35.30367],
+    datas: 1354,
+    img: '../images/icon-1.png',
+  },
+  {
+    name: '卫滨区',
+    value: [113.82578, 35.30211],
+    datas: 1402,
+    img: '../images/icon-2.png',
+  },
+  {
+    name: '凤泉区',
+    value: [113.91507, 35.38399],
+    datas: 2468,
+    img: '../images/icon-3.png',
+  },
+  // {
+  //   name: '定州市',
+  //   value: [115.050014, 38.460198],
+  //   datas: 768,
+  //   img: 'https://www.isqqw.com/asset/get/s/data-1619321685306-EvjlgDOXi.png',
+  // },
+  // {
+  //   name: '曲阳县',
+  //   value: [114.654083, 38.700813],
+  //   datas: 589,
+  //   img: 'https://www.isqqw.com/asset/get/s/data-1619059838735-QE9mBZmhh.png',
+  // },
+  // {
+  //   name: '唐县',
+  //   value: [114.798254, 38.898656],
+  //   datas: 1500,
+  //   img: 'https://www.isqqw.com/asset/get/s/data-1619321685306-EvjlgDOXi.png',
+  // },
+]
 
-    echarts.registerMap(mapName, geoJson)
+$.getJSON(loadedDataURL, function (geoJson) {
+  echarts.registerMap('xinxiang', geoJson)
+  myChart.hideLoading()
 
-    // 隐藏动画加载效果。
-    myChart.hideLoading()
-
-    // 图表配置项
-    var option = {
-      selectedMode: 'multiple', // 选中效果固话
-      tooltip: {
-        // 提示框
-        show: true,
-        trigger: 'item',
-        formatter: function (params) {
-          return params.name
+  var option = {
+    backgroundColor: '#020933',
+    geo: {
+      map: 'xinxiang',
+      aspectScale: 0.75,
+      zoom: 1.1,
+      roam: false,
+      itemStyle: {
+        normal: {
+          areaColor: '#013c62',
+          shadowColor: '#182f68',
+          shadowOffsetX: 0,
+          shadowOffsetY: 25,
         },
-      },
-      geo3D: {
-        name: 'map3D',
-        type: 'map3D', // map3D / map
-        map: mapName,
-        label: {
-          // 标签的相关设置
-          show: true, // (地图上的城市名称)是否显示标签 [ default: false ]
-          // distance: 5, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
-          //formatter:, // 标签内容格式器
-          textStyle: {
-            // 标签的字体样式
-            color: '#ffffff', // 地图初始化区域字体颜色
-            fontSize: 14, // 字体大小
-            opacity: 1, // 字体透明度
-            backgroundColor: 'rgba(0,23,11,0.5)', // 字体背景色
-          },
-          // normal:{
-          //   show:true,
-          //   formatter:function(params){ //标签内容
-          //     // console.log(params)
-          //     return  params.name;
-          //   },
-          //   // lineHeight: 20,
-          //   backgroundColor:'rgba(255,255,255,.9)',
-          //   borderColor:'#80cffd',
-          //   borderWidth:'1',
-          //   padding:[5,15,4],
-          //   color:'#000000',
-          //   fontSize: 12,
-          //   fontWeight:'normal',
-          // },
-          emphasis: {
-            show: true,
-          },
-        },
-        tooltip: {
-          //提示框组件。
-          alwaysShowContent: true,
-          hoverAnimation: true,
-          trigger: 'item', //触发类型 散点图
-          enterable: true, //鼠标是否可进入提示框
-          transitionDuration: 1, //提示框移动动画过渡时间
-          triggerOn: 'click',
-          formatter: function (params) {
-            // console.log(params.name, 'params.name')
-            if (params.name) {
-              var str = `
-                <div class="map-tooltip">
-                  <div class="city-name">${params.name}</div>
-                  <div class="city-info">志愿者人数：<span class="city-num">${params.data.volunteerNumber}</span></div>
-                  <div class="city-info">活动总数：<span class="city-num">${params.data.taskNumber}</span></div>
-                </div>
-                `
-              return str
-            }
-          },
-          borderWidth: '1px',
-          borderRadius: '4',
-          borderColor: '#00B2AC',
-          textStyle: {
-            color: 'rgba(255,255,255,1)',
-          },
-          padding: [5, 10],
-        },
-        itemStyle: {
-          // 三维地理坐标系组件 中三维图形的视觉属性，包括颜色，透明度，描边等。
-          // areaColor: 'rgba(95,158,160,0.5)', // 地图板块的颜色
-          areaColor: '#10786c', // 地图板块的颜色
-          opacity: 0.3, // 图形的不透明度 [ default: 1 ]
-          borderWidth: 2, // (地图板块间的分隔线)图形描边的宽度。加上描边后可以更清晰的区分每个区域 [ default: 0 ]
-          borderColor: '#5CFFE0', // 图形描边的颜色。[ default: #333 ]
-        },
-        data: data,
-        // regions: [{
-        //   name: '长垣县',
-        //   itemStyle: {
-        //     opacity: 1,
-        //   },
-        //   label: {
-        //     show: true
-        //   },
-        // }]
-      },
-      series: [
-        //柱状图
-        {
-          name: 'bar3D',
-          type: 'bar3D',
-          coordinateSystem: 'geo3D',
-          barSize: 2, //柱子粗细
-          shading: 'lambert',
-          opacity: 0.8,
-          bevelSize: 0.3,
+        emphasis: {
+          areaColor: '#2ab8ff',
+          borderWidth: 0,
+          color: 'green',
           label: {
             show: false,
-            formatter: '{b}',
           },
-          data: [
-            { name: '红旗区', value: [113.87523, 35.30367, (Math.random() * 300).toFixed(2)] },
-            { name: '卫滨区', value: [113.82578, 35.30211, (Math.random() * 300).toFixed(2)] },
-            { name: '凤泉区', value: [113.91507, 35.38399, (Math.random() * 300).toFixed(2)] },
-          ],
         },
-      ],
-    }
+      },
+    },
 
-    // 设置图表实例的配置项以及数据，万能接口，所有参数和数据的修改都可以通过setOption完成，ECharts 会合并新的参数和数据，然后刷新图表。
-    myChart.setOption(option)
+    series: [
+      {
+        type: 'map',
+        roam: false,
+        label: {
+          normal: {
+            show: true,
+            textStyle: {
+              color: '#fff',
+            },
+          },
+          emphasis: {
+            textStyle: {
+              color: '#fff',
+            },
+          },
+        },
 
-  //   let count = 0
-  //   setInterval(function() {
-  //     option.geo3D.regions[0].name = option.geo3D.data[count].name
-  //     myChart.setOption(option);
-  //     count ++
-  //     if (count === option.geo3D.data.length) {
-  //         count = 0
-  //     }
-  // }, 1000);
-
-    // 动态显示tootip /*map3D中 不生效*/
-    // setTimeout(() => {
-    //   console.log('dispatchAction');
-    //   myChart.dispatchAction({
-    //     type: 'showTip',
-    //     seriesIndex: 0,
-    //     dataIndex: 1
-    //   });
-    // }, 3000);
-  })
-}
+        itemStyle: {
+          normal: {
+            borderColor: '#2ab8ff',
+            borderWidth: 1.5,
+            areaColor: {
+              image: domImg,
+              repeat: 'repeat',
+            },
+          },
+          emphasis: {
+            areaColor: '#2ab8ff',
+            borderWidth: 1.5,
+            color: 'green',
+            areaColor: {
+              image: domImgHover,
+              repeat: 'repeat',
+            },
+          },
+        },
+        zoom: 1.1,
+        roam: false,
+        map: 'xinxiang',
+      },
+      {
+        type: 'effectScatter',
+        coordinateSystem: 'geo',
+        showEffectOn: 'render',
+        rippleEffect: {
+          period: 15,
+          scale: 4,
+          brushType: 'fill',
+        },
+        hoverAnimation: true,
+        itemStyle: {
+          normal: {
+            color: '#ffff',
+            shadowBlur: 10,
+            shadowColor: '#333',
+          },
+        },
+        symbol: 'circle',
+        symbolSize: [10, 5],
+        data: mapDate,
+        zlevel: 1,
+      },
+      {
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        itemStyle: {
+          color: '#f00',
+        },
+        symbol: function (value, params) {
+          return params.data.img
+        },
+        symbolSize: [32, 41],
+        symbolOffset: [0, -20],
+        z: 9999,
+        data: mapDate,
+      },
+    ],
+  }
+  myChart.setOption(option)
+})
