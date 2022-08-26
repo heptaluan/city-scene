@@ -98,7 +98,7 @@ tempList.map(function (item, i) {
         color: '#FFE269',
         symbol: symbolStr,
         symbolSize: 100,
-        // loop: false
+        loop: false
       },
       lineStyle: {
         normal: {
