@@ -57,7 +57,6 @@ function setCityChart() {
         show: true,
         trigger: 'item',
         formatter: function (params) {
-          debugger
           return params.name
         },
       },
@@ -105,7 +104,6 @@ function setCityChart() {
           transitionDuration: 1, //提示框移动动画过渡时间
           triggerOn: 'click',
           formatter: function (params) {
-            debugger
             // console.log(params.name, 'params.name')
             if (params.name) {
               var str = `
