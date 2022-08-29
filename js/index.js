@@ -25,35 +25,20 @@ function LoadMapping(name, data) {
       map: name,
       top: '0',
       width: 1024,
-      label: {
-        position: 'top',
-        distance: 5,
+      // 贴图颜色
+      itemStyle: {
         normal: {
-          show: true,
-          textStyle: {
-            color: '#fff',
-          },
+            areaColor: '#21729a',
+            borderColor: '#68ebf0', //线
+            borderWidth: 0,
+            borderJoin: 'round',
+            shadowColor: 'rgba(18, 216, 250, 1)', //外发光
+            shadowOffsetX: -3,
+            shadowOffsetY: 5,
+            shadowBlur: 2, //图形阴影的模糊大小
         },
         emphasis: {
-          textStyle: {
-            color: '#fff',
-          },
-        },
-      },
-      itemStyle: {
-        color: '#2B5890', //地图颜色
-        borderWidth: 3, //分界线wdith
-        borderColor: '#5578A5', //分界线颜色
-      },
-      emphasis: {
-        label: {
-          show: true, //是否显示高亮
-          textStyle: {
-            color: '#fff', //高亮文字颜色
-          },
-        },
-        itemStyle: {
-          color: '#0489d6', //地图高亮颜色
+            areaColor: '#2f9eff', //悬浮区背景
         },
       },
     },
@@ -66,21 +51,12 @@ function LoadMapping(name, data) {
         zlevel: 1,
         rippleEffect: {
           period: 5,
-          scale: 4,
+          scale: 6,
           brushType: 'fill',
         },
 
         hoverAnimation: true,
-        label: {
-          normal: {
-            formatter: '{b}',
-            position: 'bottom',
-            offset: [15, 0],
-            color: '#fff',
-            show: true,
-            fontSize: 16,
-          },
-        },
+        
         itemStyle: {
           normal: {
             color: function (params) {
@@ -148,8 +124,10 @@ function LoadMapping(name, data) {
               ]
               return colorList[params.dataIndex]
             },
+            shadowColor: '#0ff',
             shadowBlur: 10,
-            shadowColor: '#333',
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
           },
         },
         symbolSize: 16,
@@ -176,88 +154,33 @@ function LoadMap(name, myChart) {
   mapBg.setOption(chartOption)
   // 3D地图渲染
   var option = {
-    backgroundColor: 'rgb(0,0,0,0)',
-    visualMap: [
-      {
-        type: 'continuous',
-        seriesIndex: 0,
-        text: ['bar3D'],
-        calculable: true,
-        min: 1000,
-        max: 5000,
-        inRange: {
-          color: ['#4ab2e5', '#5abead', '#f56321', '#f58f0e', '#d5b314', '#b9be23'],
-        },
-      },
-    ],
     geo3D: {
       map: name,
       roam: true,
+      show: true,
       shading: 'color',
       width: 1024,
       boxHeight: 20,
-      itemStyle: {
-        color: '#5a8dce',
-        opacity: 1,
-        borderWidth: 1,
-        borderColor: '#96ebf7',
+      label: {
+        show: true, //是否显示市
+        distance: 130,
+        textStyle: {
+          color: '#fff',
+          fontSize: 24
+        },
       },
-      emphasis: {
-        label: {
-          show: false,
-          textStyle: {
-            color: '#fff',
-            fontSize: 13,
-            backgroundColor: 'rgba(0,23,11,1)',
-          },
-        },
-        itemStyle: {
-          areaColor: '#498fde', // 高亮时地图板块颜色改变
-        },
+      itemStyle: {
+        color: '#fff',
+        opacity: 1, // 透明度
+        borderWidth: 1.5, //分界线宽度
+        borderColor: '#207fce', //分界线颜色
       },
       colorMaterial: {
         detailTexture: mapBg, // 纹理贴图
         textureTiling: 1, // 纹理平铺，1是拉伸，数字表示纹理平铺次数
       },
-      environment: new echarts.graphic.LinearGradient(
-        0,
-        0,
-        0,
-        1,
-        [
-          {
-            offset: 0,
-            color: '#176186', // 天空颜色
-          },
-          {
-            offset: 0.5,
-            color: '#176186', // 地面颜色
-          },
-          {
-            offset: 1,
-            color: '#07101b', // 地面颜色
-          },
-        ],
-        false
-      ),
       viewControl: {
-        // projection: 'perspective',
-        // autoRotate: false, //会有自动旋转查看动画出现,可查看每个维度信息
-        // autoRotateDirection: 'ccw', //物体自传的方向。默认是 'cw' 也就是从上往下看是顺时针方向，也可以取 'ccw'，既从上往下看为逆时针方向。
-        // autoRotateSpeed: 2, //物体自传的速度
-        // autoRotateAfterStill: 1, //在鼠标间静止操作后恢复自动旋转的时间隔。在开启 autoRotate 后有效。
         distance: 160, //默认视角距离主体的距离(常用)
-        // // alpha:90,//视角绕 x 轴，即上下旋转的角度(与beta一起控制视野成像效果)
-        // beta: 90, //视角绕 y 轴，即左右旋转的角度。
-        // // center:[]//视角中心点，旋转也会围绕这个中心点旋转，默认为[0,0,0]。
-        // // zlevel://组件所在的层。
-        // minAlpha: -360000,
-        // maxAlpha: 360000,
-        // minBeta: -360000,
-        // maxBeta: 360000,
-        // animation: true,
-        // animationDurationUpdate: 1000, // 过渡动画的时长。[ default: 1000 ]
-        // animationEasingUpdate: 'cubicInOut',
       },
       light: {
         main: {
@@ -282,10 +205,8 @@ function LoadMap(name, myChart) {
         bevelSize: 1,
         bevelSmoothness: 10,
         minHeight: 1,
-        // shading: 'color',
-        // shading: 'lambert',
         shading: 'realistic',
-        silent: false, //图形是否不响应和触发鼠标事件
+        silent: false,
         opacity: 0.6,
         itemStyle: {
           opacity: 0.6,
