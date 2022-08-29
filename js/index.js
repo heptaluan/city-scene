@@ -19,26 +19,58 @@ LoadMap(chinaName, myChart)
 // 配置二维地图贴图
 function LoadMapping(name, data) {
   var chartOption = {
+    backgroundColor: {
+      type: 'linear',
+      x: 0,
+      y: 0,
+      x2: 1,
+      y2: 1,
+      colorStops: [
+        {
+          offset: 0,
+          color: '#0f378f', // 0% 处的颜色
+        },
+        {
+          offset: 1,
+          color: '#fff', // 100% 处的颜色
+        },
+      ],
+      globalCoord: false, // 缺省为 false
+    },
     geo: {
       show: true,
-      roam: true,
       map: name,
       top: '0',
       width: 1024,
-      // 贴图颜色
-      itemStyle: {
+      label: {
+        position: 'top',
+        distance: 5,
         normal: {
-            areaColor: '#21729a',
-            borderColor: '#68ebf0', //线
-            borderWidth: 0,
-            borderJoin: 'round',
-            shadowColor: 'rgba(18, 216, 250, 1)', //外发光
-            shadowOffsetX: -3,
-            shadowOffsetY: 5,
-            shadowBlur: 2, //图形阴影的模糊大小
+          show: true,
+          textStyle: {
+            color: '#fff',
+          },
         },
         emphasis: {
-            areaColor: '#2f9eff', //悬浮区背景
+          textStyle: {
+            color: '#fff',
+          },
+        },
+      },
+      itemStyle: {
+        //地图区域的多边形 图形样式
+        normal: {
+          areaColor: '#013C62', //地区颜色
+          shadowColor: '#182f68', //阴影颜色
+          shadowOffsetX: 0, //阴影偏移量
+          shadowOffsetY: 25, //阴影偏移量
+          opacity: 0.8,
+        },
+        emphasis: {
+          areaColor: '#2AB8FF', //地区颜色
+          label: {
+            show: false,
+          },
         },
       },
     },
@@ -51,12 +83,22 @@ function LoadMapping(name, data) {
         zlevel: 1,
         rippleEffect: {
           period: 5,
-          scale: 6,
+          scale: 4,
+          // stroke
           brushType: 'fill',
         },
 
         hoverAnimation: true,
-        
+        label: {
+          normal: {
+            formatter: '{b}',
+            position: 'bottom',
+            offset: [15, 0],
+            color: '#fff',
+            show: true,
+            fontSize: 16,
+          },
+        },
         itemStyle: {
           normal: {
             color: function (params) {
@@ -124,10 +166,8 @@ function LoadMapping(name, data) {
               ]
               return colorList[params.dataIndex]
             },
-            shadowColor: '#0ff',
             shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowOffsetY: 0,
+            shadowColor: '#333',
           },
         },
         symbolSize: 16,
@@ -154,26 +194,62 @@ function LoadMap(name, myChart) {
   mapBg.setOption(chartOption)
   // 3D地图渲染
   var option = {
+    backgroundColor: 'rgb(0,0,0,0)',
+    visualMap: [
+      {
+        show: false,
+        type: 'continuous',
+        seriesIndex: 0,
+        text: ['bar3D'],
+        calculable: true,
+        min: 1000,
+        max: 5000,
+        inRange: {
+          color: ['#4ab2e5', '#5abead', '#f56321', '#f58f0e', '#d5b314', '#b9be23'],
+        },
+      },
+    ],
     geo3D: {
       map: name,
       roam: true,
-      show: true,
       shading: 'color',
       width: 1024,
       boxHeight: 20,
+      itemStyle: {
+        color: '#5a8dce',
+        opacity: 1,
+        borderWidth: 1,
+        borderColor: '#96ebf7',
+      },
       label: {
-        show: true, //是否显示市
         distance: 130,
+        // 标签的相关设置
+        show: false, // (地图上的城市名称)是否显示标签 [ default: false ]
+        // distance: 5, // 标签距离图形的距离，在三维的散点图中这个距离是屏幕空间的像素值，其它图中这个距离是相对的三维距离
+        //formatter:, // 标签内容格式器
         textStyle: {
-          color: '#fff',
-          fontSize: 24
+          // 标签的字体样式
+          color: '#ffffff', // 地图初始化区域字体颜色
+          fontSize: 14, // 字体大小
+          opacity: 1, // 字体透明度
+          backgroundColor: 'rgba(0,23,11,0.5)', // 字体背景色
+        },
+        emphasis: {
+          show: true,
         },
       },
-      itemStyle: {
-        color: '#fff',
-        opacity: 1, // 透明度
-        borderWidth: 1.5, //分界线宽度
-        borderColor: '#207fce', //分界线颜色
+      emphasis: {
+        label: {
+          show: false,
+          textStyle: {
+            color: '#fff',
+            fontSize: 13,
+            backgroundColor: 'rgba(0,23,11,1)',
+          },
+        },
+        itemStyle: {
+          areaColor: '#498fde', // 高亮时地图板块颜色改变
+        },
       },
       colorMaterial: {
         detailTexture: mapBg, // 纹理贴图
@@ -205,8 +281,10 @@ function LoadMap(name, myChart) {
         bevelSize: 1,
         bevelSmoothness: 10,
         minHeight: 1,
+        // shading: 'color',
+        // shading: 'lambert',
         shading: 'realistic',
-        silent: false,
+        silent: false, //图形是否不响应和触发鼠标事件
         opacity: 0.6,
         itemStyle: {
           opacity: 0.6,
