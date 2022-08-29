@@ -74,7 +74,6 @@ function LoadMapping(name, data) {
       },
     },
     series: [
-      // 涟漪效果
       {
         type: `effectScatter`,
         coordinateSystem: `geo`,
@@ -202,7 +201,6 @@ function LoadMap(name, myChart) {
         min: 1000,
         max: 5000,
         inRange: {
-          // 柱子颜色
           color: ['#4ab2e5', '#5abead', '#f56321', '#f58f0e', '#d5b314', '#b9be23'],
         },
       },
