@@ -21,6 +21,7 @@ function LoadMapping(name, data) {
   var chartOption = {
     geo: {
       show: true,
+      roam: true,
       map: name,
       top: '0',
       width: 1024,
@@ -40,40 +41,24 @@ function LoadMapping(name, data) {
         },
       },
       itemStyle: {
-        normal: {
-          areaColor: {
-            type: 'radial',
-            x: 0.5,
-            y: 0.5,
-            r: 0.8,
-            colorStops: [
-              {
-                offset: 0,
-                color: '#09132c', // 0% 处的颜色
-              },
-              {
-                offset: 1,
-                color: '#274d68', // 100% 处的颜色
-              },
-            ],
-          },
-        },
+        color: '#2B5890', //地图颜色
+        borderWidth: 3, //分界线wdith
+        borderColor: '#5578A5', //分界线颜色
       },
       emphasis: {
         label: {
-          show: true,
+          show: true, //是否显示高亮
           textStyle: {
-            color: '#fff',
-            fontSize: 13,
-            backgroundColor: 'rgba(0,23,11,1)',
+            color: '#fff', //高亮文字颜色
           },
         },
         itemStyle: {
-          areaColor: '#f00', // 高亮时地图板块颜色改变
+          color: '#0489d6', //地图高亮颜色
         },
       },
     },
     series: [
+      // 涟漪
       {
         type: `effectScatter`,
         coordinateSystem: `geo`,
@@ -219,7 +204,7 @@ function LoadMap(name, myChart) {
       },
       emphasis: {
         label: {
-          show: true,
+          show: false,
           textStyle: {
             color: '#fff',
             fontSize: 13,
@@ -261,7 +246,7 @@ function LoadMap(name, myChart) {
         // autoRotateDirection: 'ccw', //物体自传的方向。默认是 'cw' 也就是从上往下看是顺时针方向，也可以取 'ccw'，既从上往下看为逆时针方向。
         // autoRotateSpeed: 2, //物体自传的速度
         // autoRotateAfterStill: 1, //在鼠标间静止操作后恢复自动旋转的时间隔。在开启 autoRotate 后有效。
-        distance: 160,//默认视角距离主体的距离(常用)
+        distance: 160, //默认视角距离主体的距离(常用)
         // // alpha:90,//视角绕 x 轴，即上下旋转的角度(与beta一起控制视野成像效果)
         // beta: 90, //视角绕 y 轴，即左右旋转的角度。
         // // center:[]//视角中心点，旋转也会围绕这个中心点旋转，默认为[0,0,0]。
