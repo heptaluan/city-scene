@@ -31,6 +31,7 @@ var option = {
   },
   geo3D: {
     map: 'xinxiang',
+    show: true,
     roam: true,
     shading: 'realistic',
     realisticMaterial: {
@@ -79,7 +80,27 @@ var option = {
       },
     },
   },
-  series: [],
+  series: [
+    // 柱状图
+    {
+      name: 'bar3D',
+      type: 'bar3D',
+      coordinateSystem: 'geo3D',
+      barSize: 1,
+      shading: 'lambert',
+      opacity: 0.8,
+      bevelSize: 0.3,
+      label: {
+        show: false,
+        formatter: '{b}',
+      },
+      data: [
+        { name: '红旗区', value: [113.87523, 35.30367, 122] },
+        { name: '卫滨区', value: [113.82578, 35.30211, 222] },
+        { name: '凤泉区', value: [113.91507, 35.38399, 444] },
+      ],
+    },
+  ],
 }
 
 myChart.setOption(option)
