@@ -14,6 +14,12 @@ myChart.hideLoading()
 
 const chinaName = 'xinxiang'
 
+var chartData = [
+  { name: '红旗区', value: [113.87523, 35.30367, 122] },
+  { name: '卫滨区', value: [113.82578, 35.30211, 222] },
+  { name: '凤泉区', value: [113.91507, 35.38399, 444] },
+]
+
 LoadMap(chinaName, myChart)
 
 // 配置二维地图贴图
@@ -58,19 +64,12 @@ function LoadMapping(name, data) {
         },
       },
       itemStyle: {
-        //地图区域的多边形 图形样式
         normal: {
-          areaColor: '#013C62', //地区颜色
-          shadowColor: '#182f68', //阴影颜色
-          shadowOffsetX: 0, //阴影偏移量
-          shadowOffsetY: 25, //阴影偏移量
-          opacity: 0.8,
+          areaColor: '#244779',
+          borderColor: '#0177ff',
         },
         emphasis: {
-          areaColor: '#2AB8FF', //地区颜色
-          label: {
-            show: false,
-          },
+          areaColor: '#071537',
         },
       },
     },
@@ -87,7 +86,6 @@ function LoadMapping(name, data) {
           // stroke
           brushType: 'fill',
         },
-
         hoverAnimation: true,
         label: {
           normal: {
@@ -95,7 +93,7 @@ function LoadMapping(name, data) {
             position: 'bottom',
             offset: [15, 0],
             color: '#fff',
-            show: true,
+            show: false,
             fontSize: 16,
           },
         },
@@ -171,11 +169,7 @@ function LoadMapping(name, data) {
           },
         },
         symbolSize: 16,
-        data: [
-          { name: '红旗区', value: [113.87523, 35.30367, 122] },
-          { name: '卫滨区', value: [113.82578, 35.30211, 222] },
-          { name: '凤泉区', value: [113.91507, 35.38399, 444] },
-        ],
+        data: chartData,
       },
     ],
   }
@@ -281,10 +275,8 @@ function LoadMap(name, myChart) {
         bevelSize: 1,
         bevelSmoothness: 10,
         minHeight: 1,
-        // shading: 'color',
-        // shading: 'lambert',
         shading: 'realistic',
-        silent: false, //图形是否不响应和触发鼠标事件
+        silent: false,
         opacity: 0.6,
         itemStyle: {
           opacity: 0.6,
@@ -296,11 +288,7 @@ function LoadMap(name, myChart) {
             return res
           },
         },
-        data: [
-          { name: '红旗区', value: [113.87523, 35.30367, 122] },
-          { name: '卫滨区', value: [113.82578, 35.30211, 222] },
-          { name: '凤泉区', value: [113.91507, 35.38399, 444] },
-        ],
+        data: chartData,
       },
     ],
   }
