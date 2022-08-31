@@ -8,22 +8,21 @@
   </head>
   <script>
     $(window).load(function () {
-      $(".loading").fadeOut(1500);
-    });
+      $('.loading').fadeOut(1500)
+    })
 
-    /****/
     $(document).ready(function () {
-      var whei = $(window).width();
-      $("html").css({ fontSize: whei / 20 });
+      var whei = $(window).width()
+      $('html').css({ fontSize: whei / 20 })
       $(window).resize(function () {
-        var whei = $(window).width();
-        $("html").css({ fontSize: whei / 20 });
-      });
-    });
+        var whei = $(window).width()
+        $('html').css({ fontSize: whei / 20 })
+      })
+    })
   </script>
   <script type="text/javascript" src="js/echarts.min.js"></script>
   <script type="text/javascript" src="js/anime.min.js"></script>
-  <script language="JavaScript" src="js/js.js"></script>
+  <script language="JavaScript" src="js/index.js"></script>
   <body>
     <!-- 加载动画 -->
     <div class="loading" id="load">
@@ -33,15 +32,8 @@
       </div>
     </div>
     <div class="head">
-      <h1>
-        <a href="https://gitee.com/iGaoWei/big-data-view" style="color: white"
-          >大数据可视化展板通用模板</a
-        >
-      </h1>
-      <div class="weather">
-        <img src="picture/weather.png" /><span>多云转小雨</span
-        ><span id="showTime"></span>
-      </div>
+      <h1>大数据可视化展板通用模板</h1>
+      <div class="weather"><img src="picture/weather.png" /><span>多云转小雨</span><span id="showTime"></span></div>
     </div>
     <div class="mainbox">
       <ul class="clearfix">
@@ -108,73 +100,66 @@
     </div>
     <div class="back"></div>
 
-    <canvas id="canvas" style="position: absolute; top: 0; left: 0;z-index: -1;"></canvas>
+    <canvas id="canvas" style="position: absolute; top: 0; left: 0; z-index: -1"></canvas>
 
     <script type="text/javascript" src="js/bg.js"></script>
-    <script type="text/javascript" src="js/china.js"></script>
     <script type="text/javascript" src="js/area_echarts.js"></script>
     <script>
-      var t = null;
-      t = setTimeout(time, 1000); //開始运行
+      var t = null
+      t = setTimeout(time, 1000) //開始运行
       function time() {
-        clearTimeout(t); //清除定时器
-        dt = new Date();
-        var y = dt.getFullYear();
-        var mt = dt.getMonth() + 1;
-        var day = dt.getDate();
-        var h = dt.getHours(); //获取时
-        var m = dt.getMinutes(); //获取分
-        var s = dt.getSeconds(); //获取秒
-        document.getElementById("showTime").innerHTML =
-          y + "年" + mt + "月" + day + "-" + h + "时" + m + "分" + s + "秒";
-        t = setTimeout(time, 1000); //设定定时器，循环运行
+        clearTimeout(t) //清除定时器
+        dt = new Date()
+        var y = dt.getFullYear()
+        var mt = dt.getMonth() + 1
+        var day = dt.getDate()
+        var h = dt.getHours() //获取时
+        var m = dt.getMinutes() //获取分
+        var s = dt.getSeconds() //获取秒
+        document.getElementById('showTime').innerHTML =
+          y + '年' + mt + '月' + day + '-' + h + '时' + m + '分' + s + '秒'
+        t = setTimeout(time, 1000) //设定定时器，循环运行
       }
 
       setTimeout(() => {
         anime({
-          targets: ".left-box .boxall",
-          translateX: "153%",
-          easing: "easeInOutQuad",
+          targets: '.left-box .boxall',
+          translateX: '153%',
+          easing: 'easeInOutQuad',
           delay: function (el, i, l) {
-            return i * 100;
+            return i * 100
           },
           endDelay: function (el, i, l) {
-            return (l - i) * 100;
+            return (l - i) * 100
           },
-        });
+        })
 
         anime({
-          targets: ".right-box .boxall",
-          translateX: "-153%",
-          easing: "easeInOutQuad",
+          targets: '.right-box .boxall',
+          translateX: '-153%',
+          easing: 'easeInOutQuad',
           delay: function (el, i, l) {
-            return i * 100;
+            return i * 100
           },
           endDelay: function (el, i, l) {
-            return (l - i) * 100;
+            return (l - i) * 100
           },
-        });
+        })
 
         anime({
           targets: '.bar',
           opacity: 1,
           easing: 'easeInOutQuad',
           delay: 500,
-        });
+        })
 
         anime({
           targets: '.head',
           translateY: '0',
-          // easing: 'easeInOutQuad',
           delay: 800,
-          duration: 300
-        });
-
-
-
-        
-
-      }, 500);
+          duration: 300,
+        })
+      }, 500)
     </script>
   </body>
 </html>
