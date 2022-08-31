@@ -251,6 +251,23 @@ function LoadMap(name, myChart) {
       },
       viewControl: {
         distance: 160, //默认视角距离主体的距离(常用)
+        projection: 'perspective',
+        autoRotate: true, //会有自动旋转查看动画出现,可查看每个维度信息
+        autoRotateDirection: 'cw', //物体自传的方向。默认是 'cw' 也就是从上往下看是顺时针方向，也可以取 'ccw'，既从上往下看为逆时针方向。
+        autoRotateSpeed: 2, //物体自传的速度
+        autoRotateAfterStill: 1, //在鼠标间静止操作后恢复自动旋转的时间隔。在开启 autoRotate 后有效。
+        // distance:90,//默认视角距离主体的距离(常用)
+        // alpha:90,//视角绕 x 轴，即上下旋转的角度(与beta一起控制视野成像效果)
+        // beta: 90, //视角绕 y 轴，即左右旋转的角度。
+        // center:[]//视角中心点，旋转也会围绕这个中心点旋转，默认为[0,0,0]。
+        // zlevel://组件所在的层。
+        minAlpha: -36000000,
+        maxAlpha: 36000000,
+        minBeta: -36000000,
+        maxBeta: 36000000,
+        animation: true,
+        animationDurationUpdate: 1000, // 过渡动画的时长。[ default: 1000 ]
+        animationEasingUpdate: 'cubicInOut',
       },
       light: {
         main: {
