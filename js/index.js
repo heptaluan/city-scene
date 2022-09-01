@@ -1,12 +1,14 @@
 ﻿$(function () {
-  echarts_1()
-  echarts_2()
-  echarts_4()
-  echarts_31()
-  echarts_32()
-  echarts_33()
-  echarts_5()
-  echarts_6()
+  setTimeout(() => {
+    echarts_1()
+    echarts_2()
+    echarts_4()
+    echarts_31()
+    echarts_32()
+    echarts_33()
+    echarts_5()
+    echarts_6()
+  }, 1300)
 
   // 左上柱状图
   function echarts_1() {
@@ -98,6 +100,9 @@
               barBorderRadius: 5,
             },
           },
+          animationDelay: function (idx) {
+            return idx * 150;
+          }
         },
       ],
     }
@@ -196,6 +201,9 @@
               barBorderRadius: 5,
             },
           },
+          animationDelay: function (idx) {
+            return idx * 150;
+          }
         },
       ],
     }
@@ -298,6 +306,9 @@
               barBorderRadius: 5,
             },
           },
+          animationDelay: function (idx) {
+            return idx * 150;
+          }
         },
       ],
     }
@@ -853,4 +864,6 @@
       myChart.resize()
     })
   }
+
+  // 中间地图
 })
