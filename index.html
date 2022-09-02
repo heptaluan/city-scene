@@ -6,24 +6,7 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <link rel="stylesheet" href="css/index.css" />
   </head>
-  <script>
-    $(window).load(function () {
-      $('.loading').fadeOut(1500)
-    })
-
-    $(document).ready(function () {
-      var whei = $(window).width()
-      $('html').css({ fontSize: whei / 20 })
-      $(window).resize(function () {
-        var whei = $(window).width()
-        $('html').css({ fontSize: whei / 20 })
-      })
-    })
-  </script>
-  <script type="text/javascript" src="js/echarts/echarts.min.js"></script>
-  <script type="text/javascript" src="js/echarts/echarts-gl.min.js"></script>
-  <script type="text/javascript" src="js/anime.min.js"></script>
-  <script language="JavaScript" src="js/index.js"></script>
+  
   <body>
     <!-- 加载动画 -->
     <div class="loading" id="load">
@@ -103,65 +86,12 @@
 
     <canvas id="canvas" style="position: absolute; top: 0; left: 0; z-index: -1"></canvas>
 
-    <script type="text/javascript" src="./js/bg.js"></script>
+    <script type="text/javascript" src="js/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="js/echarts/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="js/anime.min.js"></script>
     <script type="text/javascript" src="./js/china.js"></script>
-    <script type="module" src="./js/map.js"></script>
-    <script>
-      var t = null
-      t = setTimeout(time, 1000) //開始运行
-      function time() {
-        clearTimeout(t) //清除定时器
-        dt = new Date()
-        var y = dt.getFullYear()
-        var mt = dt.getMonth() + 1
-        var day = dt.getDate()
-        var h = dt.getHours() //获取时
-        var m = dt.getMinutes() //获取分
-        var s = dt.getSeconds() //获取秒
-        document.getElementById('showTime').innerHTML =
-          y + '年' + mt + '月' + day + '-' + h + '时' + m + '分' + s + '秒'
-        t = setTimeout(time, 1000) //设定定时器，循环运行
-      }
-
-      setTimeout(() => {
-        anime({
-          targets: '.left-box .boxall',
-          translateX: '153%',
-          easing: 'easeInOutQuad',
-          delay: function (el, i, l) {
-            return i * 100
-          },
-          endDelay: function (el, i, l) {
-            return (l - i) * 100
-          },
-        })
-
-        anime({
-          targets: '.right-box .boxall',
-          translateX: '-153%',
-          easing: 'easeInOutQuad',
-          delay: function (el, i, l) {
-            return i * 100
-          },
-          endDelay: function (el, i, l) {
-            return (l - i) * 100
-          },
-        })
-
-        anime({
-          targets: '.bar',
-          opacity: 1,
-          easing: 'easeInOutQuad',
-          delay: 500,
-        })
-
-        anime({
-          targets: '.head',
-          translateY: '0',
-          delay: 800,
-          duration: 300,
-        })
-      }, 500)
-    </script>
+    <script type="text/javascript" src="./js/bg.js"></script>
+    <script type="module" src="js/options.js"></script>
+    <script type="module" src="js/index.js"></script>
   </body>
 </html>
