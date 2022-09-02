@@ -9,6 +9,7 @@ import {
   echarts_6,
   echarts_map,
 } from './options.js'
+import { PahoMQTT } from './mqtt.js'
 
 $(window).load(function () {
   var whei = $(window).width()
@@ -91,4 +92,38 @@ $(window).load(function () {
     document.getElementById('showTime').innerHTML = y + '年' + mt + '月' + day + '-' + h + '时' + m + '分' + s + '秒'
     t = setTimeout(time, 1000)
   }
+
+  // mqtt
+  const getMqttConfig = {
+    ip: `${window.location.hostname}`,
+    port: 61614,
+    clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+  }
+
+  const client = new PahoMQTT.Client(
+    getMqttConfig.ip,
+    getMqttConfig.port,
+    getMqttConfig.clientId
+  )
+
+  client.onConnectionLost = responseObject => {
+    if (responseObject.errorCode !== 0) {
+      console.log('onConnectionLost:' + responseObject.errorMessage)
+    }
+  }
+  client.onMessageArrived = message => {
+    console.log(JSON.parse(message.payloadString))
+  }
+
+  client.connect({
+    onSuccess: () => {
+      client.subscribe(`device_data_${gateway}`)
+      client.subscribe(`card_data_${gateway}`)
+      const message = new PahoMQTT.Message('Hello')
+      message.destinationName = 'World'
+      client.send(message)
+    },
+  })
+
 })
+

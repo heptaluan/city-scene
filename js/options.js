@@ -930,12 +930,12 @@ export const echarts_map = () => {
         },
         itemStyle: {
           normal: {
-              borderColor: 'rgba(192,245,249,.8)',
-              borderWidth: 3,
-              shadowColor: '#6FFDFF',
-              shadowOffsetY: 0,
-              shadowBlur: 10,
-              areaColor: 'rgba(29,85,139,.6)',
+            borderColor: 'rgba(192,245,249,.8)',
+            borderWidth: 3,
+            shadowColor: '#6FFDFF',
+            shadowOffsetY: 0,
+            shadowBlur: 10,
+            areaColor: 'rgba(29,85,139,.6)',
           },
           // normal: {
           //   areaColor: '#3a7fd5',
@@ -1074,7 +1074,7 @@ export const echarts_map = () => {
           min: 1000,
           max: 5000,
           inRange: {
-            color: ['#f58f0e', '#d5b314', '#b9be23', '#4ab2e5', '#5abead', '#f56321'],
+            color: ['#4ab2e5', '#b9be23', '#d5b314', '#f58f0e', '#5abead', '#f56321'],
           },
         },
       ],
