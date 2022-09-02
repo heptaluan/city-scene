@@ -929,21 +929,20 @@ export const echarts_map = () => {
           },
         },
         itemStyle: {
-          // normal: {
-          //     borderColor: 'rgba(192,245,249,.8)',
-          //     borderWidth: 3,
-          //     shadowColor: '#6FFDFF',
-          //     shadowOffsetY: 0,
-          //     shadowBlur: 10,
-          //     areaColor: 'rgba(29,85,139,.6)',
-          // },
-
           normal: {
-            areaColor: '#3a7fd5',
-            borderColor: '#0a53e9', //线
-            shadowColor: '#092f8f', //外发光
-            shadowBlur: 20,
+              borderColor: 'rgba(192,245,249,.8)',
+              borderWidth: 3,
+              shadowColor: '#6FFDFF',
+              shadowOffsetY: 0,
+              shadowBlur: 10,
+              areaColor: 'rgba(29,85,139,.6)',
           },
+          // normal: {
+          //   areaColor: '#3a7fd5',
+          //   borderColor: '#0a53e9', //线
+          //   shadowColor: '#092f8f', //外发光
+          //   shadowBlur: 20,
+          // },
           emphasis: {
             areaColor: '#0a2dae', //悬浮区背景
           },
@@ -959,8 +958,8 @@ export const echarts_map = () => {
           rippleEffect: {
             period: 5,
             scale: 4,
-            // stroke
-            brushType: 'fill',
+            // stroke fill
+            brushType: 'stroke',
           },
           hoverAnimation: true,
           label: {
@@ -1100,7 +1099,7 @@ export const echarts_map = () => {
           textStyle: {
             // 标签的字体样式
             color: '#ffffff', // 地图初始化区域字体颜色
-            fontSize: 14, // 字体大小
+            fontSize: 16, // 字体大小
             opacity: 1, // 字体透明度
             backgroundColor: 'rgba(0,23,11,0.5)', // 字体背景色
           },
