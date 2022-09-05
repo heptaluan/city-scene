@@ -877,112 +877,163 @@ export const echarts_map = () => {
   echarts.registerMap('xinxiang', geoData)
   myChart.hideLoading()
 
-  const chinaName = 'xinxiang'
-
   var chartData = [
     { name: '红旗区', value: [113.87523, 35.30367, 122] },
     { name: '卫滨区', value: [113.82578, 35.30211, 222] },
     { name: '凤泉区', value: [113.91507, 35.38399, 444] },
   ]
 
-  LoadMap(chinaName, myChart)
+  var rangeColorList = [
+    '#244779',
+    '#244D82',
+    '#25528B',
+    '#255894',
+    '#255D9D',
+    '#2663A6',
+    '#2668AE',
+    '#276EB7',
+    '#2773C0',
+    '#2779C9',
+    '#287ED2',
+    '#2884DB',
+  ]
 
-  function LoadMap(name, myChart) {
-
-    var rangeColorList = [
-      '#236da8',
-      '#2884db',
-      '#244779',
-      '#246198',
-      '#2884db',
-      '#2884db',
-      '#244779',
-      '#244779',
-      '#244779',
-      '#246198',
-      '#2884db',
-      '#2884db',
-      '#244779',
-    ]
-
-    var option = {
-      geo3D: {
-        map: 'xinxiang',
-        boxDepth: 80,
-        regionHeight: 2,
-        itemStyle: {
-          areaColor: 'rgb(5,101,123)',
-          opacity: 1,
-          borderWidth: 0.5,
-          borderColor: 'rgb(62,215,213)',
-        },
-        viewControl: {
-          distance: 95,
-          center: [0, -10, 0],
-        },
-        label: {
-          show: true,
-        },
-        emphasis: {
-          label: {
-            show: true,
-            textStyle: {
-              color: '#fff',
-              fontSize: 3,
-              backgroundColor: 'rgba(0,23,11,0)',
-            },
-          },
-        },
-        // 光照
-        light: {
-          main: {
-            color: '#fff',
-            intensity: 1.5,
-            shadowQuality: 'high',
-            shadow: false,
-            alpha: 55,
-            beta: 10,
-          },
-          ambient: {
-            intensity: 0.3,
-          },
-        },
-        regions: [
-          { name: '辉县市', itemStyle: { color: rangeColorList[0] } },
-          { name: '原阳县', itemStyle: { color: rangeColorList[1] } },
-          { name: '卫辉市', itemStyle: { color: rangeColorList[2] } },
-          { name: '封丘县', itemStyle: { color: rangeColorList[3] } },
-        ],
+  var option = {
+    geo3D: {
+      map: 'xinxiang',
+      boxDepth: 80,
+      regionHeight: 2,
+      shading: 'realistic',
+      // realisticMaterial: {
+      //   detailTexture: '../images/map-bg.jpg',
+      //   roughness: 0,
+      // },
+      itemStyle: {
+        opacity: 1, // 透明度
+        borderWidth: 1, //分界线宽度
+        borderColor: '#207fce', //分界线颜色
       },
-      series: [
-        {
-          type: 'bar3D',
-          coordinateSystem: 'geo3D',
-          bevelSize: 0,
-          tooltip: {
-            //提示框的内容
-            formatter: function (data) {
-              return 'name:' + data.name + '<br />' + 'value:' + data.value[2]
-            },
+      viewControl: {
+        distance: 95,
+        center: [0, -10, 0],
+      },
+      label: {
+        show: true, //是否显示市
+        color: '#fff', //文字颜色
+        fontSize: 12, //文字大小
+        fontFamily: '微软雅黑',
+        backgroundColor: 'rgba(0,0,0,0)', //透明度0清空文字背景
+      },
+      emphasis: {
+        label: {
+          show: true, //是否显示高亮
+          textStyle: {
+            color: '#fff', //高亮文字颜色
           },
-          label: {
+        },
+        itemStyle: {
+          color: '#0489d6', //地图高亮颜色
+        },
+      },
+      // 光照
+      light: {
+        main: {
+          color: '#fff',
+          intensity: 1.5,
+          shadowQuality: 'high',
+          shadow: false,
+          alpha: 55,
+          beta: 10,
+        },
+        ambient: {
+          intensity: 0.3,
+        },
+      },
+      regions: [
+        { name: '辉县市', itemStyle: { color: rangeColorList[0] } },
+        { name: '原阳县', itemStyle: { color: rangeColorList[1] } },
+        { name: '卫辉市', itemStyle: { color: rangeColorList[2] } },
+        { name: '封丘县', itemStyle: { color: rangeColorList[3] } },
+      ],
+    },
+    tooltip: {
+      show: true,
+      formatter: params => {
+        let data = params.name + '<br/>' + '值:' + params.value[2]
+        return data
+      },
+    },
+    series: [
+      {
+        name: 'bar3D',
+        type: 'bar3D',
+        coordinateSystem: 'geo3D',
+        barSize: 1,
+        shading: 'lambert',
+        opacity: 1,
+        bevelSize: 0.3,
+        minHeight: 0.05,
+        label: {
+          normal: {
             show: true,
-            formatter: params => {
+            formatter: function (params) {
               return params.value[2]
             },
-            position: 'top',
             textStyle: {
-              color: '#000',
-              backgroundColor: '#fff',
+              color: '#fff',
+              fontSize: 14,
             },
           },
-          shading: 'lambert',
-          data: chartData,
         },
-      ],
-    }
-    myChart.setOption(option, true)
+        emphasis: {
+          itemStyle: {
+            color: '#e46318',
+          },
+          label: {
+            show: true,
+            distance: -2,
+            formatter: function (params) {
+              var name = params.name
+              var value = params.value[2]
+              var data = 34
+              return `{a|${name}}\n{b|${value}}\n{c|${data}}`
+            },
+            textStyle: {
+              backgroundColor: {
+                image: '../images/tip.png',
+              },
+              padding: [16, 20],
+              color: '#E59B0A',
+              fontSize: 12,
+              height: 50,
+              lineHeight: 17,
+              rich: {
+                a: {
+                  color: '#E59B0A',
+                  fontSize: 12,
+                  align: 'center',
+                },
+                b: {
+                  color: '#0EB1FE',
+                  fontSize: 14,
+                  fontWeight: 600,
+
+                  align: 'center',
+                },
+                c: {
+                  color: '#FFE82A',
+                  fontSize: 12,
+                  align: 'center',
+                },
+              },
+            },
+          },
+        },
+        data: chartData,
+      },
+    ],
   }
+  myChart.setOption(option, true)
 
   window.addEventListener('resize', function () {
     myChart.resize()
