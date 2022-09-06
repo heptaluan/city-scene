@@ -97,14 +97,10 @@ $(window).load(function () {
   const getMqttConfig = {
     ip: `${window.location.hostname}`,
     port: 61614,
-    clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8)
+    clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
   }
 
-  const client = new PahoMQTT.Client(
-    getMqttConfig.ip,
-    getMqttConfig.port,
-    getMqttConfig.clientId
-  )
+  const client = new PahoMQTT.Client(getMqttConfig.ip, getMqttConfig.port, getMqttConfig.clientId)
 
   client.onConnectionLost = responseObject => {
     if (responseObject.errorCode !== 0) {
@@ -124,6 +120,4 @@ $(window).load(function () {
       client.send(message)
     },
   })
-
 })
-
