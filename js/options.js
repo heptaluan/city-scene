@@ -81,6 +81,7 @@ export const echarts_1 = () => {
         },
 
         splitLine: {
+          show: false,
           lineStyle: {
             color: 'rgba(255,255,255,.1)',
           },
@@ -89,7 +90,7 @@ export const echarts_1 = () => {
     ],
     series: [
       {
-        name: '安卓',
+        name: 'IOS',
         type: 'line',
         smooth: true,
         symbol: 'circle',
@@ -111,11 +112,11 @@ export const echarts_1 = () => {
               [
                 {
                   offset: 0,
-                  color: 'rgba(0,244,255,1)', // 0% 处的颜色
+                  color: 'rgba(1, 132, 213, 0.4)',
                 },
                 {
-                  offset: 1,
-                  color: 'rgba(0,77,167,1)', // 100% 处的颜色
+                  offset: 0.8,
+                  color: 'rgba(1, 132, 213, 0.1)',
                 },
               ],
               false
@@ -125,12 +126,12 @@ export const echarts_1 = () => {
         },
         itemStyle: {
           normal: {
-            color: '#0184d5',
+            color: '#00d887',
             borderColor: 'rgba(221, 220, 107, .1)',
             borderWidth: 12,
           },
         },
-        data: [3, 4, 3, 4, 3, 4, 3, 6, 2, 4, 2, 4, 3, 4, 3, 4, 3, 4, 3, 6, 2, 4, 2, 4],
+        data: [5, 3, 5, 6, 1, 5, 3, 5, 6, 4, 6, 4, 8, 3, 5, 6, 1, 5, 3, 7, 2, 5, 1, 4],
       },
     ],
     animationDelay: animationDelay,
@@ -200,6 +201,7 @@ export const echarts_2 = () => {
           },
         },
         splitLine: {
+          show: false,
           lineStyle: {
             color: 'rgba(255,255,255,0.12)',
           },
@@ -318,92 +320,86 @@ export const echarts_4 = () => {
   var myChart = echarts.init(document.getElementById('echart4'))
 
   var option = {
-    //  backgroundColor: '#00265f',
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'shadow',
       },
+      backgroundColor: 'rgba(9, 24, 48, 0.5)',
+      borderColor: 'rgba(75, 253, 238, 0.4)',
+      textStyle: {
+        color: '#CFE3FC',
+      },
+      borderWidth: 1,
     },
-    grid: {
-      left: '0%',
-      top: '10px',
-      right: '0%',
-      bottom: '4%',
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: ['商超门店', '教育培训', '房地产', '生活服务', '汽车销售', '旅游酒店', '五金建材'],
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-            width: 1,
-            type: 'solid',
-          },
-        },
-
-        axisTick: {
-          show: false,
-        },
-        axisLabel: {
-          interval: 0,
-          // rotate:50,
-          show: true,
-          splitNumber: 15,
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
-          },
+    xAxis: {
+      data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      axisLabel: {
+        color: '#e2e9ff',
+      },
+      axisTick: {
+        show: false,
+      },
+      axisLine: {
+        lineStyle: {
+          type: 'dashed',
+          color: 'rgba(255, 255, 255,0.5)',
         },
       },
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        axisLabel: {
-          //formatter: '{value} %'
-          show: true,
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
-          },
-        },
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(255,255,255,.1	)',
-            width: 1,
-            type: 'solid',
-          },
-        },
-        splitLine: {
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-          },
+    },
+    yAxis: {
+      axisLabel: {
+        color: '#e2e9ff',
+      },
+      nameTextStyle: {
+        color: '#fff',
+        fontSize: 15,
+      },
+      splitLine: {
+        //网格线
+        show: false,
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          type: 'dashed',
+          color: 'rgba(255, 255, 255,0.5)',
         },
       },
-    ],
+    },
     series: [
       {
         type: 'bar',
-        data: [200, 300, 300, 900, 1500, 1200, 600],
-        barWidth: '35%', //柱子宽度
-        // barGap: 1, //柱子之间间距
-        itemStyle: {
-          normal: {
-            color: '#2f89cf',
-            opacity: 1,
-            barBorderRadius: 5,
-          },
+        barWidth: '40%', //柱条宽度
+        data: [220, 182, 191, 234, 290, 330, 310],
+        label: {
+          //文本标签的样式
+          show: true,
+          formatter: '{c}%', //格式化文字
+          color: '#fff', //文字的颜色
+          position: 'top', //文字的位置
         },
-        animationDelay: function (idx) {
-          return idx * animationDelay
+        itemStyle: {
+          //图形的样式
+          color: {
+            //渐变色配置
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              {
+                offset: 0,
+                color: 'rgba(19,138,179,1)', // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: 'rgba(10,73,98,0)', // 100% 处的颜色
+              },
+            ],
+            global: false, // 缺省为 false
+          },
         },
       },
     ],
