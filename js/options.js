@@ -2,99 +2,243 @@
 
 const animationDelay = 300
 
-// 左上柱状图
+// 左上
 export const echarts_1 = () => {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.getElementById('echart1'))
 
+  let bgColor = '#040811'
+  let color = ['#0090FF', '#EE8931', '#8B5CFF']
+  let echartData = [
+    {
+      name: '1月',
+      value1: 13512,
+      value2: 0,
+      value3: 0,
+    },
+    {
+      name: '2月',
+      value1: 9806,
+      value2: 0,
+      value3: 0,
+    },
+    {
+      name: '3月',
+      value1: 19727,
+      value2: 0,
+      value3: 0,
+    },
+    {
+      name: '4月',
+      value1: 17046,
+      value2: 12689,
+      value3: 7479,
+    },
+    {
+      name: '5月',
+      value1: 17780,
+      value2: 13396,
+      value3: 6355,
+    },
+    {
+      name: '6月',
+      value1: 19359,
+      value2: 13220,
+      value3: 5940,
+    },
+    {
+      name: '7月',
+      value1: 16229,
+      value2: 11836,
+      value3: 10234,
+    },
+    {
+      name: '8月',
+      value1: 18176,
+      value2: 13478,
+      value3: 10755,
+    },
+    {
+      name: '9月',
+      value1: 18515,
+      value2: 12911,
+      value3: 9806,
+    },
+    {
+      name: '10月',
+      value1: 13658,
+      value2: 9479,
+      value3: 8613,
+    },
+    {
+      name: '11月',
+      value1: 16364,
+      value2: 10839,
+      value3: 8826,
+    },
+    {
+      name: '12月',
+      value1: 13973,
+      value2: 8816,
+      value3: 7291,
+    },
+  ]
+
+  let legendItem = ['实际接受服务', '持续接受服务', '完成两次面对面服务']
+
+  let xAxisData = echartData.map(v => v.name)
+  //  ["1", "2", "3", "4", "5", "6", "7", "8"]
+  let yAxisData1 = echartData.map(v => v.value1)
+  // [100, 138, 350, 173, 180, 150, 180, 230]
+  let yAxisData2 = echartData.map(v => v.value2)
+  // [233, 233, 200, 180, 199, 233, 210, 180]
+  let yAxisData3 = echartData.map(v => v.value3)
+  //[133,133,100,80,99,133,110,80]
+  const hexToRgba = (hex, opacity) => {
+    let rgbaColor = ''
+    let reg = /^#[\da-f]{6}$/i
+    if (reg.test(hex)) {
+      rgbaColor = `rgba(${parseInt('0x' + hex.slice(1, 3))},${parseInt('0x' + hex.slice(3, 5))},${parseInt(
+        '0x' + hex.slice(5, 7)
+      )},${opacity})`
+    }
+    return rgbaColor
+  }
+
   var option = {
-    //  backgroundColor: '#00265f',
+    color: color,
+    legend: {
+      show: false,
+    },
     tooltip: {
       trigger: 'axis',
-      axisPointer: {
-        type: 'shadow',
+      formatter: function (params) {
+        let html = ''
+        params.forEach(v => {
+          console.log(v)
+          html += `<div style="color: #666;font-size: 14px;line-height: 24px">
+                <span style="display:inline-block;margin-right:5px;border-radius:10px;width:10px;height:10px;background-color:${
+                  color[v.componentIndex]
+                };"></span>
+                ${v.seriesName}.${v.name}
+                <span style="color:${color[v.componentIndex]};font-weight:700;font-size: 18px">${v.value}</span>
+                万元`
+        })
+        return html
       },
-    },
-    grid: {
-      left: '0%',
-      top: '10px',
-      right: '0%',
-      bottom: '4%',
-      containLabel: true,
+      extraCssText: 'background: #fff; border-radius: 0;box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);color: #333;',
     },
     xAxis: [
       {
         type: 'category',
-        data: ['商超门店', '教育培训', '房地产', '生活服务', '汽车销售', '旅游酒店', '五金建材'],
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-            width: 1,
-            type: 'solid',
-          },
-        },
-
         axisTick: {
           show: false,
         },
-        axisLabel: {
-          interval: 0,
-          // rotate:50,
+        axisLine: {
           show: true,
-          splitNumber: 15,
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
+          lineStyle: {
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.5)',
           },
         },
+        axisLabel: {
+          inside: false,
+          textStyle: {
+            color: 'rgba(255, 255, 255,0.7)',
+            fontWeight: 'normal',
+            fontSize: '14',
+            lineHeight: 22,
+          },
+        },
+
+        data: xAxisData,
       },
     ],
     yAxis: [
       {
         type: 'value',
+        // name: '(t)',
         axisLabel: {
-          //formatter: '{value} %'
-          show: true,
           textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
+            color: 'rgba(255, 255, 255,0.7)',
+          },
+        },
+        nameTextStyle: {
+          color: 'rgba(255, 255, 255,0.7)',
+          fontSize: 12,
+          lineHeight: 40,
+          padding: [0, 0, 0, -20],
+        },
+        splitLine: {
+          show: false,
+          lineStyle: {
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.5)',
+          },
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.5)',
           },
         },
         axisTick: {
           show: false,
         },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(255,255,255,.1	)',
-            width: 1,
-            type: 'solid',
-          },
-        },
-        splitLine: {
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-          },
-        },
       },
     ],
     series: [
       {
-        type: 'bar',
-        data: [200, 300, 300, 900, 1500, 1200, 600],
-        barWidth: '35%', //柱子宽度
-        // barGap: 1, //柱子之间间距
-        itemStyle: {
+        name: legendItem[0],
+        type: 'line',
+        showSymbol: false,
+        smooth: true,
+        symbolSize: 8,
+        zlevel: 3,
+        lineStyle: {
           normal: {
-            color: '#2f89cf',
-            opacity: 1,
-            barBorderRadius: 5,
+            color: color[0],
+            shadowBlur: 3,
+            shadowColor: hexToRgba(color[0], 0.5),
+            shadowOffsetY: 0,
           },
         },
-        animationDelay: function (idx) {
-          return idx * animationDelay
+        data: yAxisData1,
+      },
+      {
+        name: legendItem[1],
+        type: 'line',
+        showSymbol: false,
+        smooth: true,
+        symbolSize: 8,
+        zlevel: 3,
+        lineStyle: {
+          normal: {
+            color: color[1],
+            shadowBlur: 0,
+            shadowColor: hexToRgba(color[1], 0.5),
+            shadowOffsetY: 0,
+          },
         },
+        data: yAxisData2,
+      },
+      {
+        name: legendItem[2],
+        type: 'line',
+        showSymbol: false,
+        smooth: true,
+        symbolSize: 8,
+        zlevel: 3,
+        lineStyle: {
+          normal: {
+            color: color[2],
+            shadowBlur: 3,
+            shadowColor: hexToRgba(color[2], 0.5),
+            shadowOffsetY: 0,
+          },
+        },
+        data: yAxisData3,
       },
     ],
   }
@@ -105,167 +249,51 @@ export const echarts_1 = () => {
   })
 }
 
-// 左中柱状图
+// 左中
 export const echarts_2 = () => {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.getElementById('echart2'))
 
   var option = {
-    //  backgroundColor: '#00265f',
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
-    },
-    grid: {
-      left: '0%',
-      top: '10px',
-      right: '0%',
-      bottom: '4%',
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: ['浙江', '上海', '江苏', '广东', '北京', '深圳', '安徽'],
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-            width: 1,
-            type: 'solid',
-          },
-        },
-
-        axisTick: {
-          show: false,
-        },
-        axisLabel: {
-          interval: 0,
-          // rotate:50,
-          show: true,
-          splitNumber: 15,
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
-          },
-        },
-      },
-    ],
-    yAxis: [
-      {
-        type: 'value',
-        axisLabel: {
-          //formatter: '{value} %'
-          show: true,
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
-          },
-        },
-        axisTick: {
-          show: false,
-        },
-        axisLine: {
-          show: true,
-          lineStyle: {
-            color: 'rgba(255,255,255,.1	)',
-            width: 1,
-            type: 'solid',
-          },
-        },
-        splitLine: {
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-          },
-        },
-      },
-    ],
-    series: [
-      {
-        type: 'bar',
-        data: [1500, 1200, 600, 200, 300, 300, 900],
-        barWidth: '35%', //柱子宽度
-        // barGap: 1, //柱子之间间距
-        itemStyle: {
-          normal: {
-            color: '#27d08a',
-            opacity: 1,
-            barBorderRadius: 5,
-          },
-        },
-        animationDelay: function (idx) {
-          return idx * animationDelay
-        },
-      },
-    ],
-  }
-
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option)
-  window.addEventListener('resize', function () {
-    myChart.resize()
-  })
-}
-
-// 右中柱状图
-export const echarts_5 = () => {
-  // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('echart5'))
-
-  var option = {
-    //  backgroundColor: '#00265f',
     tooltip: {
       trigger: 'axis',
       axisPointer: {
         type: 'shadow',
       },
-    },
-
-    grid: {
-      left: '0%',
-      top: '10px',
-      right: '0%',
-      bottom: '2%',
-      containLabel: true,
+      backgroundColor: 'rgba(9, 24, 48, 0.5)',
+      borderColor: 'rgba(75, 253, 238, 0.4)',
+      textStyle: {
+        color: '#CFE3FC',
+      },
+      borderWidth: 1,
     },
     xAxis: [
       {
         type: 'category',
-        data: ['浙江', '上海', '江苏', '广东', '北京', '深圳', '安徽', '四川'],
+        data: ['七月', '八月', '九月'],
         axisLine: {
-          show: true,
           lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-            width: 1,
-            type: 'solid',
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.5)',
           },
-        },
-
-        axisTick: {
-          show: false,
         },
         axisLabel: {
-          interval: 0,
-          // rotate:50,
-          show: true,
-          splitNumber: 15,
+          margin: 10,
+          color: '#e2e9ff',
           textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
+            fontSize: 12,
           },
+        },
+        axisTick: {
+          show: false,
         },
       },
     ],
     yAxis: [
       {
-        type: 'value',
         axisLabel: {
-          //formatter: '{value} %'
-          show: true,
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: '12',
-          },
+          formatter: '{value}',
+          color: '#e2e9ff',
         },
         axisTick: {
           show: false,
@@ -273,14 +301,13 @@ export const echarts_5 = () => {
         axisLine: {
           show: true,
           lineStyle: {
-            color: 'rgba(255,255,255,.1	)',
-            width: 1,
-            type: 'solid',
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.5)',
           },
         },
         splitLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,.1)',
+            color: 'rgba(255,255,255,0.12)',
           },
         },
       },
@@ -288,31 +315,267 @@ export const echarts_5 = () => {
     series: [
       {
         type: 'bar',
-        data: [2, 3, 3, 9, 15, 12, 6, 4, 6, 7, 4, 10],
-        barWidth: '35%', //柱子宽度
-        // barGap: 1, //柱子之间间距
+        data: [2000, 1520, 1850],
+        barWidth: '30%',
         itemStyle: {
           normal: {
-            color: '#2f89cf',
-            opacity: 1,
-            barBorderRadius: 5,
+            color: new echarts.graphic.LinearGradient(
+              0,
+              0,
+              0,
+              1,
+              [
+                {
+                  offset: 0,
+                  color: 'rgba(0,244,255,1)', // 0% 处的颜色
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(0,77,167,1)', // 100% 处的颜色
+                },
+              ],
+              false
+            ),
+            shadowColor: 'rgba(0,160,221,1)',
+            shadowBlur: 4,
           },
         },
-        animationDelay: function (idx) {
-          return idx * animationDelay
+        label: {
+          normal: {
+            show: true,
+            lineHeight: 10,
+            formatter: '{c}',
+            position: 'top',
+            textStyle: {
+              color: '#00D6F9',
+              fontSize: 12,
+            },
+          },
         },
       },
     ],
   }
 
-  // 使用刚指定的配置项和数据显示图表。
   myChart.setOption(option)
   window.addEventListener('resize', function () {
     myChart.resize()
   })
 }
 
-// 右上折线图
+// 左下
+export const echarts_3 = () => {
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('echart3'))
+
+  var gradList = [
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#03c',
+      },
+      {
+        offset: 1,
+        color: '#18f',
+      },
+    ]),
+
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#46f',
+      },
+      {
+        offset: 1,
+        color: '#4cd',
+      },
+    ]),
+
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#3a7',
+      },
+      {
+        offset: 1,
+        color: '#4db',
+      },
+    ]),
+
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#03c',
+      },
+      {
+        offset: 1,
+        color: '#9db',
+      },
+    ]),
+
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#06b',
+      },
+      {
+        offset: 1,
+        color: '#4bf',
+      },
+    ]),
+
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#06b',
+      },
+      {
+        offset: 1,
+        color: '#0bb',
+      },
+    ]),
+
+    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+      {
+        offset: 0,
+        color: '#8ec',
+      },
+      {
+        offset: 1,
+        color: '#dea',
+      },
+    ]),
+  ]
+
+  var option = {
+    tooltip: {
+      confine: false,
+      borderWidth: 0,
+      padding: [15, 20],
+      backgroundColor: 'rgba(0, 51, 204, .9)',
+      textStyle: {
+        color: '#eef',
+        fontSize: 16,
+        fontFamily: 'pingfang sc, microsoft yahei',
+      },
+      formatter: parames => {
+        return `${parames.data.name} 男女比例 ${parseInt((100 - parames.data.value) / 10)}：${parseInt(
+          parames.data.value / 10
+        )}`
+      },
+    },
+    legend: {
+      show: false,
+    },
+    series: [
+      {
+        name: '需求类型占比',
+        type: 'pie',
+        center: ['50%', '50%'],
+        radius: ['55%', '75%'],
+        itemStyle: {
+          normal: {
+            color: function (params) {
+              return gradList[params.dataIndex]
+            },
+            borderColor: '#007',
+            borderWidth: 0,
+          },
+        },
+        label: {
+          normal: {
+            show: false,
+            position: 'center',
+            formatter: '{value|{c}}\n{label|{b}}',
+            rich: {
+              value: {
+                padding: 5,
+                align: 'center',
+                verticalAlign: 'middle',
+                fontSize: 48,
+                fontFamily: 'electronicFont, impact, pingfang sc, microsoft yahei',
+                color: '#fff',
+              },
+              label: {
+                align: 'center',
+                verticalAlign: 'middle',
+                fontSize: 16,
+                fontFamily: 'pingfang sc, microsoft yahei',
+                color: '#9cf',
+              },
+            },
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '12',
+            },
+          },
+        },
+        labelLine: {
+          show: false,
+          length: 0,
+          length2: 0,
+        },
+        data: [
+          { name: '18-30', value: 10 },
+          { name: '31-45', value: 30 },
+          { name: '46-60', value: 50 },
+          { name: '61-75', value: 10 },
+        ],
+      },
+
+      {
+        name: '刻度间隔',
+        type: 'gauge',
+        radius: '55%',
+        center: ['50%', '50%'],
+        startAngle: 0,
+        endAngle: 359.9,
+        splitNumber: 20,
+        hoverAnimation: true,
+        splitLine: {
+          show: false,
+          distance: 20,
+          length: 10,
+          lineStyle: {
+            width: 1,
+            color: 'rgba(17, 136, 255, .5)',
+          },
+        },
+        axisTick: {
+          // distance: -25,
+          length: 20,
+          lineStyle: {
+            width: 1,
+            color: 'rgba(17, 136, 255, .5)',
+          },
+        },
+        axisLabel: {
+          show: false,
+        },
+        pointer: {
+          show: false,
+        },
+        axisLine: {
+          lineStyle: {
+            opacity: 0,
+          },
+        },
+        detail: {
+          show: false,
+        },
+        data: [0],
+      },
+    ],
+  }
+
+  myChart.setOption(option)
+  window.addEventListener('resize', function () {
+    myChart.resize()
+  })
+}
+
+// 右上
 export const echarts_4 = () => {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.getElementById('echart4'))
@@ -321,547 +584,257 @@ export const echarts_4 = () => {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
-        lineStyle: {
-          color: '#dddc6b',
-        },
+        type: 'shadow',
       },
     },
-    legend: {
-      top: '0%',
-      data: ['安卓', 'IOS'],
-      textStyle: {
-        color: 'rgba(255,255,255,.5)',
-        fontSize: '12',
-      },
-    },
-    grid: {
-      left: '10',
-      top: '30',
-      right: '10',
-      bottom: '10',
-      containLabel: true,
-    },
-
     xAxis: [
       {
         type: 'category',
-        boundaryGap: false,
-        axisLabel: {
-          textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: 12,
-          },
-        },
+        data: [
+          'SQL注入',
+          '非法访问',
+          '其他',
+          'DOS攻击',
+          '信息爬虫',
+          '进出',
+          '业务主机',
+          '扫描器',
+          '恶意攻击',
+          '攻击协助',
+        ],
         axisLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,.2)',
+            color: '#FFFFFF',
           },
         },
-
-        data: [
-          '01',
-          '02',
-          '03',
-          '04',
-          '05',
-          '06',
-          '07',
-          '08',
-          '09',
-          '11',
-          '12',
-          '13',
-          '14',
-          '15',
-          '16',
-          '17',
-          '18',
-          '19',
-          '20',
-          '21',
-          '22',
-          '23',
-          '24',
-        ],
-      },
-      {
-        axisPointer: { show: false },
-        axisLine: { show: false },
-        position: 'bottom',
-        offset: 20,
+        axisLabel: {
+          interval: 0,
+        },
+        axisTick: {
+          show: false,
+        },
       },
     ],
-
     yAxis: [
       {
+        min: 0,
+        max: 4000,
+        interval: 1000,
         type: 'value',
-        axisTick: { show: false },
-        axisLine: {
-          lineStyle: {
-            color: 'rgba(255,255,255,.1)',
-          },
-        },
         axisLabel: {
           textStyle: {
-            color: 'rgba(255,255,255,.6)',
-            fontSize: 12,
+            color: '#ffffff',
+          },
+          formatter: function (value, index) {
+            if (value >= 1000) {
+              value = value / 1000 + '000'
+            } else if (value < 1000) {
+              value
+            }
+            return value
           },
         },
-
+        axisTick: {
+          show: false,
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            color: '#FFFFFF',
+          },
+        },
         splitLine: {
           lineStyle: {
-            color: 'rgba(255,255,255,.1)',
+            color: 'rgba(255,255,255,0.12)',
           },
         },
       },
     ],
     series: [
       {
-        name: '安卓',
-        type: 'line',
-        smooth: true,
-        symbol: 'circle',
-        symbolSize: 5,
-        showSymbol: false,
-        lineStyle: {
-          normal: {
-            color: '#0184d5',
-            width: 2,
-          },
-        },
-        areaStyle: {
-          normal: {
-            color: new echarts.graphic.LinearGradient(
-              0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: 'rgba(1, 132, 213, 0.4)',
-                },
-                {
-                  offset: 0.8,
-                  color: 'rgba(1, 132, 213, 0.1)',
-                },
-              ],
-              false
-            ),
-            shadowColor: 'rgba(0, 0, 0, 0.1)',
-          },
-        },
+        type: 'bar',
+        data: [2000, 1900, 1700, 1400, 1000, 800, 600, 400, 200, 100],
+        barWidth: '22px',
         itemStyle: {
           normal: {
-            color: '#0184d5',
-            borderColor: 'rgba(221, 220, 107, .1)',
-            borderWidth: 12,
+            color: 'rgb(24,176,255)',
           },
         },
-        data: [3, 4, 3, 4, 3, 4, 3, 6, 2, 4, 2, 4, 3, 4, 3, 4, 3, 4, 3, 6, 2, 4, 2, 4],
-      },
-      {
-        name: 'IOS',
-        type: 'line',
-        smooth: true,
-        symbol: 'circle',
-        symbolSize: 5,
-        showSymbol: false,
-        lineStyle: {
-          normal: {
-            color: '#00d887',
-            width: 2,
-          },
-        },
-        areaStyle: {
-          normal: {
-            color: new echarts.graphic.LinearGradient(
-              0,
-              0,
-              0,
-              1,
-              [
-                {
-                  offset: 0,
-                  color: 'rgba(0, 216, 135, 0.4)',
-                },
-                {
-                  offset: 0.8,
-                  color: 'rgba(0, 216, 135, 0.1)',
-                },
-              ],
-              false
-            ),
-            shadowColor: 'rgba(0, 0, 0, 0.1)',
-          },
-        },
-        itemStyle: {
-          normal: {
-            color: '#00d887',
-            borderColor: 'rgba(221, 220, 107, .1)',
-            borderWidth: 12,
-          },
-        },
-        data: [5, 3, 5, 6, 1, 5, 3, 5, 6, 4, 6, 4, 8, 3, 5, 6, 1, 5, 3, 7, 2, 5, 1, 4],
       },
     ],
-    animationDelay: animationDelay,
   }
 
-  // 使用刚指定的配置项和数据显示图表。
   myChart.setOption(option)
   window.addEventListener('resize', function () {
     myChart.resize()
   })
 }
 
-// 右下饼图
+// 右中
+export const echarts_5 = () => {
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('echart5'))
+
+  var option = {
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(26,34,126,.9)',
+      padding: 10,
+      borderRadius: 4,
+      textStyle: {
+        fontSize: 12,
+        color: '#fff',
+      },
+      extraCssText: 'box-shadow:0 0 18px rgba(255,255,255,0.2)',
+    },
+
+    angleAxis: {
+      type: 'category',
+      data: ['区县一', '区县二', '区县三', '区县四', '区县五', '区县六', '区县七', '区县八', '区县九'],
+      splitLine: {
+        // 分隔线
+        show: false,
+        // onGap: null,
+        lineStyle: {
+          // 属性lineStyle（详见lineStyle）控制线条样式
+          color: ['rgba(207,238,252,0.2)'],
+          width: 1,
+          type: 'solid',
+        },
+      },
+
+      axisLine: {
+        // 坐标轴线
+        show: false,
+        lineStyle: {
+          // 属性lineStyle控制线条样式
+          color: 'rgba(207,238,252,0.2)',
+          width: 1,
+          type: 'solid',
+        },
+      },
+      axisTick: {
+        // 坐标轴小标记
+        show: false, // 属性show控制显示与否，默认不显示
+        inside: false, // 控制小标记是否在grid里
+        length: 5, // 属性length控制线长
+        lineStyle: {
+          // 属性lineStyle控制线条样式
+          color: 'rgba(207,238,252,0.2)',
+          width: 1,
+        },
+      },
+      axisLabel: {
+        color: '#fff',
+      },
+    },
+
+    radiusAxis: {
+      splitLine: {
+        lineStyle: {
+          type: 'solid',
+          color: 'rgba(207,238,252,0.2)',
+        },
+      },
+      axisLabel: {
+        color: '#fff',
+      },
+      axisTick: {
+        // 坐标轴小标记
+        show: true, // 属性show控制显示与否，默认不显示
+        inside: false, // 控制小标记是否在grid里
+        length: 5, // 属性length控制线长
+        lineStyle: {
+          // 属性lineStyle控制线条样式
+          color: 'rgba(207,238,252,1)',
+          width: 1,
+        },
+      },
+    },
+
+    polar: {
+      z: 0,
+      center: ['50%', '50%'],
+      radius: ['5%', '70%'],
+    },
+    series: [
+      {
+        type: 'bar',
+        data: [12, 24, 33, 44, 43, 45, 41, 41, 43],
+        coordinateSystem: 'polar',
+        name: '存储总量',
+        stack: 'a',
+        color: 'rgba(37,213,232,1)',
+        z: 0,
+      },
+      {
+        type: 'bar',
+        data: [2, 4, 6, 1, 3, 2, 1, 1, 3],
+
+        coordinateSystem: 'polar',
+        name: '领用总量',
+        stack: 'a',
+        color: 'rgba(0,100,252,1)',
+        z: 0,
+      },
+    ],
+  }
+
+  myChart.setOption(option)
+  window.addEventListener('resize', function () {
+    myChart.resize()
+  })
+}
+
+// 右下
 export const echarts_6 = () => {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.getElementById('echart6'))
 
-  var dataStyle = {
-    normal: {
-      label: {
+  var option = {
+    tooltip: {},
+    angleAxis: {
+      splitLine: {
         show: false,
       },
-      labelLine: {
-        show: false,
+    },
+    radiusAxis: {
+      type: 'category',
+      nameTextStyle: {
+        fontSize: 1, //设置字体大小无效
       },
-      //shadowBlur: 40,
-      //shadowColor: 'rgba(40, 40, 40, 1)',
+      data: ['周一', '周二', '周三', '周四'],
+      z: 10,
     },
-  }
-
-  var placeHolderStyle = {
-    normal: {
-      color: 'rgba(255,255,255,.05)',
-      label: { show: false },
-      labelLine: { show: false },
+    polar: {
+      radius: '65%',
     },
-    emphasis: {
-      color: 'rgba(0,0,0,0)',
+    axisLabel: {
+      color: '#fff',
     },
-  }
-
-  var option = {
-    color: ['#0f63d6', '#0f78d6', '#0f8cd6', '#0fa0d6', '#0fb4d6'],
-    tooltip: {
-      show: true,
-      formatter: '{a} : {c} ',
-    },
-    legend: {
-      itemWidth: 10,
-      itemHeight: 10,
-      itemGap: 12,
-      bottom: '3%',
-
-      data: ['浙江', '上海', '广东', '北京', '深圳'],
-      textStyle: {
-        color: 'rgba(255,255,255,.6)',
-      },
-    },
-
     series: [
       {
-        name: '浙江',
-        type: 'pie',
-        clockWise: false,
-        center: ['50%', '42%'],
-        radius: ['59%', '70%'],
-        itemStyle: dataStyle,
-        hoverAnimation: false,
-        data: [
-          {
-            value: 80,
-            name: '01',
+        type: 'bar',
+        data: [94464, 914346, 3242346, 2342634],
+        itemStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: '#2378f7' },
+              { offset: 0.7, color: '#0be7cd' },
+              { offset: 1, color: '#13dcca' },
+            ]),
           },
-          {
-            value: 20,
-            name: 'invisible',
-            tooltip: { show: false },
-            itemStyle: placeHolderStyle,
-          },
-        ],
-      },
-      {
-        name: '上海',
-        type: 'pie',
-        clockWise: false,
-        center: ['50%', '42%'],
-        radius: ['49%', '60%'],
-        itemStyle: dataStyle,
-        hoverAnimation: false,
-        data: [
-          {
-            value: 70,
-            name: '02',
-          },
-          {
-            value: 30,
-            name: 'invisible',
-            tooltip: { show: false },
-            itemStyle: placeHolderStyle,
-          },
-        ],
-      },
-      {
-        name: '广东',
-        type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
-        center: ['50%', '42%'],
-        radius: ['39%', '50%'],
-        itemStyle: dataStyle,
-        data: [
-          {
-            value: 65,
-            name: '03',
-          },
-          {
-            value: 35,
-            name: 'invisible',
-            tooltip: { show: false },
-            itemStyle: placeHolderStyle,
-          },
-        ],
-      },
-      {
-        name: '北京',
-        type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
-        center: ['50%', '42%'],
-        radius: ['29%', '40%'],
-        itemStyle: dataStyle,
-        data: [
-          {
-            value: 60,
-            name: '04',
-          },
-          {
-            value: 40,
-            name: 'invisible',
-            tooltip: { show: false },
-            itemStyle: placeHolderStyle,
-          },
-        ],
-      },
-      {
-        name: '深圳',
-        type: 'pie',
-        clockWise: false,
-        hoverAnimation: false,
-        center: ['50%', '42%'],
-        radius: ['20%', '30%'],
-        itemStyle: dataStyle,
-        data: [
-          {
-            value: 50,
-            name: '05',
-          },
-          {
-            value: 50,
-            name: 'invisible',
-            tooltip: { show: false },
-            itemStyle: placeHolderStyle,
-          },
-        ],
-      },
-    ],
-    animationDelay: animationDelay,
-  }
-
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option)
-
-  window.addEventListener('resize', function () {
-    myChart.resize()
-  })
-}
-
-// 左下环图一
-export const echarts_31 = () => {
-  // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('fb1'))
-  var option = {
-    title: [
-      {
-        text: '年龄分布',
-        left: 'center',
-        textStyle: {
-          color: '#fff',
-          fontSize: '16',
         },
+        coordinateSystem: 'polar',
+        name: 'A',
+        stack: 'a',
       },
     ],
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
-      position: function (p) {
-        //其中p为当前鼠标的位置
-        return [p[0] + 10, p[1] - 10]
-      },
+    textStyle: {
+      color: 'black',
     },
-    legend: {
-      top: '70%',
-      itemWidth: 10,
-      itemHeight: 10,
-      data: ['0岁以下', '20-29岁', '30-39岁', '40-49岁', '50岁以上'],
-      textStyle: {
-        color: 'rgba(255,255,255,.5)',
-        fontSize: '12',
-      },
-    },
-    series: [
-      {
-        name: '年龄分布',
-        type: 'pie',
-        center: ['50%', '42%'],
-        radius: ['40%', '60%'],
-        color: ['#065aab', '#066eab', '#0682ab', '#0696ab', '#06a0ab', '#06b4ab', '#06c8ab', '#06dcab', '#06f0ab'],
-        label: { show: false },
-        labelLine: { show: false },
-        data: [
-          { value: 1, name: '0岁以下' },
-          { value: 4, name: '20-29岁' },
-          { value: 2, name: '30-39岁' },
-          { value: 2, name: '40-49岁' },
-          { value: 1, name: '50岁以上' },
-        ],
-      },
-    ],
-    animationDelay: animationDelay,
   }
 
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option)
-  window.addEventListener('resize', function () {
-    myChart.resize()
-  })
-}
-
-// 左下环图二
-export const echarts_32 = () => {
-  // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('fb2'))
-
-  var option = {
-    title: [
-      {
-        text: '职业分布',
-        left: 'center',
-        textStyle: {
-          color: '#fff',
-          fontSize: '16',
-        },
-      },
-    ],
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
-      position: function (p) {
-        //其中p为当前鼠标的位置
-        return [p[0] + 10, p[1] - 10]
-      },
-    },
-    legend: {
-      top: '70%',
-      itemWidth: 10,
-      itemHeight: 10,
-      data: ['电子商务', '教育', 'IT/互联网', '金融', '学生', '其他'],
-      textStyle: {
-        color: 'rgba(255,255,255,.5)',
-        fontSize: '12',
-      },
-    },
-    series: [
-      {
-        name: '年龄分布',
-        type: 'pie',
-        center: ['50%', '42%'],
-        radius: ['40%', '60%'],
-        color: ['#065aab', '#066eab', '#0682ab', '#0696ab', '#06a0ab', '#06b4ab', '#06c8ab', '#06dcab', '#06f0ab'],
-        label: { show: false },
-        labelLine: { show: false },
-        data: [
-          { value: 5, name: '电子商务' },
-          { value: 1, name: '教育' },
-          { value: 6, name: 'IT/互联网' },
-          { value: 2, name: '金融' },
-          { value: 1, name: '学生' },
-          { value: 1, name: '其他' },
-        ],
-      },
-    ],
-    animationDelay: animationDelay,
-  }
-
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option)
-
-  window.addEventListener('resize', function () {
-    myChart.resize()
-  })
-}
-
-// 左下环图三
-export const echarts_33 = () => {
-  // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('fb3'))
-
-  var option = {
-    title: [
-      {
-        text: '兴趣分布',
-        left: 'center',
-        textStyle: {
-          color: '#fff',
-          fontSize: '16',
-        },
-      },
-    ],
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
-      position: function (p) {
-        //其中p为当前鼠标的位置
-        return [p[0] + 10, p[1] - 10]
-      },
-    },
-    legend: {
-      top: '70%',
-      itemWidth: 10,
-      itemHeight: 10,
-      data: ['汽车', '旅游', '财经', '教育', '软件', '其他'],
-      textStyle: {
-        color: 'rgba(255,255,255,.5)',
-        fontSize: '12',
-      },
-    },
-    series: [
-      {
-        name: '兴趣分布',
-        type: 'pie',
-        center: ['50%', '42%'],
-        radius: ['40%', '60%'],
-        color: ['#065aab', '#066eab', '#0682ab', '#0696ab', '#06a0ab', '#06b4ab', '#06c8ab', '#06dcab', '#06f0ab'],
-        label: { show: false },
-        labelLine: { show: false },
-        data: [
-          { value: 2, name: '汽车' },
-          { value: 3, name: '旅游' },
-          { value: 1, name: '财经' },
-          { value: 4, name: '教育' },
-          { value: 8, name: '软件' },
-          { value: 1, name: '其他' },
-        ],
-      },
-    ],
-    animationDelay: animationDelay,
-  }
-
-  // 使用刚指定的配置项和数据显示图表。
   myChart.setOption(option)
 
   window.addEventListener('resize', function () {
