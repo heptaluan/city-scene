@@ -30,13 +30,14 @@ a:hover{ color:#06c; text-decoration: none!important}
 
 .copyright{ background:rgba(19,31,64,.32); border: 1px solid rgba(255,255,255,.05); line-height:.5rem; text-align: center; padding-right: 15px; bottom: 0; color:rgba(255,255,255,.7); font-size: .16rem; }
 
-.head{ height:0.7rem; background: url(../images/head_bg.png) no-repeat center center; background-size: 100% 100%; position: relative; z-index: 100; transform: translateY(-150%); transition-duration: 1s;}
-.head h1{ color:#fff; text-align: center; font-size: .3rem; line-height:.6rem;}
+.head{ height: 1.2rem; background: url(../images/head_bg.png) no-repeat center center; background-size: 100% 100%; position: relative; z-index: 100; transform: translateY(-150%); transition-duration: 1s;}
+.head h1{ color:#fff; text-align: center; font-size: .32rem; padding-top: 0.3em;}
+.head h4{ color:#fff; text-align: center; font-size: .28rem; padding-top: 0.1em;}
 .head h1 img{ width:1.5rem; display: inline-block; vertical-align: middle; margin-right: .2rem}
 .weather{ position:absolute; right:.3rem; top:0; line-height: .5rem;}
 .weather img{ width:.3rem; display: inline-block; vertical-align: middle;margin-right:.01em;}
 .weather span{color:rgba(255,255,255,.7); font-size: .18rem; padding-right: .1rem;}
-.mainbox{ width: 100%; height: calc(100% - 10.5em); padding: 0 .1rem;}
+.mainbox{ width: 100%; height: calc(100% - 15.5em); padding: 0 .1rem;}
 .mainbox>ul{ height: 100%;}
 .mainbox>ul>li{ float: left; padding: 0 .1rem}
 

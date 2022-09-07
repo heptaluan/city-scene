@@ -78,20 +78,20 @@ $(window).load(function () {
   echarts_6()
   echarts_map()
 
-  var t = null
-  t = setTimeout(time, 1000)
-  function time() {
-    clearTimeout(t)
-    var dt = new Date()
-    var y = dt.getFullYear()
-    var mt = dt.getMonth() + 1
-    var day = dt.getDate()
-    var h = dt.getHours()
-    var m = dt.getMinutes()
-    var s = dt.getSeconds()
-    document.getElementById('showTime').innerHTML = y + '年' + mt + '月' + day + '-' + h + '时' + m + '分' + s + '秒'
-    t = setTimeout(time, 1000)
-  }
+  // var t = null
+  // t = setTimeout(time, 1000)
+  // function time() {
+  //   clearTimeout(t)
+  //   var dt = new Date()
+  //   var y = dt.getFullYear()
+  //   var mt = dt.getMonth() + 1
+  //   var day = dt.getDate()
+  //   var h = dt.getHours()
+  //   var m = dt.getMinutes()
+  //   var s = dt.getSeconds()
+  //   document.getElementById('showTime').innerHTML = y + '年' + mt + '月' + day + '-' + h + '时' + m + '分' + s + '秒'
+  //   t = setTimeout(time, 1000)
+  // }
 
   // mqtt
   const getMqttConfig = {
