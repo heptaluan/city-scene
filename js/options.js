@@ -111,11 +111,11 @@ export const echarts_1 = () => {
               [
                 {
                   offset: 0,
-                  color: 'rgba(1, 132, 213, 0.4)',
+                  color: 'rgba(0,244,255,1)', // 0% 处的颜色
                 },
                 {
-                  offset: 0.8,
-                  color: 'rgba(1, 132, 213, 0.1)',
+                  offset: 1,
+                  color: 'rgba(0,77,167,1)', // 100% 处的颜色
                 },
               ],
               false
@@ -132,7 +132,6 @@ export const echarts_1 = () => {
         },
         data: [3, 4, 3, 4, 3, 4, 3, 6, 2, 4, 2, 4, 3, 4, 3, 4, 3, 4, 3, 6, 2, 4, 2, 4],
       },
-      
     ],
     animationDelay: animationDelay,
   }
@@ -262,204 +261,47 @@ export const echarts_3 = () => {
   // 基于准备好的dom，初始化echarts实例
   var myChart = echarts.init(document.getElementById('echart3'))
 
-  var gradList = [
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#03c',
-      },
-      {
-        offset: 1,
-        color: '#18f',
-      },
-    ]),
-
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#46f',
-      },
-      {
-        offset: 1,
-        color: '#4cd',
-      },
-    ]),
-
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#3a7',
-      },
-      {
-        offset: 1,
-        color: '#4db',
-      },
-    ]),
-
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#03c',
-      },
-      {
-        offset: 1,
-        color: '#9db',
-      },
-    ]),
-
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#06b',
-      },
-      {
-        offset: 1,
-        color: '#4bf',
-      },
-    ]),
-
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#06b',
-      },
-      {
-        offset: 1,
-        color: '#0bb',
-      },
-    ]),
-
-    new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-      {
-        offset: 0,
-        color: '#8ec',
-      },
-      {
-        offset: 1,
-        color: '#dea',
-      },
-    ]),
-  ]
-
   var option = {
     tooltip: {
-      confine: false,
-      borderWidth: 0,
-      padding: [15, 20],
-      backgroundColor: 'rgba(0, 51, 204, .9)',
-      textStyle: {
-        color: '#eef',
-        fontSize: 16,
-        fontFamily: 'pingfang sc, microsoft yahei',
-      },
-      formatter: parames => {
-        return `${parames.data.name} 男女比例 ${parseInt((100 - parames.data.value) / 10)}：${parseInt(
-          parames.data.value / 10
-        )}`
-      },
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
-    legend: {
-      show: false,
-    },
+    color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
     series: [
       {
-        name: '需求类型占比',
+        name: '占比',
         type: 'pie',
-        center: ['50%', '50%'],
-        radius: ['55%', '75%'],
-        itemStyle: {
-          normal: {
-            color: function (params) {
-              return gradList[params.dataIndex]
-            },
-            borderColor: '#007',
-            borderWidth: 0,
-          },
-        },
+        selectedMode: 'single',
+        radius: [0, '30%'],
         label: {
-          normal: {
-            show: false,
-            position: 'center',
-            formatter: '{value|{c}}\n{label|{b}}',
-            rich: {
-              value: {
-                padding: 5,
-                align: 'center',
-                verticalAlign: 'middle',
-                fontSize: 48,
-                fontFamily: 'electronicFont, impact, pingfang sc, microsoft yahei',
-                color: '#fff',
-              },
-              label: {
-                align: 'center',
-                verticalAlign: 'middle',
-                fontSize: 16,
-                fontFamily: 'pingfang sc, microsoft yahei',
-                color: '#9cf',
-              },
-            },
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '12',
-            },
-          },
+          position: 'inner',
+          fontSize: 14,
         },
         labelLine: {
           show: false,
-          length: 0,
-          length2: 0,
         },
         data: [
-          { name: '18-30', value: 10 },
-          { name: '31-45', value: 30 },
-          { name: '46-60', value: 50 },
-          { name: '61-75', value: 10 },
+          { value: 1548, name: '男' },
+          { value: 775, name: '女' },
         ],
       },
-
       {
-        name: '刻度间隔',
-        type: 'gauge',
-        radius: '55%',
-        center: ['50%', '50%'],
-        startAngle: 0,
-        endAngle: 359.9,
-        splitNumber: 20,
-        hoverAnimation: true,
-        splitLine: {
-          show: false,
-          distance: 20,
-          length: 10,
-          lineStyle: {
-            width: 1,
-            color: 'rgba(17, 136, 255, .5)',
-          },
+        name: '年龄段',
+        type: 'pie',
+        radius: ['60%', '85%'],
+        labelLine: {
+          length: 30,
         },
-        axisTick: {
-          // distance: -25,
-          length: 20,
-          lineStyle: {
-            width: 1,
-            color: 'rgba(17, 136, 255, .5)',
-          },
+        label: {
+          position: 'inner',
+          fontSize: 12,
         },
-        axisLabel: {
-          show: false,
-        },
-        pointer: {
-          show: false,
-        },
-        axisLine: {
-          lineStyle: {
-            opacity: 0,
-          },
-        },
-        detail: {
-          show: false,
-        },
-        data: [0],
+        data: [
+          { value: 1048, name: '18-30' },
+          { value: 335, name: '31-45' },
+          { value: 310, name: '46-60' },
+          { value: 251, name: '61-75' },
+        ],
       },
     ],
   }
