@@ -170,6 +170,11 @@
       }
     )
 
+		// 判断是否登录
+		if (localStorage.getItem('token')) {
+			window.location = './index.html'
+		}
+
     $('.animsition').animsition({
       inClass: 'fade-in',
       outClass: 'fade-out',
@@ -233,6 +238,7 @@
         processData: false,
         success: function (data) {
           if (data.code === 200) {
+						localStorage.setItem('token', data.data.token)
             $('.target').click()
           } else if (data.code === 400) {
             $('.tips').html(data.message)

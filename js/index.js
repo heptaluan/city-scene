@@ -10,6 +10,12 @@ import {
 import { PahoMQTT } from './mqtt.js'
 
 $(window).load(function () {
+
+  // 判断是否登录
+  if (!localStorage.getItem('token')) {
+    window.location = './login.html'
+  }
+
   var whei = $(window).width()
   $('html').css({ fontSize: whei / 20 })
   $(window).resize(function () {
