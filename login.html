@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width" />
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="css/animsition.css" />
+    <link rel="stylesheet" type="text/css" href="css/login.css" />
+  </head>
+  <body>
+    <div class="wp animsition">
+      <div class="boardLogin">
+        <h2 class="title">「健康中国·新乡行动」 泛肿瘤普早筛</h2>
+        <h4 class="sub-title">全域智慧管理数字系统</h4>
+        <form>
+          <div class="inpGroup">
+            <span class="loginIco1"></span>
+            <input type="text" class="user" placeholder="请输入您的用户名" />
+          </div>
+          <div class="prompt">
+            <p class="error">用户名错误或不存在</p>
+          </div>
+
+          <div class="inpGroup">
+            <span class="loginIco2"></span>
+            <input type="password" class="password" placeholder="请输入您的密码" />
+          </div>
+          <div class="prompt">
+            <p class="success">输入正确</p>
+          </div>
+
+          <div class="inpGroup" style="width: 250px; position: relative">
+            <span class="loginIco2"></span>
+            <input type="text" class="captcha-code" placeholder="请输入验证码" maxlength="4" />
+            <img src="" class="captcha-image" style="width: 120px; height: 40px" />
+          </div>
+          <div class="prompt tips" style="margin: 5px; color: red"></div>
+
+          <div class="submit">登录</div>
+
+          <a href="./index.html" class="animsition-link target" style="display: none"></a>
+        </form>
+      </div>
+    </div>
+    <div id="particles-js"></div>
+  </body>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/javascript" src="js/jquery.animsition.js"></script>
+  <script src="js/particles.min.js"></script>
+  <script src="js/api.js"></script>
+  <script type="text/javascript">
+    particlesJS(
+      'particles-js',
+
+      {
+        particles: {
+          number: {
+            value: 40,
+            density: {
+              enable: true,
+              value_area: 800,
+            },
+          },
+          color: {
+            value: '#ffffff',
+          },
+          shape: {
+            type: 'circle',
+            stroke: {
+              width: 0,
+              color: '#000000',
+            },
+            polygon: {
+              nb_sides: 5,
+            },
+            image: {
+              src: 'img/github.svg',
+              width: 100,
+              height: 100,
+            },
+          },
+          opacity: {
+            value: 0.5,
+            random: false,
+            anim: {
+              enable: false,
+              speed: 1,
+              opacity_min: 0.1,
+              sync: false,
+            },
+          },
+          size: {
+            value: 5,
+            random: true,
+            anim: {
+              enable: false,
+              speed: 40,
+              size_min: 0.1,
+              sync: false,
+            },
+          },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: '#ffffff',
+            opacity: 0.4,
+            width: 1,
+          },
+          move: {
+            enable: true,
+            speed: 3,
+            direction: 'none',
+            random: false,
+            straight: false,
+            out_mode: 'out',
+            attract: {
+              enable: false,
+              rotateX: 600,
+              rotateY: 1200,
+            },
+          },
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: {
+              enable: true,
+              mode: 'repulse',
+            },
+            onclick: {
+              enable: true,
+              mode: 'push',
+            },
+            resize: true,
+          },
+          modes: {
+            grab: {
+              distance: 400,
+              line_linked: {
+                opacity: 1,
+              },
+            },
+            bubble: {
+              distance: 400,
+              size: 40,
+              duration: 2,
+              opacity: 8,
+              speed: 3,
+            },
+            repulse: {
+              distance: 200,
+            },
+            push: {
+              particles_nb: 4,
+            },
+            remove: {
+              particles_nb: 2,
+            },
+          },
+        },
+        retina_detect: true,
+        config_demo: {
+          hide_card: false,
+          background_color: '#b61924',
+          background_image: '',
+          background_position: '50% 50%',
+          background_repeat: 'no-repeat',
+          background_size: 'cover',
+        },
+      }
+    )
+
+    $('.animsition').animsition({
+      inClass: 'fade-in',
+      outClass: 'fade-out',
+      inDuration: 800,
+      outDuration: 1000,
+      linkElement: '.animsition-link',
+
+      loading: false,
+      loadingParentElement: 'body',
+      loadingClass: 'animsition-loading',
+      unSupportCss: ['animation-duration', '-webkit-animation-duration', '-o-animation-duration'],
+
+      overlay: false,
+
+      overlayClass: 'animsition-overlay-slide',
+      overlayParentElement: 'body',
+    })
+
+    const checkKey = new Date().getTime().toString()
+    const getImgUrl = loginImg(checkKey)
+
+    const getCaptchaImage = () => {
+      $.get(getImgUrl, function (data, status) {
+        if (data.code === 200) {
+          $('.captcha-image').attr('src', data.data)
+        } else {
+          $('.tips').html(`验证码加载失败，请刷新后重新尝试`)
+        }
+      })
+    }
+
+    getCaptchaImage()
+
+    $('.captcha-image').click(function () {
+      getCaptchaImage()
+    })
+
+    $('.submit').click(function () {
+      if ($('.user').val() === '' || $('.password').val() === '') {
+        $('.tips').html(`请输入用户名和密码`)
+        return false
+      }
+
+      if ($('.captcha-code').val() === '') {
+        $('.tips').html(`请输入验证码`)
+        return false
+      }
+
+      const data = {
+        username: $('.user').val(),
+        password: $('.password').val(),
+        captcha: $('.captcha-code').val(),
+        checkKey: new Date().getTime().toString(),
+      }
+
+      $.ajax({
+        url: loginUrl(),
+        data: JSON.stringify(data),
+        type: 'post',
+        contentType: 'application/json;charset=UTF-8',
+        processData: false,
+        success: function (data) {
+          if (data.code === 200) {
+            $('.target').click()
+          } else if (data.code === 400) {
+            $('.tips').html(data.message)
+          }
+        },
+      })
+    })
+  </script>
+</html>

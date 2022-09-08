@@ -302,7 +302,7 @@ export const echarts_3 = () => {
           { value: 1048, name: '18-30' },
           { value: 335, name: '31-45' },
           { value: 310, name: '46-60' },
-          { value: 251, name: '61-75' },
+          { value: 251, name: '61岁及以上' },
         ],
       },
     ],
@@ -496,7 +496,7 @@ export const echarts_5 = () => {
     polar: {
       z: 0,
       center: ['50%', '50%'],
-      radius: ['5%', '70%'],
+      radius: ['5%', '80%'],
     },
     series: [
       {
@@ -548,7 +548,7 @@ export const echarts_6 = () => {
       z: 10,
     },
     polar: {
-      radius: '65%',
+      radius: '80%',
     },
     axisLabel: {
       color: '#fff',
