@@ -1,16 +1,23 @@
 import {
-  echarts_1,
-  echarts_2,
-  echarts_4,
-  echarts_3,
-  echarts_5,
-  echarts_6,
-  echarts_map,
+  option1,
+  formatOption1,
+  option2,
+  formatOption2,
+  option3,
+  formatOption3,
+  option4,
+  formatOption4,
+  option5,
+  formatOption5,
+  option6,
+  formatOption6,
+  option7,
+  formatOption7,
 } from './options.js'
+import { geoData } from './xinxiang.js'
 import { PahoMQTT } from './mqtt.js'
 
 $(window).load(function () {
-
   // 判断是否登录
   if (!localStorage.getItem('token')) {
     window.location = './login.html'
@@ -72,54 +79,88 @@ $(window).load(function () {
     })
   }, 200)
 
-  echarts_1()
-  echarts_2()
-  echarts_4()
-  echarts_3()
-  echarts_5()
-  echarts_6()
-  echarts_map()
+  // ===========================================================
 
-  // var t = null
-  // t = setTimeout(time, 1000)
-  // function time() {
-  //   clearTimeout(t)
-  //   var dt = new Date()
-  //   var y = dt.getFullYear()
-  //   var mt = dt.getMonth() + 1
-  //   var day = dt.getDate()
-  //   var h = dt.getHours()
-  //   var m = dt.getMinutes()
-  //   var s = dt.getSeconds()
-  //   document.getElementById('showTime').innerHTML = y + '年' + mt + '月' + day + '-' + h + '时' + m + '分' + s + '秒'
-  //   t = setTimeout(time, 1000)
-  // }
+  echarts.registerMap('xinxiang', geoData)
 
-  // mqtt
-  const getMqttConfig = {
-    ip: `${window.location.hostname}`,
-    port: 61614,
-    clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
-  }
+  const echart1 = echarts.init(document.getElementById('echart1'))
+  const echart2 = echarts.init(document.getElementById('echart2'))
+  const echart3 = echarts.init(document.getElementById('echart3'))
+  const echart4 = echarts.init(document.getElementById('echart4'))
+  const echart5 = echarts.init(document.getElementById('echart5'))
+  const echart6 = echarts.init(document.getElementById('echart6'))
+  const echart7 = echarts.init(document.getElementById('echart7'))
+  echart7.hideLoading()
 
-  const client = new PahoMQTT.Client(getMqttConfig.ip, getMqttConfig.port, getMqttConfig.clientId)
+  const getViewDataUrl = getViewData()
 
-  client.onConnectionLost = responseObject => {
-    if (responseObject.errorCode !== 0) {
-      console.log('onConnectionLost:' + responseObject.errorMessage)
-    }
-  }
-  client.onMessageArrived = message => {
-    console.log(JSON.parse(message.payloadString))
-  }
-
-  client.connect({
-    onSuccess: () => {
-      client.subscribe(`device_data_${gateway}`)
-      client.subscribe(`card_data_${gateway}`)
-      const message = new PahoMQTT.Message('Hello')
-      message.destinationName = 'World'
-      client.send(message)
+  $.ajax({
+    url: getViewDataUrl,
+    type: 'POST',
+    contentType: 'application/json;charset=UTF-8',
+    headers: { 'X-Access-Token': localStorage.getItem('token') },
+    success: function (res) {
+      initCharts(res.data)
     },
   })
+
+  function initCharts(data) {
+    
+    $('#todayOrderNumber').html(data.todayOrderNumber)
+    $('#totalOrderNumber').html(data.totalOrderNumber)
+
+    const newOption1 = formatOption1(data, option1)
+    const newOption2 = formatOption2(data, option2)
+    const newOption3 = formatOption3(data, option3)
+    const newOption4 = formatOption4(data, option4)
+    const newOption5 = formatOption5(data, option5)
+    const newOption6 = formatOption6(data, option6)
+    const newOption7 = formatOption7(data, option7)
+
+    echart1.setOption(newOption1)
+    echart2.setOption(newOption2)
+    echart3.setOption(newOption3)
+    echart4.setOption(newOption4)
+    echart5.setOption(newOption5)
+    // echart6.setOption(newOption6)
+    echart7.setOption(newOption7)
+
+    window.addEventListener('resize', function () {
+      echart1.resize()
+      echart2.resize()
+      echart3.resize()
+      echart4.resize()
+      echart5.resize()
+      // echart6.resize()
+      echart7.resize()
+    })
+  }
+
+  // mqtt
+  // const getMqttConfig = {
+  //   ip: `${window.location.hostname}`,
+  //   port: 61614,
+  //   clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+  // }
+
+  // const client = new PahoMQTT.Client(getMqttConfig.ip, getMqttConfig.port, getMqttConfig.clientId)
+
+  // client.onConnectionLost = responseObject => {
+  //   if (responseObject.errorCode !== 0) {
+  //     console.log('onConnectionLost:' + responseObject.errorMessage)
+  //   }
+  // }
+  // client.onMessageArrived = message => {
+  //   console.log(JSON.parse(message.payloadString))
+  // }
+
+  // client.connect({
+  //   onSuccess: () => {
+  //     client.subscribe(`device_data_${gateway}`)
+  //     client.subscribe(`card_data_${gateway}`)
+  //     const message = new PahoMQTT.Message('Hello')
+  //     message.destinationName = 'World'
+  //     client.send(message)
+  //   },
+  // })
 })

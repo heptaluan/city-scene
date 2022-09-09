@@ -193,8 +193,8 @@
       overlayParentElement: 'body',
     })
 
-    const checkKey = new Date().getTime().toString()
-    const getImgUrl = loginImg(checkKey)
+    let checkKey = new Date().getTime().toString()
+    let getImgUrl = loginImg(checkKey)
 
     const getCaptchaImage = () => {
       $.get(getImgUrl, function (data, status) {
@@ -209,6 +209,8 @@
     getCaptchaImage()
 
     $('.captcha-image').click(function () {
+			checkKey = new Date().getTime().toString()
+			getImgUrl = loginImg(checkKey)
       getCaptchaImage()
     })
 
@@ -227,7 +229,7 @@
         username: $('.user').val(),
         password: $('.password').val(),
         captcha: $('.captcha-code').val(),
-        checkKey: new Date().getTime().toString(),
+        checkKey: checkKey,
       }
 
       $.ajax({
