@@ -411,7 +411,7 @@ export const formatOption4 = (data, option) => {
   return option
 }
 
-// 左中
+// 右中
 export const option5 = {
   tooltip: {
     trigger: 'axis',
@@ -604,9 +604,6 @@ var rangeColorList = [
 ]
 
 export const option7 = {
-  tooltip: {
-    show: true,
-},
   geo3D: {
     map: 'xinxiang',
     boxDepth: 80,
@@ -659,33 +656,24 @@ export const option7 = {
     },
     regions: [],
   },
-  // tooltip: {
-  //   show: true,
-  //   formatter: params => {
-  //     let data = params.name + '<br/>' + '值:' + params.value[2]
-  //     return data
-  //   },
-  // },
+  tooltip: {
+    show: true,
+    formatter: params => {
+      let data = params.name + '<br/>' + '累计数:' + params.value[2]
+      return data
+    },
+  },
   series: [
     {
       name: 'bar3D',
       type: 'bar3D',
       coordinateSystem: 'geo3D',
-      barSize: 1, //柱子粗细
+      barSize: 0.8,
       shading: 'lambert',
-      opacity: 0.1,
-      label: {
-        show: false,
-        formatter: function (data) {
-          var res = data.name + ' ' + data.value[2]
-          return res
-        },
+      itemStyle: {
+        color: 'rgba(37,213,232,1)',
       },
-      data: [
-        { name: '红旗区', value: [113.87523, 35.30367, 122] },
-        { name: '卫滨区', value: [113.82578, 35.30211, 222] },
-        { name: '凤泉区', value: [113.91507, 35.38399, 444] },
-      ],
+      data: [],
     },
   ],
 }
@@ -703,10 +691,12 @@ export const formatOption7 = (data, option) => {
   const cityList = []
   const city = list.sort(compare)
   for (let i = 0; i < city.length; i++) {
-    cityList.push({
-      name: city[i].name.replace('新乡市', ''),
-      itemStyle: { color: rangeColorList[i] },
-    })
+    if (city[i] !== '新乡市经开区' || city[i] !== '新乡市高新区' || city[i] !== '平原新区') {
+      cityList.push({
+        name: city[i].name.replace('新乡市', ''),
+        itemStyle: { color: rangeColorList[i] },
+      })
+    }
   }
 
   // 处理柱状图
@@ -723,8 +713,11 @@ export const formatOption7 = (data, option) => {
   //   seriesData.push(parseFloat(list[i].num))
   // }
 
-  option.geo3D.regions = cityList
-  // option.series.find(item => item.type === 'bar3D').data = barData
+  const newCityList = cityList.filter(
+    item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
+  )
+  option.geo3D.regions = newCityList
+  option.series.find(item => item.type === 'bar3D').data = barData
 
   return option
 }

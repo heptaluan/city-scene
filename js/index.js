@@ -105,7 +105,6 @@ $(window).load(function () {
   })
 
   function initCharts(data) {
-    
     $('#todayOrderNumber').html(data.todayOrderNumber)
     $('#totalOrderNumber').html(data.totalOrderNumber)
 
@@ -133,6 +132,10 @@ $(window).load(function () {
       echart5.resize()
       // echart6.resize()
       echart7.resize()
+    })
+
+    echart7.getZr().on('click', params => {
+      console.log(params)
     })
   }
 
