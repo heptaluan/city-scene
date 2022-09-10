@@ -609,10 +609,10 @@ export const option7 = {
     boxDepth: 80,
     regionHeight: 2,
     shading: 'realistic',
-    // realisticMaterial: {
-    //   detailTexture: '../images/map-bg.jpg',
-    //   roughness: 0,
-    // },
+    realisticMaterial: {
+      detailTexture: '../images/map-bg.jpg',
+      roughness: 0,
+    },
     itemStyle: {
       opacity: 1, // 透明度
       borderWidth: 1, //分界线宽度
