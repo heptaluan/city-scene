@@ -609,10 +609,10 @@ export const option7 = {
     boxDepth: 80,
     regionHeight: 2,
     shading: 'realistic',
-    realisticMaterial: {
-      detailTexture: '../images/map-bg.jpg',
-      roughness: 0,
-    },
+    // realisticMaterial: {
+    //   detailTexture: '../images/map-bg.jpg',
+    //   roughness: 0,
+    // },
     itemStyle: {
       opacity: 1, // 透明度
       borderWidth: 1, //分界线宽度
@@ -713,11 +713,11 @@ export const formatOption7 = (data, option) => {
   //   seriesData.push(parseFloat(list[i].num))
   // }
 
-  const newCityList = cityList.filter(
-    item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
-  )
-  option.geo3D.regions = newCityList
-  option.series.find(item => item.type === 'bar3D').data = barData
+  // const newCityList = cityList.filter(
+  //   item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
+  // )
+  // option.geo3D.regions = newCityList
+  // option.series.find(item => item.type === 'bar3D').data = barData
 
   return option
 }
