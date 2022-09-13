@@ -134,8 +134,12 @@ $(window).load(function () {
       echart7.resize()
     })
 
-    echart7.getZr().on('click', params => {
+    echart7.on('click', params => {
       console.log(params)
+    })
+
+    echart7.on('geoselectchanged', function(event){
+      console.log(event)
     })
   }
 
