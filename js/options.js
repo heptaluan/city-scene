@@ -10,6 +10,10 @@ export const option1 = {
       },
     },
   },
+  grid: {
+    top: '10',
+    right: '2%',
+  },
   xAxis: [
     {
       type: 'category',
@@ -137,6 +141,10 @@ export const option2 = {
       color: '#CFE3FC',
     },
     borderWidth: 1,
+  },
+  grid: {
+    top: '30',
+    right: '2%',
   },
   xAxis: [
     {
@@ -322,6 +330,10 @@ export const option4 = {
       color: '#CFE3FC',
     },
     borderWidth: 1,
+  },
+  grid: {
+    top: '10',
+    right: '2%',
   },
   xAxis: {
     data: [],
@@ -619,7 +631,7 @@ export const option7 = {
       borderColor: '#207fce', //分界线颜色
     },
     viewControl: {
-      distance: 95,
+      distance: 100,
       center: [0, -10, 0],
     },
     label: {
@@ -656,6 +668,18 @@ export const option7 = {
     },
     regions: [],
   },
+  visualMap: {
+    max: 40,
+    show: false,
+    calculable: true,
+    realtime: false,
+    inRange: {
+      color: ['#313695', '#4575b4', '#74add1']
+    },
+    outOfRange: {
+      colorAlpha: 0,
+    },
+  },
   tooltip: {
     show: true,
     formatter: params => {
@@ -668,11 +692,11 @@ export const option7 = {
       name: 'bar3D',
       type: 'bar3D',
       coordinateSystem: 'geo3D',
-      barSize: 0.8,
+      barSize: 1,
       shading: 'lambert',
-      itemStyle: {
-        color: 'rgba(37,213,232,1)',
-      },
+      opacity: 1,
+      bevelSize: 0.8,
+      minHeight: 1.5,
       data: [],
     },
   ],
@@ -713,11 +737,11 @@ export const formatOption7 = (data, option) => {
   //   seriesData.push(parseFloat(list[i].num))
   // }
 
-  // const newCityList = cityList.filter(
-  //   item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
-  // )
-  // option.geo3D.regions = newCityList
-  // option.series.find(item => item.type === 'bar3D').data = barData
+  const newCityList = cityList.filter(
+    item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
+  )
+  option.geo3D.regions = newCityList
+  option.series.find(item => item.type === 'bar3D').data = barData
 
   return option
 }

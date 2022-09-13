@@ -81,6 +81,8 @@ $(window).load(function () {
 
   // ===========================================================
 
+  // ===========================================================
+
   echarts.registerMap('xinxiang', geoData)
 
   const echart1 = echarts.init(document.getElementById('echart1'))
@@ -92,6 +94,8 @@ $(window).load(function () {
   const echart7 = echarts.init(document.getElementById('echart7'))
   echart7.hideLoading()
 
+  let mapOption = {}
+
   const getViewDataUrl = getViewData()
 
   $.ajax({
@@ -102,11 +106,28 @@ $(window).load(function () {
     success: function (res) {
       initCharts(res.data)
     },
+    error: function (res) {
+      if (res.responseJSON.code === 500) {
+        localStorage.setItem('token', '')
+        window.location = './login.html'
+      }
+    },
   })
 
   function initCharts(data) {
-    $('#todayOrderNumber').html(data.todayOrderNumber)
-    $('#totalOrderNumber').html(data.totalOrderNumber)
+    $('#todayOrderNumber').countTo({
+      from: 0,
+      to: data.todayOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderNumber').countTo({
+      from: 0,
+      to: data.totalOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
 
     const newOption1 = formatOption1(data, option1)
     const newOption2 = formatOption2(data, option2)
@@ -121,8 +142,9 @@ $(window).load(function () {
     echart3.setOption(newOption3)
     echart4.setOption(newOption4)
     echart5.setOption(newOption5)
-    // echart6.setOption(newOption6)
+    echart6.setOption(newOption6)
     echart7.setOption(newOption7)
+    mapOption = $.extend(true, {}, newOption7)
 
     window.addEventListener('resize', function () {
       echart1.resize()
@@ -130,18 +152,26 @@ $(window).load(function () {
       echart3.resize()
       echart4.resize()
       echart5.resize()
-      // echart6.resize()
+      echart6.resize()
       echart7.resize()
     })
-
-    echart7.on('click', params => {
-      console.log(params)
-    })
-
-    echart7.on('geoselectchanged', function(event){
-      console.log(event)
-    })
   }
+
+  // ===========================================================
+
+  $('#showBarChart').click(function () {
+    if ($(this).html() === '隐藏检测点') {
+      $(this).html('显示检测点')
+      const option = $.extend(true, {}, mapOption)
+      option.series.find(item => item.type === 'bar3D').data = []
+      echart7.setOption(option)
+    } else {
+      $(this).html('隐藏检测点')
+      echart7.setOption(mapOption)
+    }
+  })
+
+  // ===========================================================
 
   // mqtt
   // const getMqttConfig = {
