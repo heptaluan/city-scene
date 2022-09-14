@@ -703,12 +703,10 @@ export const formatOption7 = (data, option) => {
   const cityList = []
   const city = list.sort(compare)
   for (let i = 0; i < city.length; i++) {
-    if (city[i] !== '新乡市经开区' || city[i] !== '新乡市高新区' || city[i] !== '平原新区') {
-      cityList.push({
-        name: city[i].name.replace('新乡市', ''),
-        itemStyle: { color: rangeColorList[i] },
-      })
-    }
+    cityList.push({
+      name: city[i].name.replace('新乡市', ''),
+      itemStyle: { color: rangeColorList[i] },
+    })
   }
 
   // 处理柱状图
@@ -725,10 +723,7 @@ export const formatOption7 = (data, option) => {
   //   seriesData.push(parseFloat(list[i].num))
   // }
 
-  const newCityList = cityList.filter(
-    item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
-  )
-  option.geo3D.regions = newCityList
+  option.geo3D.regions = cityList
   option.series.find(item => item.type === 'bar3D').data = barData
 
   return option
