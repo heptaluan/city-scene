@@ -1,4 +1,6 @@
-﻿const animationDelay = 300
+﻿import { config } from '../config.js'
+
+const animationDelay = 300
 
 // 左上
 export const option1 = {
@@ -9,6 +11,10 @@ export const option1 = {
         color: '#dddc6b',
       },
     },
+  },
+  grid: {
+    top: '10',
+    right: '2%',
   },
   xAxis: [
     {
@@ -137,6 +143,10 @@ export const option2 = {
       color: '#CFE3FC',
     },
     borderWidth: 1,
+  },
+  grid: {
+    top: '30',
+    right: '2%',
   },
   xAxis: [
     {
@@ -322,6 +332,10 @@ export const option4 = {
       color: '#CFE3FC',
     },
     borderWidth: 1,
+  },
+  grid: {
+    top: '10',
+    right: '2%',
   },
   xAxis: {
     data: [],
@@ -535,7 +549,7 @@ export const option6 = {
     nameTextStyle: {
       fontSize: 1, //设置字体大小无效
     },
-    data: ['周一', '周二', '周三', '周四'],
+    data: config.radiusAxisData,
     z: 10,
   },
   polar: {
@@ -547,7 +561,7 @@ export const option6 = {
   series: [
     {
       type: 'bar',
-      data: [94464, 914346, 3242346, 2342634],
+      data: config.seriesData,
       itemStyle: {
         normal: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -558,7 +572,6 @@ export const option6 = {
         },
       },
       coordinateSystem: 'polar',
-      name: 'A',
       stack: 'a',
     },
   ],
@@ -568,23 +581,10 @@ export const option6 = {
 }
 
 export const formatOption6 = (data, option) => {
-  const list = data.completionList
-  const angleAxisData = []
-  const seriesData = []
-
-  // for (let i = 0; i < list.length; i++) {
-  //   angleAxisData.push(list[i].name)
-  //   seriesData.push(parseFloat(list[i].num))
-  // }
-
-  // option.angleAxis.data = angleAxisData
-  // option.series.find(item => item.type === 'bar').data = seriesData
-
   return option
 }
 
 // 中间地图
-
 var rangeColorList = [
   '#244779',
   '#244c81',
@@ -619,7 +619,7 @@ export const option7 = {
       borderColor: '#207fce', //分界线颜色
     },
     viewControl: {
-      distance: 95,
+      distance: 100,
       center: [0, -10, 0],
     },
     label: {
@@ -656,6 +656,18 @@ export const option7 = {
     },
     regions: [],
   },
+  visualMap: {
+    max: 40,
+    show: false,
+    calculable: true,
+    realtime: false,
+    inRange: {
+      color: ['#313695', '#4575b4', '#74add1'],
+    },
+    outOfRange: {
+      colorAlpha: 0,
+    },
+  },
   tooltip: {
     show: true,
     formatter: params => {
@@ -668,11 +680,11 @@ export const option7 = {
       name: 'bar3D',
       type: 'bar3D',
       coordinateSystem: 'geo3D',
-      barSize: 0.8,
+      barSize: 0.4,
       shading: 'lambert',
-      itemStyle: {
-        color: 'rgba(37,213,232,1)',
-      },
+      opacity: 1,
+      bevelSize: 0.8,
+      minHeight: 1.5,
       data: [],
     },
   ],
@@ -713,11 +725,11 @@ export const formatOption7 = (data, option) => {
   //   seriesData.push(parseFloat(list[i].num))
   // }
 
-  // const newCityList = cityList.filter(
-  //   item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
-  // )
-  // option.geo3D.regions = newCityList
-  // option.series.find(item => item.type === 'bar3D').data = barData
+  const newCityList = cityList.filter(
+    item => item.name !== '经开区' && item.name !== '平原新区' && item.name !== '高新区'
+  )
+  option.geo3D.regions = newCityList
+  option.series.find(item => item.type === 'bar3D').data = barData
 
   return option
 }
