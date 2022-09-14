@@ -151,8 +151,6 @@ select:-webkit-autofill {
 
 .wp {
   height: 100%;
-  /* background: url(../images/bgImg.png) no-repeat center 0;
-	background-size: auto 100%; */
   position: relative;
   z-index: 2;
 }
@@ -254,7 +252,6 @@ select:-webkit-autofill {
 }
 
 .boardLogin .inpGroup input::-moz-placeholder {
-  /* Mozilla Firefox 19+ */
   color: #fff;
   opacity: 1;
 }

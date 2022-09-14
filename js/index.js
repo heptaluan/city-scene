@@ -174,30 +174,30 @@ $(window).load(function () {
   // ===========================================================
 
   // mqtt
-  // const getMqttConfig = {
-  //   ip: `${window.location.hostname}`,
-  //   port: 61614,
-  //   clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
-  // }
+  var getMqttConfig = {
+    ip: `106.15.180.169`,
+    port: 8083,
+    clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+  }
 
-  // const client = new PahoMQTT.Client(getMqttConfig.ip, getMqttConfig.port, getMqttConfig.clientId)
+  var client = new PahoMQTT.Client(getMqttConfig.ip, getMqttConfig.port, getMqttConfig.clientId)
 
-  // client.onConnectionLost = responseObject => {
-  //   if (responseObject.errorCode !== 0) {
-  //     console.log('onConnectionLost:' + responseObject.errorMessage)
-  //   }
-  // }
-  // client.onMessageArrived = message => {
-  //   console.log(JSON.parse(message.payloadString))
-  // }
+  client.onConnectionLost = responseObject => {
+    console.log(responseObject)
+  }
 
-  // client.connect({
-  //   onSuccess: () => {
-  //     client.subscribe(`device_data_${gateway}`)
-  //     client.subscribe(`card_data_${gateway}`)
-  //     const message = new PahoMQTT.Message('Hello')
-  //     message.destinationName = 'World'
-  //     client.send(message)
-  //   },
-  // })
+  client.onMessageArrived = message => {
+    console.log(message.payloadString)
+  }
+
+  client.connect({
+    userName: 'admin',
+    password: 'Tailai@wh@2022',
+    onSuccess: () => {
+      client.subscribe(`test/topic`)
+      // const message = new PahoMQTT.Message('Hello')
+      // message.destinationName = 'World'
+      // client.send(message)
+    },
+  })
 })
