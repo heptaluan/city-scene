@@ -95,6 +95,7 @@ $(window).load(function () {
   echart7.hideLoading()
 
   let mapOption = {}
+  let preTodayOrderNumber = 0, nextTodayOrderNumber = 0, preTotalOrderNumber = 0, nextTotalOrderNumber = 0
 
   const getViewDataUrl = getViewData()
 
@@ -115,6 +116,11 @@ $(window).load(function () {
   })
 
   function initCharts(data) {
+    
+    // 保存之前的数据
+    preTodayOrderNumber = data.todayOrderNumber
+    preTotalOrderNumber = data.totalOrderNumber
+
     $('#todayOrderNumber').countTo({
       from: 0,
       to: data.todayOrderNumber,
