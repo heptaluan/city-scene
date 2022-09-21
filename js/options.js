@@ -280,12 +280,19 @@ export const option3 = {
       name: '年龄段',
       type: 'pie',
       radius: ['60%', '85%'],
-      labelLine: {
-        length: 30,
-      },
       label: {
         position: 'inner',
         fontSize: 12,
+        lineHeight: 15,
+        formatter: params => {
+          if (params.data.name === '30岁及以下') {
+            return '30岁' + '\n' + '及以下'
+          } else if (params.data.name === '61岁及以上') {
+            return '61岁' + '\n' + '及以上'
+          } else {
+            return params.data.name
+          }
+        },
       },
       data: [],
     },
@@ -530,7 +537,7 @@ export const formatOption5 = (data, option) => {
     seriesData.push(parseFloat(list[i].num))
   }
 
-  option.angleAxis.data = angleAxisData
+  option.angleAxis.data = angleAxisData.map(item => item.replace('新乡市', ''))
   option.series.find(item => item.type === 'bar').data = seriesData
 
   return option
@@ -540,6 +547,7 @@ export const formatOption5 = (data, option) => {
 export const option6 = {
   tooltip: {},
   angleAxis: {
+    max: Math.max(...config.seriesData) * 1.2,
     splitLine: {
       show: false,
     },
@@ -551,6 +559,9 @@ export const option6 = {
     },
     data: config.radiusAxisData,
     z: 10,
+    axisLabel: {
+      interval: 0,
+    },
   },
   polar: {
     radius: '80%',
@@ -582,161 +593,4 @@ export const option6 = {
 
 export const formatOption6 = (data, option) => {
   return option
-}
-
-// 中间地图
-var rangeColorList = [
-  '#244779',
-  '#244c81',
-  '#244e85',
-  '#24518a',
-  '#24548e',
-  '#245996',
-  '#245c9b',
-  '#2460a1',
-  '#2463a6',
-  '#2466ab',
-  '#2469b0',
-  '#246cb5',
-  '#256fba',
-  '#2572bf',
-  '#2884db',
-]
-
-export const option7 = {
-  geo3D: {
-    map: 'xinxiang',
-    boxDepth: 80,
-    regionHeight: 2,
-    shading: 'realistic',
-    // realisticMaterial: {
-    //   detailTexture: '../images/map-bg.jpg',
-    //   roughness: 0,
-    // },
-    itemStyle: {
-      opacity: 1, // 透明度
-      borderWidth: 1, //分界线宽度
-      borderColor: '#207fce', //分界线颜色
-    },
-    viewControl: {
-      distance: 100,
-      center: [0, -10, 0],
-    },
-    label: {
-      show: true, //是否显示市
-      color: '#fff', //文字颜色
-      fontSize: 12, //文字大小
-      fontFamily: '微软雅黑',
-      backgroundColor: 'rgba(0,0,0,0)', //透明度0清空文字背景
-    },
-    emphasis: {
-      label: {
-        show: true, //是否显示高亮
-        textStyle: {
-          color: '#fff', //高亮文字颜色
-        },
-      },
-      itemStyle: {
-        color: '#0489d6', //地图高亮颜色
-      },
-    },
-    // 光照
-    light: {
-      main: {
-        color: '#fff',
-        intensity: 1.5,
-        shadowQuality: 'high',
-        shadow: false,
-        alpha: 55,
-        beta: 10,
-      },
-      ambient: {
-        intensity: 0.3,
-      },
-    },
-    regions: [],
-  },
-  visualMap: {
-    max: 40,
-    show: false,
-    calculable: true,
-    realtime: false,
-    inRange: {
-      color: ['#313695', '#4575b4', '#74add1'],
-    },
-    outOfRange: {
-      colorAlpha: 0,
-    },
-  },
-  tooltip: {
-    show: true,
-    formatter: params => {
-      let data = params.name + '<br/>' + '累计数:' + params.value[2]
-      return data
-    },
-  },
-  series: [
-    {
-      name: 'bar3D',
-      type: 'bar3D',
-      coordinateSystem: 'geo3D',
-      barSize: 0.4,
-      shading: 'lambert',
-      opacity: 1,
-      bevelSize: 0.8,
-      minHeight: 1.5,
-      data: [],
-    },
-  ],
-}
-
-export const formatOption7 = (data, option) => {
-  const list = data.completionList
-  const place = data.placeList
-  const angleAxisData = []
-  const seriesData = []
-
-  console.log(data)
-  console.log(option)
-
-  // 处理区域颜色
-  const cityList = []
-  const city = list.sort(compare)
-  for (let i = 0; i < city.length; i++) {
-    cityList.push({
-      name: city[i].name.replace('新乡市', ''),
-      itemStyle: { color: rangeColorList[i] },
-    })
-  }
-
-  // 处理柱状图
-  const barData = []
-  for (let i = 0; i < place.length; i++) {
-    barData.push({
-      name: place[i].name,
-      value: [place[i].longitude, place[i].latitude, place[i].num],
-    })
-  }
-
-  // for (let i = 0; i < list.length; i++) {
-  //   angleAxisData.push(list[i].name)
-  //   seriesData.push(parseFloat(list[i].num))
-  // }
-
-  option.geo3D.regions = cityList
-  option.series.find(item => item.type === 'bar3D').data = barData
-
-  return option
-}
-
-function compare(obj1, obj2) {
-  var val1 = parseFloat(obj1.num)
-  var val2 = parseFloat(obj2.num)
-  if (val1 < val2) {
-    return 1
-  } else if (val1 > val2) {
-    return -1
-  } else {
-    return 0
-  }
 }

@@ -190,6 +190,9 @@ a:hover {
   height: 100%;
   transform: translateX(-150%);
 }
+.mainbox .center-box .bar {
+  position: relative;
+}
 .mainbox .right-box {
   position: relative;
   z-index: 10;
@@ -307,9 +310,14 @@ a:hover {
   color: rgba(255, 255, 255, 0.7);
   padding-top: 0.1rem;
 }
+.mapContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 .map {
-  position: relative;
+  position: absolute;
   height: 7.2rem;
   z-index: 9;
   opacity: 0;
@@ -602,10 +610,10 @@ a:hover {
   }
 }
 
-#showBarChart {
+#showBarChart, #fire1, #fire2 {
   position: absolute;
   right: 0;
-  top: 20px;
+  bottom: -45px;
   line-height: 1.5715;
   display: inline-block;
   font-weight: 400;
@@ -631,6 +639,12 @@ a:hover {
   outline: 0;
   cursor: pointer;
   z-index: 999;
+}
+#fire1 {
+  right: 140px;
+}
+#fire2 {
+  right: 220px;
 }
 
 #showBarChart:hover {

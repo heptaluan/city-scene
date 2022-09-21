@@ -3,16 +3,24 @@
   <head>
     <meta charset="utf-8" />
     <title>index</title>
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <link rel="stylesheet" href="css/index.css" />
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <link rel="stylesheet" href="./css/index.css" />
   </head>
 
   <body>
     <!-- 加载动画 -->
+    <div
+      id="provinceInfo"
+      style="position: absolute; z-index: 2; background: white; padding: 10px; visibility: hidden"
+    ></div>
+    <div
+      id="placeInfo"
+      style="position: absolute; z-index: 2; background: white; padding: 10px; visibility: hidden"
+    ></div>
     <div class="loading" id="load">
       <div class="load_img">
-        <img class="jzxz1" src="images/jzxz1.png" />
-        <img class="jzxz2" src="images/jzxz2.png" />
+        <img class="jzxz1" src="./images/jzxz1.png" />
+        <img class="jzxz2" src="./images/jzxz2.png" />
       </div>
     </div>
     <div class="head">
@@ -21,6 +29,9 @@
       <!-- <div class="weather"><img src="picture/weather.png" /><span>多云转小雨</span><span id="showTime"></span></div> -->
     </div>
     <div class="mainbox">
+      <div class="map">
+        <div class="map4" id="echart7" style="display: none"></div>
+      </div>
       <ul class="clearfix">
         <li class="left-box">
           <div class="boxall">
@@ -41,10 +52,13 @@
         </li>
         <li class="center-box">
           <div class="bar">
+            <button id="showBarChart">隐藏检测点</button>
+            <!-- <button id="fire1">fire1</button>
+            <button id="fire2">fire2</button> -->
             <div class="barbox">
               <ul class="clearfix">
-                <li class="pulll_left counter num-scroll-1" id="totalOrderNumber">234562</li>
-                <li class="pulll_left counter num-scroll-2" id="todayOrderNumber">2444</li>
+                <li class="pulll_left counter num-scroll-1" id="totalOrderNumber">0</li>
+                <li class="pulll_left counter num-scroll-2" id="todayOrderNumber">0</li>
               </ul>
             </div>
             <div class="barbox2">
@@ -55,10 +69,6 @@
             </div>
           </div>
           <div class="map">
-            <button id="showBarChart">隐藏检测点</button>
-            <!-- <div class="map1"><img src="picture/lbx.png" /></div>
-            <div class="map2"><img src="picture/jt.png" /></div> -->
-            <!-- <div class="map3"><img src="picture/map.png" /></div> -->
             <div class="map4" id="echart7"></div>
           </div>
         </li>
@@ -85,14 +95,24 @@
 
     <canvas id="canvas" style="position: absolute; top: 0; left: 0; z-index: -1"></canvas>
 
-    <script type="text/javascript" src="js/echarts/echarts.min.js"></script>
-    <script type="text/javascript" src="js/echarts/echarts-gl.min.js"></script>
-    <script type="text/javascript" src="js/anime.min.js"></script>
-    <script type="text/javascript" src="js/jquery.countTo.js"></script>
+    <script type="text/javascript" src="./js/echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="./js/echarts/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="./js/anime.min.js"></script>
+    <script type="text/javascript" src="./js/jquery.countTo.js"></script>
     <script type="text/javascript" src="./js/bg.js"></script>
-    <script type="text/javascript" src="js/api.js"></script>
+    <script type="text/javascript" src="./js/api.js"></script>
+
+    <script type="text/javascript" src="./three/fly.js"></script>
+    <script type="text/javascript" src="./three/three.js"></script>
+    <script type="text/javascript" src="./three/tween.umd.js"></script>
+    <script type="text/javascript" src="./three/stats.min.js"></script>
+    <script type="text/javascript" src="./three/OrbitControls.js"></script>
+    <script type="text/javascript" src="./three/d3-array.v1.min.js"></script>
+    <script type="text/javascript" src="./three/d3-geo.v1.min.js"></script>
+
+    <script type="module" src="./three/index.js"></script>
     <script type="module" src="./config.js"></script>
-    <script type="module" src="js/options.js"></script>
-    <script type="module" src="js/index.js"></script>
+    <script type="module" src="./js/options.js"></script>
+    <script type="module" src="./js/index.js"></script>
   </body>
 </html>

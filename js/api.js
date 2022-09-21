@@ -1,5 +1,5 @@
-
 // http-server -P http://192.168.1.64:9000
+// 上线之前调整 API 与 MQTT 订阅内容
 const api = ''
 
 const loginImg = time => {
