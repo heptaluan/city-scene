@@ -7,7 +7,7 @@ var canvas = document.getElementById('canvas'),
   hue = 217,
   stars = [],
   count = 0,
-  maxStars = 1300 //星星数量
+  maxStars = 500 //星星数量
 
 var canvas2 = document.createElement('canvas'),
   ctx2 = canvas2.getContext('2d')
@@ -24,7 +24,6 @@ ctx2.fillStyle = gradient2
 ctx2.beginPath()
 ctx2.arc(half, half, half, 0, Math.PI * 2)
 ctx2.fill()
-
 
 // End cache
 

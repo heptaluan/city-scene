@@ -10,6 +10,10 @@ const loginUrl = () => {
   return `${api}/tailai-cloud-system/sys-user/login`
 }
 
-const getViewData = () => {
+const getAllDataUrl = () => {
   return `${api}/tailai-cloud-register/register-data-view/getViewData`
+}
+
+const getCityDataUrl = () => {
+  return `${api}/tailai-cloud-register/register-data-view/getCountyViewData`
 }

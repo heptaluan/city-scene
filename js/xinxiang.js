@@ -189,12 +189,13 @@
         ],
       },
       properties: {
+        id: '1548976492823425025',
         gml_id: 'layer_county_boundary_pg.1671',
         name: '卫滨区',
         layer: '区县',
         code: '410703000000',
         grade: 3,
-        adcode: 410703,
+        adcode: 4107031,
         center: [113.866065, 35.304905],
         centroid: [113.785, 35.276723],
         childrenNum: 0,
@@ -356,6 +357,7 @@
         ],
       },
       properties: {
+        id: '1548977101446295553',
         gml_id: 'layer_county_boundary_pg.1672',
         name: '凤泉区',
         layer: '区县',
@@ -559,6 +561,7 @@
         ],
       },
       properties: {
+        id: '1548976790476402690',
         gml_id: 'layer_county_boundary_pg.1673',
         name: '牧野区',
         layer: '区县',
@@ -566,7 +569,7 @@
         grade: 3,
         adcode: 410711,
         center: [113.89716, 35.312974],
-        centroid: [113.908706, 35.337932],
+        centroid: [113.878706, 35.337932],
         childrenNum: 0,
         level: 'district',
         parent: {
@@ -883,6 +886,7 @@
         ],
       },
       properties: {
+        id: '1548975926726602754',
         gml_id: 'layer_county_boundary_pg.1675',
         name: '获嘉县',
         layer: '区县',
@@ -890,7 +894,7 @@
         grade: 3,
         adcode: 410724,
         center: [113.657249, 35.261685],
-        centroid: [113.645007, 35.196795],
+        centroid: [113.595007, 35.196795],
         childrenNum: 0,
         level: 'district',
         parent: {
@@ -1582,6 +1586,7 @@
         ],
       },
       properties: {
+        id: '1548974747355426818',
         gml_id: 'layer_county_boundary_pg.1677',
         name: '延津县',
         layer: '区县',
@@ -1589,7 +1594,7 @@
         grade: 3,
         adcode: 410726,
         center: [114.200982, 35.149515],
-        centroid: [114.237014, 35.2724],
+        centroid: [114.197014, 35.2724],
         childrenNum: 0,
         level: 'district',
         parent: {
@@ -2223,6 +2228,7 @@
         ],
       },
       properties: {
+        id: '1548975651899027457',
         gml_id: 'layer_county_boundary_pg.1678',
         name: '封丘县',
         layer: '区县',
@@ -2943,6 +2949,7 @@
         ],
       },
       properties: {
+        id: '1548955005760548866',
         gml_id: 'layer_county_boundary_pg.1679',
         name: '长垣市',
         layer: '区县',
@@ -3485,6 +3492,7 @@
         ],
       },
       properties: {
+        id: '1548972316814979074',
         gml_id: 'layer_county_boundary_pg.1680',
         name: '卫辉市',
         layer: '区县',
@@ -3492,7 +3500,7 @@
         grade: 3,
         adcode: 410781,
         center: [114.065855, 35.404295],
-        centroid: [114.074478, 35.49545],
+        centroid: [114.074478, 35.44545],
         childrenNum: 0,
         level: 'district',
         parent: {
@@ -4205,6 +4213,7 @@
         ],
       },
       properties: {
+        id: '1548972812246167553',
         gml_id: 'layer_county_boundary_pg.1681',
         name: '辉县市',
         layer: '区县',
@@ -4648,13 +4657,14 @@
       },
       properties: {
         gml_id: 'layer_county_boundary_pg.1676',
+        id: '1548962832692523010',
         name: '原阳县',
         layer: '区县',
         code: '410725000000',
         grade: 3,
         adcode: 410725,
         center: [113.965966, 35.054001],
-        centroid: [113.950653, 35.021904],
+        centroid: [113.999653, 35.021904],
         childrenNum: 0,
         level: 'district',
         parent: {
@@ -4882,6 +4892,7 @@
         ],
       },
       properties: {
+        id: '1548976200065200130',
         gml_id: 'layer_county_boundary_pg.1670',
         name: '红旗区',
         layer: '区县',
@@ -5283,6 +5294,7 @@
         ],
       },
       properties: {
+        id: '1548977250742546434',
         gml_id: 'layer_county_boundary_pg.1674',
         name: '新乡县',
         layer: '区县',
@@ -5290,7 +5302,7 @@
         grade: 3,
         adcode: 410721,
         center: [113.806186, 35.190021],
-        centroid: [113.834287, 35.202384],
+        centroid: [113.784287, 35.176384],
         childrenNum: 0,
         level: 'district',
         parent: {
@@ -5351,12 +5363,13 @@
         ],
       },
       properties: {
+        id: '1548971701611245570',
         gml_id: 'layer_county_boundary_pg.1670',
         name: '高新区',
         layer: '区县',
         code: '410702000000',
         grade: 3,
-        adcode: 410703,
+        adcode: 4107032,
         center: [113.866065, 35.304905],
         centroid: [113.868, 35.256723],
         childrenNum: 0,
@@ -5449,12 +5462,13 @@
         ],
       },
       properties: {
+        id: '1548969216754561025',
         gml_id: 'layer_county_boundary_pg.1674',
         name: '经开区',
         layer: '区县',
         code: '410721000000',
         grade: 3,
-        adcode: 410703,
+        adcode: 4107033,
         center: [113.866065, 35.304905],
         centroid: [113.975, 35.236723],
         childrenNum: 0,
@@ -5814,12 +5828,13 @@
         ],
       },
       properties: {
+        id: '1548962078510526465',
         gml_id: 'layer_county_boundary_pg.1676',
         name: '平原新区',
         layer: '区县',
         code: '410725000000',
         grade: 3,
-        adcode: 410703,
+        adcode: 4107034,
         center: [113.866065, 35.304905],
         centroid: [113.655, 34.976723],
         childrenNum: 0,

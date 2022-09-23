@@ -11,12 +11,14 @@ body {
   margin: 0px;
   color: #222;
   font-family: '微软雅黑';
+  font-weight: normal;
 }
 html,
 body {
   overflow: hidden;
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 @font-face {
   font-family: electronicFont;
@@ -127,7 +129,6 @@ a:hover {
   position: relative;
   z-index: 100;
   transform: translateY(-150%);
-  transition-duration: 1s;
 }
 .head h1 {
   color: #fff;
@@ -314,6 +315,7 @@ a:hover {
   position: absolute;
   top: 0;
   left: 0;
+  opacity: 0;
 }
 
 .map {
@@ -610,7 +612,11 @@ a:hover {
   }
 }
 
-#showBarChart, #fire1, #fire2 {
+#showBarChart,
+#fire1,
+#fire2,
+#mapShine,
+#endW {
   position: absolute;
   right: 0;
   bottom: -45px;
@@ -640,14 +646,55 @@ a:hover {
   cursor: pointer;
   z-index: 999;
 }
-#fire1 {
-  right: 140px;
+
+#mapShine {
+  right: 100px;
 }
-#fire2 {
+#endW {
   right: 220px;
+}
+#fire1 {
+  right: 160px;
+}
+
+#fire2 {
+  right: 240px;
 }
 
 #showBarChart:hover {
   color: #40a9ff;
   border-color: #40a9ff;
+}
+#mapShine:hover {
+  color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.header-time {
+  position: absolute;
+  right: 40px;
+  top: 22px;
+}
+
+.header-time #time {
+  color: #fff;
+  font-size: 16px;
+}
+
+.box1, .box2 {
+  width: 49%;
+  display: inline-block;
+}
+
+.header-wrap {
+  width: 100%;
+  height: 10em;
+  position: absolute;
+  left: 35px;
+  top: 5px;
+}
+
+.header-wrap img {
+  max-width: 100%;
+  max-height: 7em;
 }

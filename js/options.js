@@ -1,6 +1,7 @@
 ﻿import { config } from '../config.js'
 
-const animationDelay = 300
+const idxTime = 30
+const delay = 1500
 
 // 左上
 export const option1 = {
@@ -15,6 +16,7 @@ export const option1 = {
   grid: {
     top: '10',
     right: '2%',
+    bottom: '25%',
   },
   xAxis: [
     {
@@ -27,9 +29,13 @@ export const option1 = {
         },
         rotate: '45',
       },
+      axisTick: {
+        show: false,
+      },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255,255,255,.2)',
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
         },
       },
       data: [],
@@ -44,19 +50,21 @@ export const option1 = {
   yAxis: [
     {
       type: 'value',
-      axisTick: { show: false },
+      axisTick: {
+        show: false,
+      },
       axisLine: {
         lineStyle: {
           color: 'rgba(255,255,255,.1)',
         },
       },
-      axisLabel: {
-        textStyle: {
-          color: 'rgba(255,255,255,.6)',
-          fontSize: 12,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
         },
       },
-
       splitLine: {
         show: false,
         lineStyle: {
@@ -111,23 +119,37 @@ export const option1 = {
       data: [],
     },
   ],
-  animationDelay: animationDelay,
+  animationDelay: delay,
 }
 
-export const formatOption1 = (data, option) => {
-  const list = data.countyList
+export const formatOption1 = (data, option, name) => {
+  const list = data.countyList ? data.countyList : data.placeList
+  const newList = move(move(list, 0, 6), 3, 8)
+
   const xAxisData = []
   const seriesData = []
 
-  for (let i = 0; i < list.length; i++) {
-    xAxisData.push(list[i].name)
-    seriesData.push(list[i].num)
+  for (let i = 0; i < newList.length; i++) {
+    xAxisData.push(newList[i].name)
+    seriesData.push(newList[i].num)
   }
 
-  option.xAxis.find(item => item.type === 'category').data = xAxisData
+  // if (data.countyList && data.countyList.length > 0) {
+  //   option.grid.bottom = '25%'
+  // } else {
+  //   option.grid.bottom = '35%'
+  // }
+
+  option.xAxis.find(item => item.type === 'category').data = xAxisData.map(item => item.replace(name, ''))
   option.series.find(item => item.type === 'line').data = seriesData
 
   return option
+}
+
+function move(arr, a, b) {
+  let arr_temp = [].concat(arr)
+  arr_temp.splice(b, 0, arr_temp.splice(a, 1)[0])
+  return arr_temp
 }
 
 // 左中
@@ -164,6 +186,7 @@ export const option2 = {
         textStyle: {
           fontSize: 12,
         },
+        rotate: '45',
       },
       axisTick: {
         show: false,
@@ -236,6 +259,9 @@ export const option2 = {
       },
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption2 = (data, option) => {
@@ -254,11 +280,10 @@ export const formatOption2 = (data, option) => {
   return option
 }
 
-// 左下
-export const option3 = {
+// 左下一
+export const option31 = {
   tooltip: {
     trigger: 'item',
-    // formatter: '{a} <br/>{b}: {c} ({d}%)',
   },
   color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
   series: [
@@ -266,23 +291,62 @@ export const option3 = {
       name: '占比',
       type: 'pie',
       selectedMode: 'single',
-      radius: [0, '30%'],
+      radius: ['55%', '80%'],
       label: {
         position: 'inner',
         fontSize: 14,
+        color: '#fff',
       },
       labelLine: {
         show: false,
       },
-      data: [],
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' },
+      ],
     },
+  ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
+}
+
+export const formatOption31 = (data, option) => {
+  const sexList = data.sexList
+
+  const sexData = []
+
+  for (let i = 0; i < sexList.length; i++) {
+    sexData.push({
+      name: sexList[i].sex,
+      value: sexList[i].num,
+    })
+  }
+
+  option.series.find(item => item.name === '占比').data = sexData
+
+  return option
+}
+
+// 左下二
+export const option32 = {
+  tooltip: {
+    trigger: 'item',
+  },
+  color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
+  series: [
     {
       name: '年龄段',
       type: 'pie',
-      radius: ['60%', '85%'],
+      selectedMode: 'single',
+      radius: ['55%', '80%'],
       label: {
         position: 'inner',
         fontSize: 12,
+        color: '#fff',
         lineHeight: 15,
         formatter: params => {
           if (params.data.name === '30岁及以下') {
@@ -294,17 +358,27 @@ export const option3 = {
           }
         },
       },
-      data: [],
+      labelLine: {
+        show: false,
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' },
+      ],
+      animationDelay: function (idx) {
+        return idx * idxTime + delay
+      },
     },
   ],
 }
 
-export const formatOption3 = (data, option) => {
+export const formatOption32 = (data, option) => {
   const ageList = data.ageList
-  const sexList = data.sexList
 
   const ageData = []
-  const sexData = []
 
   for (let i = 0; i < ageList.length; i++) {
     ageData.push({
@@ -313,15 +387,7 @@ export const formatOption3 = (data, option) => {
     })
   }
 
-  for (let i = 0; i < sexList.length; i++) {
-    sexData.push({
-      name: sexList[i].sex,
-      value: sexList[i].num,
-    })
-  }
-
   option.series.find(item => item.name === '年龄段').data = ageData
-  option.series.find(item => item.name === '占比').data = sexData
 
   return option
 }
@@ -371,6 +437,9 @@ export const option4 = {
     splitLine: {
       show: false,
     },
+    axisTick: {
+      show: false,
+    },
     axisLine: {
       show: true,
       lineStyle: {
@@ -414,6 +483,9 @@ export const option4 = {
       },
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption4 = (data, option) => {
@@ -446,7 +518,6 @@ export const option5 = {
     extraCssText: 'box-shadow:0 0 18px rgba(255,255,255,0.2)',
     formatter: '{a} <br/>{b}: {c} %',
   },
-
   angleAxis: {
     type: 'category',
     data: [],
@@ -525,6 +596,9 @@ export const option5 = {
       z: 0,
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption5 = (data, option) => {
@@ -540,6 +614,132 @@ export const formatOption5 = (data, option) => {
   option.angleAxis.data = angleAxisData.map(item => item.replace('新乡市', ''))
   option.series.find(item => item.type === 'bar').data = seriesData
 
+  return option
+}
+
+export const option51 = {
+  title: [
+    {
+      id: 'title',
+      text: (0.55 * 100).toFixed(0) + '%',
+      left: '50%',
+      top: '40%',
+      textAlign: 'center',
+      textStyle: {
+        fontSize: '32',
+        fontWeight: '400',
+        color: '#fff',
+        textAlign: 'center',
+        textBorderColor: 'rgba(0, 0, 0, 0)',
+        textShadowColor: '#000',
+        textShadowBlur: '0',
+        textShadowOffsetX: 0,
+        textShadowOffsetY: 1,
+      },
+    },
+  ],
+  polar: {
+    radius: ['80%', '72%'],
+    center: ['50%', '50%'],
+  },
+  angleAxis: {
+    max: 100,
+    clockwise: false,
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
+    axisLabel: {
+      show: false,
+    },
+    splitLine: {
+      show: false,
+    },
+  },
+  radiusAxis: {
+    type: 'category',
+    show: true,
+    axisLabel: {
+      show: false,
+    },
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
+  },
+  series: [
+    {
+      type: 'liquidFill',
+      radius: '75%',
+      z: 1,
+      center: ['50%', '50%'],
+      amplitude: 20,
+      // color: '#2378f7',
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        { offset: 0, color: '#324791' },
+        { offset: 1, color: '#449090' },
+      ]),
+      data: [0.4, 0.4, 0.4],
+      backgroundStyle: {
+        borderWidth: 1,
+        color: 'transparent',
+      },
+      label: {
+        normal: {
+          formatter: '',
+        },
+      },
+      outline: {
+        show: true,
+        itemStyle: {
+          borderWidth: 0,
+        },
+        borderDistance: 0,
+      },
+    },
+    {
+      name: 'bar',
+      type: 'bar',
+      roundCap: true,
+      z: 2,
+      showBackground: true,
+      backgroundStyle: {
+        color: '#15181e',
+      },
+      data: [80],
+      coordinateSystem: 'polar',
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0.5, 1, [
+            {
+              offset: 0,
+              color: '#5acef2',
+            },
+            {
+              offset: 0.7,
+              color: '#5073fb',
+            },
+            {
+              offset: 1,
+              color: '#6ae8d8',
+            },
+          ]),
+        },
+      },
+    },
+  ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
+}
+
+export const formatOption51 = (data, option) => {
+  const value = data.completionNum
+  option.title.find(item => item.id === 'title').text = value + '%'
   return option
 }
 
@@ -589,8 +789,119 @@ export const option6 = {
   textStyle: {
     color: 'black',
   },
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption6 = (data, option) => {
+  return option
+}
+
+export const option61 = {
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+  },
+  grid: {
+    top: '10',
+    right: '2%',
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: [],
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
+        },
+      },
+      axisLabel: {
+        show: true,
+        color: '#fff',
+        fontSize: 14,
+        rotate: '45',
+      },
+      axisTick: {
+        show: false,
+      },
+    },
+  ],
+  yAxis: [
+    {
+      type: 'value',
+      nameTextStyle: {
+        color: '#fff',
+        fontSize: 16,
+      },
+      axisLabel: {
+        formatter: '{value}',
+        color: '#fff',
+      },
+      axisTick: {
+        show: false,
+      },
+      splitLine: {
+        show: false,
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
+        },
+      },
+    },
+  ],
+  series: [
+    {
+      type: 'bar',
+      data: [],
+      barWidth: '40%',
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(
+            0,
+            0,
+            0,
+            1,
+            [
+              {
+                offset: 0,
+                color: '#9529FB',
+              },
+              {
+                offset: 1,
+                color: '#2D35EA',
+              },
+            ],
+            false
+          ),
+        },
+      },
+    },
+  ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
+}
+
+export const formatOption61 = (data, option) => {
+  const list = data.statusList
+
+  const xAxisData = []
+  const seriesData = []
+
+  for (let i = 0; i < list.length; i++) {
+    xAxisData.push(list[i].name)
+    seriesData.push(list[i].num)
+  }
+
+  option.xAxis.find(item => item.type === 'category').data = xAxisData
+  option.series.find(item => item.type === 'bar').data = seriesData
+
   return option
 }

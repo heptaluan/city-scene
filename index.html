@@ -14,6 +14,10 @@
       style="position: absolute; z-index: 2; background: white; padding: 10px; visibility: hidden"
     ></div>
     <div
+      id="districtInfo"
+      style="position: absolute; z-index: 2; background: white; padding: 10px; visibility: hidden"
+    ></div>
+    <div
       id="placeInfo"
       style="position: absolute; z-index: 2; background: white; padding: 10px; visibility: hidden"
     ></div>
@@ -24,7 +28,13 @@
       </div>
     </div>
     <div class="head">
-      <h1>「健康中国·新乡行动」 泛肿瘤普早筛</h1>
+      <div class="header-time">
+        <span id="time"></span>
+      </div>
+      <div class="header-wrap">
+        <img src="./images/title.png" alt="标题">
+      </div>
+      <h1>泛肿瘤普早筛</h1>
       <h4>全域智慧管理数字系统</h4>
       <!-- <div class="weather"><img src="picture/weather.png" /><span>多云转小雨</span><span id="showTime"></span></div> -->
     </div>
@@ -35,26 +45,28 @@
       <ul class="clearfix">
         <li class="left-box">
           <div class="boxall">
-            <div class="alltitle">区县累计数</div>
+            <div class="alltitle" id="title1">区县累计数</div>
             <div class="allnav" id="echart1"></div>
             <div class="boxfoot"></div>
           </div>
           <div class="boxall">
-            <div class="alltitle">月度检测数量</div>
+            <div class="alltitle" id="title2">月度检测数量</div>
             <div class="allnav" id="echart2"></div>
             <div class="boxfoot"></div>
           </div>
           <div class="boxall">
-            <div class="alltitle">男女年龄比例分布</div>
-            <div class="allnav" id="echart3"></div>
-            <div class="boxfoot"></div>
+            <div class="alltitle" id="title3">男女年龄比例分布</div>
+            <div class="allnav box1" id="echart31"></div>
+            <div class="allnav box2" id="echart32"></div>
           </div>
         </li>
         <li class="center-box">
           <div class="bar">
             <button id="showBarChart">隐藏检测点</button>
-            <!-- <button id="fire1">fire1</button>
-            <button id="fire2">fire2</button> -->
+<!--            <button id="mapShine">恢复地图全亮</button>-->
+<!--            <button id="endW">The end of the world</button>-->
+<!--            <button id="fire1">fire1</button>-->
+<!--            <button id="fire2">fire2</button>-->
             <div class="barbox">
               <ul class="clearfix">
                 <li class="pulll_left counter num-scroll-1" id="totalOrderNumber">0</li>
@@ -74,17 +86,17 @@
         </li>
         <li class="right-box">
           <div class="boxall">
-            <div class="alltitle">机构检测累计量排名</div>
+            <div class="alltitle" id="title4">机构检测累计量排名</div>
             <div class="allnav" id="echart4"></div>
             <div class="boxfoot"></div>
           </div>
           <div class="boxall">
-            <div class="alltitle">区县目标完成度</div>
+            <div class="alltitle" id="title5">区县目标完成度</div>
             <div class="allnav" id="echart5"></div>
             <div class="boxfoot"></div>
           </div>
           <div class="boxall">
-            <div class="alltitle">高风险复查比</div>
+            <div class="alltitle" id="title6">高风险复查比</div>
             <div class="allnav" id="echart6"></div>
             <div class="boxfoot"></div>
           </div>
@@ -96,7 +108,8 @@
     <canvas id="canvas" style="position: absolute; top: 0; left: 0; z-index: -1"></canvas>
 
     <script type="text/javascript" src="./js/echarts/echarts.min.js"></script>
-    <script type="text/javascript" src="./js/echarts/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="./js/echarts-liquidfill.min.js"></script>
+    <!-- <script type="text/javascript" src="./js/echarts/echarts-gl.min.js"></script> -->
     <script type="text/javascript" src="./js/anime.min.js"></script>
     <script type="text/javascript" src="./js/jquery.countTo.js"></script>
     <script type="text/javascript" src="./js/bg.js"></script>

@@ -24,7 +24,7 @@ export class lineMap {
   }
 
   init() {
-    this.provinceInfo = document.getElementById('provinceInfo')
+    this.districtInfo = document.getElementById('districtInfo')
     this.placeInfo = document.getElementById('placeInfo')
     // 渲染器
     this.renderer = new THREE.WebGLRenderer({ alpha: true })
@@ -58,7 +58,9 @@ export class lineMap {
     this.depth = 4
     this.placeList = []
 
-    this.districtColor = []
+    this.districtMeshList = []
+    this.districtDataList = []
+    this.districtColorList = []
     this.waveArr = []
     this.itemHeight = 15 //柱子最大的高度，以此作为比例映射显示高度
     this.boxR = 0.3 //柱子半径
@@ -66,7 +68,10 @@ export class lineMap {
     this.textOffset = 0.8 //显示数量偏移柱子量
     this.fontSize = 12
     this.counter1 = 0
-    this.barColor = '#739fce'
+    this.districtMeshColor = '#739fce'
+    this.districtSideColor = '#28316c'
+    this.fadeOutColor = 'rgba(2,51,121)'
+    this.isHighlight = false
   }
 
   setResize() {
@@ -100,6 +105,7 @@ export class lineMap {
     // textMesh.rotateX(Math.PI / 2)
     this.scene.add(textMesh)
   }
+
   createWave(position) {
     const textureLoader = new THREE.TextureLoader() // TextureLoader创建一个纹理加载器对象
     const texture = textureLoader.load('../images/wave.png')
@@ -119,7 +125,7 @@ export class lineMap {
     waveMesh.scale.set(size, size, size)
     waveMesh._s = Math.random() * 1 + 1
 
-    waveMesh.position.set(position.x, position.y, position.z)
+    waveMesh.position.set(position.x + 0.1, position.y, position.z)
     waveMesh.name = waveMesh.uuid
     this.waveArr.push(waveMesh)
     this.scene.add(waveMesh)
@@ -141,7 +147,7 @@ export class lineMap {
     let _this = this
     // 墨卡托投影转换
     const projection = d3.geoMercator().center([114.1, 35.21]).scale(5200).translate([-12, 20])
-    const districts = this.data.completionList.map(ele =>
+    this.districtDataList = this.data.completionList.map(ele =>
       ele.name.includes('新乡市') ? { ...ele, name: ele.name.replace('新乡市', '') } : ele
     )
 
@@ -153,7 +159,7 @@ export class lineMap {
       const coordinates = elem.geometry.coordinates
       // 循环坐标数组
       // 存下每个区的专属颜色
-      const theColor = this.districtColorHandle(districts, elem)
+      const theColor = this.districtColorHandle(elem)
 
       coordinates.forEach(multiPolygon => {
         multiPolygon.forEach(polygon => {
@@ -185,7 +191,7 @@ export class lineMap {
             opacity: 1,
           })
           const sideMaterial = new THREE.MeshBasicMaterial({
-            color: '#28316c',
+            color: this.districtSideColor,
             transparent: false,
             opacity: 1,
           })
@@ -216,6 +222,8 @@ export class lineMap {
           province.properties = elem.properties
         })
       })
+      province.properties.isFadeOut = false
+      _this.districtMeshList.push(province)
       _this.map.add(province)
     })
     _this.placeList.forEach(ele => {
@@ -224,7 +232,7 @@ export class lineMap {
       ele.longitude = tempCoordinate[1]
       _this.createBar(_this, ele)
     })
-
+    // console.log(this.districtMeshList)
     this.scene.add(this.map)
   }
 
@@ -242,11 +250,11 @@ export class lineMap {
       _this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
       _this.eventOffset.x = event.clientX
       _this.eventOffset.y = event.clientY
-      // console.log(' _this.mouse: ',  _this.mouse)
-      this.provinceInfo.style.left = _this.eventOffset.x + 2 + 'px'
-      this.provinceInfo.style.top = _this.eventOffset.y + 2 + 'px'
       this.placeInfo.style.left = _this.eventOffset.x + 2 + 'px'
       this.placeInfo.style.top = _this.eventOffset.y + 2 + 'px'
+
+      this.districtInfo.style.left = _this.eventOffset.x + 2 + 'px'
+      this.districtInfo.style.top = _this.eventOffset.y + 2 + 'px'
     }
 
     function onWindowResize() {
@@ -254,44 +262,95 @@ export class lineMap {
       _this.camera.updateProjectionMatrix()
       _this.renderer.setSize(window.innerWidth, window.innerHeight)
     }
+
+    window.addEventListener('click', this.highlightDistrict.bind(this), false)
+    // window.addEventListener('click', this.worldCrash.bind(this), false)
     window.addEventListener('mousemove', onMouseMove, false)
     window.addEventListener('resize', onWindowResize, false)
   }
 
-  districtColorHandle(districts, elem) {
-    let tempColor = null
-    for (let i = 0; i < districts.length; i++) {
-      if (elem.properties.name === districts[i].name) {
-        tempColor = this.rangeColorList[i]
-        this.districtColor.push({
-          name: elem.properties.name,
-          code: elem.properties.adcode,
-          color: this.rangeColorList[i],
+  animate() {
+    requestAnimationFrame(this.animate.bind(this))
+    // this.cube.rotation.x += 0.05;
+    // this.cube.rotation.y += 0.05;
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+
+    // calculate objects intersecting the picking ray
+    let intersects = this.raycaster.intersectObjects(this.scene.children, true)
+    let intersectBars = this.raycaster.intersectObjects(this.scene.children, true)
+    if (this.activeInstersect && this.activeInstersect.length > 0) {
+      // 显示区域详情
+      // this.createDistrict(intersects)
+      // 将上一次选中的恢复颜色
+      this.activeInstersect.forEach(element => {
+        // 将所选区的颜色比对后恢复
+        this.districtColorList.forEach(district => {
+          if (
+              element.object.parent &&
+              element.object.geometry.type !== 'CylinderGeometry' &&
+              element.object.parent.properties.adcode === district.code
+          ) {
+            if (this.isHighlight) {
+              if (element.object.parent.properties.isFadeOut) {
+                this.meshFade(element.object, this.fadeOutColor, true, false)
+              } else {
+                this.meshFade(element.object, this.districtMeshColor, false, false)
+              }
+            } else {
+              element.object.material[0].color.set(district.color)
+              element.object.material[1].color.set(this.districtSideColor)
+            }
+          }
         })
+      })
+    } else {
+      this.districtInfo.style.visibility = 'hidden'
+    }
+
+    if (this.activeInstersectBar && this.activeInstersectBar.length > 0) {
+      // 将上一次选中的恢复颜色
+      this.activeInstersectBar.forEach(element => {
+        element.object.material.color.set('#0DEAF8')
+      })
+    }
+
+    const delta = this.clock.getDelta()
+    this.Fly.animation(delta)
+    this.activeInstersect = [] // 设置为空
+    this.activeInstersectBar = [] // 设置为空
+    this.placeInfo.style.visibility = 'hidden'
+    for (let i = 0; i < intersects.length; i++) {
+      if (intersects[i].object.material && intersects[i].object.material.length === 2) {
+        this.activeInstersect.push(intersects[i])
+        intersects[i].object.material[0].color.set(this.districtMeshColor)
+        intersects[i].object.material[1].color.set(this.districtMeshColor)
+        break // 只取第一个
       }
     }
-    return tempColor
+
+    for (let i = 0; i < intersectBars.length; i++) {
+      if (intersectBars[i].object.material.type === 'MeshPhongMaterial') {
+        if (
+            intersectBars[i].object.geometry.type === 'CylinderGeometry' &&
+            intersects[i].object.parent.type === 'Object3D'
+        ) {
+          this.activeInstersectBar.push(intersectBars[i])
+          this.createPlaceInfo()
+
+          intersectBars[i].object.material.color.set('#a9faeb')
+          break
+        }
+      }
+    }
+    // the wave will flash when text location receives a new order
+    if (this.waveArr && this.waveArr.length > 0) {
+      this.waveAnimate()
+    }
+
+    this.renderer.render(this.scene, this.camera)
   }
 
-  createBar(that, place) {
-    const position = [place.latitude, -place.longitude, place.num]
-    const numHeight = this.calcShowHeight(position[2])
-    debugger
-    let geometry = new THREE.CylinderGeometry(this.boxR, this.boxR, numHeight, 100)
-    let material = new THREE.MeshPhongMaterial({
-      color: '#0DEAF8',
-      transparent: true,
-      opacity: 0.8,
-    })
-    let cylinder = new THREE.Mesh(geometry, material)
-    cylinder.position.set(position[0] - this.gapWidth, position[1], numHeight / 2 + this.depth + 0.28)
-    cylinder.rotateX(Math.PI / 2)
-    cylinder.properties = {
-      name: place.name,
-      num: place.num,
-    }
-    that.map.add(cylinder)
-  }
+
   calcShowHeight(count) {
     // if(count < this.itemHeight) return count;
     let height = this.itemHeight * (count / (Math.max(...this.placeList.map(o => o.num)) || 1))
@@ -322,11 +381,11 @@ export class lineMap {
       const y = THREE.Math.randFloat(fireworkPoint.y, fireworkPoint.y)
       const z = THREE.Math.randFloat(
         fireworkPoint.z ? fireworkPoint.z : 0 + 40,
-        fireworkPoint.z ? fireworkPoint.z : 0 + 40
+        fireworkPoint.z ? fireworkPoint.z : 0 + 60
       )
       const src = new THREE.Vector3(x, y, z)
       const activePoints = this.Fly.tranformPath(
-        [new THREE.Vector3(fireworkPoint.x, fireworkPoint.y, this.depth + this.textOffset), src],
+        [new THREE.Vector3(fireworkPoint.x - 0.5, fireworkPoint.y, this.depth + this.textOffset), src],
         0.15
       )
       const flyMesh = this.Fly.addFly({
@@ -363,73 +422,19 @@ export class lineMap {
     this.controller.maxZoom = 2; // 最大缩放 */
   }
 
-  animate() {
-    requestAnimationFrame(this.animate.bind(this))
-    // this.cube.rotation.x += 0.05;
-    // this.cube.rotation.y += 0.05;
-    this.raycaster.setFromCamera(this.mouse, this.camera)
-
-    // calculate objects intersecting the picking ray
-    let intersects = this.raycaster.intersectObjects(this.scene.children, true)
-    let intersectBars = this.raycaster.intersectObjects(this.scene.children, true)
-    if (this.activeInstersect && this.activeInstersect.length > 0) {
-      // 将上一次选中的恢复颜色
-      this.activeInstersect.forEach(element => {
-        // 将所选区的颜色比对后恢复
-        this.districtColor.forEach(district => {
-          if (
-            element.object.parent &&
-            element.object.geometry.type !== 'CylinderGeometry' &&
-            element.object.parent.properties.adcode === district.code
-          ) {
-            element.object.material[0].color.set(district.color)
-            element.object.material[1].color.set('#28316c')
-          }
+  districtColorHandle(elem) {
+    let tempColor = null
+    for (let i = 0; i < this.districtDataList.length; i++) {
+      if (elem.properties.name === this.districtDataList[i].name) {
+        tempColor = this.rangeColorList[i]
+        this.districtColorList.push({
+          name: elem.properties.name,
+          code: elem.properties.adcode,
+          color: this.rangeColorList[i],
         })
-      })
-    }
-
-    if (this.activeInstersectBar && this.activeInstersectBar.length > 0) {
-      // 将上一次选中的恢复颜色
-      this.activeInstersectBar.forEach(element => {
-        element.object.material.color.set('#1dc3d7')
-      })
-    }
-
-    const delta = this.clock.getDelta()
-    this.Fly.animation(delta)
-    this.activeInstersect = [] // 设置为空
-    this.activeInstersectBar = [] // 设置为空
-    this.placeInfo.style.visibility = 'hidden'
-    for (let i = 0; i < intersects.length; i++) {
-      if (intersects[i].object.material && intersects[i].object.material.length === 2) {
-        this.activeInstersect.push(intersects[i])
-        intersects[i].object.material[0].color.set(this.barColor)
-        intersects[i].object.material[1].color.set(this.barColor)
-        break // 只取第一个
       }
     }
-
-    for (let i = 0; i < intersectBars.length; i++) {
-      if (intersectBars[i].object.material.type === 'MeshPhongMaterial') {
-        if (
-          intersectBars[i].object.geometry.type === 'CylinderGeometry' &&
-          intersects[i].object.parent.type === 'Object3D'
-        ) {
-          this.activeInstersectBar.push(intersectBars[i])
-          this.createPlaceInfo()
-          intersectBars[i].object.material.color.set('#a9faeb')
-          break
-        }
-      }
-    }
-
-    // the wave will flash when text location receives a new order
-    if (this.waveArr && this.waveArr.length > 0) {
-      this.waveAnimate()
-    }
-
-    this.renderer.render(this.scene, this.camera)
+    return tempColor
   }
 
   waveAnimate() {
@@ -446,19 +451,6 @@ export class lineMap {
     })
   }
 
-  createProvinceInfo() {
-    // 显示省份的信息
-    if (this.activeInstersect.length !== 0 && this.activeInstersect[0].object.parent.properties.name) {
-      var properties = this.activeInstersect[0].object.parent.properties
-
-      this.provinceInfo.textContent = properties.name
-      // this.provinceInfo.textContent += properties.num;
-
-      this.provinceInfo.style.visibility = 'visible'
-    } else {
-      this.provinceInfo.style.visibility = 'hidden'
-    }
-  }
   createPlaceInfo() {
     // 显示监测点的信息
     if (this.activeInstersectBar.length !== 0 && this.activeInstersectBar[0].object.properties.name) {
@@ -466,9 +458,103 @@ export class lineMap {
       this.placeInfo.innerHTML = properties.name + '<br />'
       this.placeInfo.innerHTML += '数量：' + properties.num
       this.placeInfo.style.visibility = 'visible'
-    } else {
-      this.placeInfo.style.visibility = 'hidden'
     }
+  }
+
+  createDistrict(intersects) {
+    // 显示监测点的信息
+    if (intersects.length > 0 && intersects[0].object.parent.properties) {
+      const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
+      if (target) {
+        this.districtInfo.style.visibility = 'visible'
+        const city = target.object.parent.properties
+        this.districtInfo.innerHTML = city.name
+      }
+    }
+  }
+
+  cancelMeshHighlight() {
+    this.districtMeshList.forEach(ele => {
+      ele.properties.isFadeOut = false
+      this.isHighlight = false
+      this.districtColorList.forEach(colorEle => {
+        if (ele.properties.adcode === colorEle.code) {
+          this.meshFade(ele.children[0], colorEle.color,false, true)
+        }
+      })
+    })
+  }
+
+  worldCrash() {
+    let intersects = this.raycaster.intersectObjects(this.scene.children, true)
+    if (intersects.length > 0 && intersects[0].object.parent.properties) {
+      const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
+      if (target) {
+        this.isHighlight = true
+        const city = target.object.parent.properties
+        this.districtMeshList.forEach(ele => {
+          if (ele.properties.adcode !== city.adcode) {
+            const item = ele.children[0]
+            // this.setupObjectScaleAnimation(item, item.scale, { x: 0, y: 0, z: 0 }, 1000, 100, TWEEN.Easing.Quadratic.Out)
+            new TWEEN.Tween(item.position)
+                .to({ y: -20 }, 1000)
+                .delay(100)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .onUpdate(function () {
+                  // object.scale.copy( source );
+                  // that.counter1 ++
+                })
+                .start()
+          } else {
+            ele.properties.isFadeOut = false
+          }
+        })
+        // console.log('city: ', city, ', target:', target)
+      }
+    }
+  }
+
+  highlightDistrict() {
+    let intersects = this.raycaster.intersectObjects(this.scene.children, true)
+    // 显示监测点的信息
+    // console.log(intersects)
+    if (intersects.length > 0 && intersects[0].object.parent.properties) {
+      const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
+      if (target) {
+        console.log('target', target)
+        this.isHighlight = true
+        const city = target.object.parent.properties
+        this.districtMeshList.forEach(ele => {
+          if (ele.properties.adcode !== city.adcode) {
+            // mesh - top & side
+            ele.properties.isFadeOut = true
+            this.meshFade(ele.children[0], this.fadeOutColor, true, false)
+            // line
+            // ele.children[1].material.color.set('rgba(2,51,121)')
+            // ele.children[1].material.transparent = true
+            // ele.children[1].material.opacity = 0.5
+          } else {
+            ele.properties.isFadeOut = false
+          }
+        })
+        // console.log('city: ', city, ', target:', target)
+      }
+    } else if (intersects.length <= 0) {
+      this.cancelMeshHighlight()
+    }
+  }
+
+  meshFade(mesh, color, isTransparent, sideColor) {
+    const meshArr = [0, 1] // 0: top, 1: side
+    meshArr.forEach(index => {
+      if (sideColor && index === 1) {
+        mesh.material[index].color.set(this.districtSideColor)
+      } else {
+        mesh.material[index].color.set(color)
+      }
+      mesh.material[index].transparent = isTransparent ? true : false
+      mesh.material[index].opacity = isTransparent ? 0.5 : 1
+    })
   }
 
   setupObjectScaleAnimation(object, source, target, duration, delay, easing) {
@@ -476,7 +562,6 @@ export class lineMap {
     let l_easing = easing !== undefined ? easing : TWEEN.Easing.Linear.None
 
     object.properties.isShow = !object.properties.isShow
-    object.geometry.verticesNeedUpdate = true
     new TWEEN.Tween(source)
       .to(target, duration)
       .delay(l_delay)
@@ -493,7 +578,7 @@ export class lineMap {
     const numHeight = this.calcShowHeight(position[2])
     let geometry = new THREE.CylinderGeometry(this.boxR, this.boxR, numHeight, 100)
     // set the base positon of this Matrix geometry
-    geometry.applyMatrix(new THREE.Matrix4().makeTranslation(0, numHeight / 2, 0))
+    geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, numHeight / 2, 0))
     let material = new THREE.MeshPhongMaterial({
       color: '#0DEAF8',
       transparent: true,
