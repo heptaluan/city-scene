@@ -34,7 +34,7 @@ $(window).load(function () {
     var whei = $(window).width()
     $('html').css({ fontSize: whei / 20 })
     $('#canvas').width($(window).width()).height($(window).height())
-    animation()
+    // animation()
   })
 
   $('.loading').fadeOut(1500)
@@ -111,16 +111,16 @@ $(window).load(function () {
   handleGetAllData(true)
   initAllAnime()
 
-  $('#totalOrderNumber').click(function () {
-    handleGetAllData()
-  })
+  // $('#totalOrderNumber').click(function () {
+  //   handleGetAllData()
+  // })
 
-  $('#todayOrderNumber').click(function () {
-    handleGetCityData({
-      marketId: '1548955005760548866',
-      name: '长垣市',
-    })
-  })
+  // $('#todayOrderNumber').click(function () {
+  //   handleGetCityData({
+  //     marketId: '1548974747355426818',
+  //     name: '延津县',
+  //   })
+  // })
 
   function handleGetAllData(type) {
     $.ajax({
@@ -244,14 +244,14 @@ $(window).load(function () {
   }
 
   // 空白区域点击
-  let flag = true
+  window.flag = true
 
   function initAll(data, name) {
     if (!data) {
       return false
     }
 
-    if (flag) {
+    if (window.flag) {
       anime({
         targets: '.left-box .boxall',
         translateX: '-153%',
@@ -279,6 +279,9 @@ $(window).load(function () {
         speed: 1500,
         refreshInterval: 50,
       })
+
+      $('#totalOrderTitle').html('总订单数')
+      $('#todayOrderTitle').html('当日订单数')
 
       setTimeout(() => {
         echart1.clear()
@@ -336,10 +339,10 @@ $(window).load(function () {
         },
         complete: function (anim) {
           console.log(anim)
-          flag = true
+          window.flag = true
         },
       })
-      flag = false
+      window.flag = false
     }
   }
 
@@ -349,7 +352,7 @@ $(window).load(function () {
       return false
     }
 
-    if (flag) {
+    if (window.flag) {
       anime({
         targets: '.left-box .boxall',
         translateX: '-153%',
@@ -377,6 +380,9 @@ $(window).load(function () {
         speed: 1500,
         refreshInterval: 50,
       })
+
+      $('#totalOrderTitle').html(`${name}总订单数`)
+      $('#todayOrderTitle').html(`${name}当日订单数`)
 
       setTimeout(() => {
         echart1.clear()
@@ -434,10 +440,10 @@ $(window).load(function () {
         },
         complete: function (anim) {
           console.log(anim)
-          flag = true
+          window.flag = true
         },
       })
-      flag = false
+      window.flag = false
     }
   }
 
@@ -506,35 +512,21 @@ $(window).load(function () {
     }
   })
 
-  // $('.head').click(function () {
+  // $('#fire1').click(function () {
   //   line.createFirework('4134944077340737582')
   //   line.createFirework('4134944077340737676')
   //   line.createFirework('1548977336021135362')
   //   line.createFirework('4134944077340737538')
+  // })
+
+  // $('#fire2').click(function () {
   //   line.createFirework('1548956063987642370')
   //   line.createFirework('4134944077340737562')
   //   line.createFirework('4134944077340737583')
   //   line.createFirework('4134944077340737677')
   //   line.createFirework('4134944077340737555')
   // })
-  $('#fire1').click(function () {
-    line.createFirework('4134944077340737582')
-    line.createFirework('4134944077340737676')
-    line.createFirework('1548977336021135362')
-    line.createFirework('4134944077340737538')
-  })
-  $('#fire2').click(function () {
-    line.createFirework('1548956063987642370')
-    line.createFirework('4134944077340737562')
-    line.createFirework('4134944077340737583')
-    line.createFirework('4134944077340737677')
-    line.createFirework('4134944077340737555')
-  })
-
-  // $('#mapShine').click(function () {
-  //   line.cancelMeshHighlight()
-  // })
-
+  
   // ===========================================================
 
   var getMqttConfig = {
@@ -562,30 +554,39 @@ $(window).load(function () {
     const data = message.payloadString
     console.log(data)
 
+    const placeId = data.split('_')[0] // 检测点
+    const marketId = data.split('_')[1] // 区县
+
     let newTodayNum = todayNum
     newTodayNum++
 
     let newTotalNum = totalNum
     newTotalNum++
 
-    $('#todayOrderNumber').countTo({
-      from: todayNum,
-      to: newTodayNum,
-      speed: 1000,
-      refreshInterval: 50,
-    })
-    todayNum = newTodayNum
+    if (
+      window.targetPlaceId === undefined ||
+      window.targetPlaceId === null ||
+      (window.targetPlaceId && window.targetPlaceId === marketId)
+    ) {
+      $('#todayOrderNumber').countTo({
+        from: todayNum,
+        to: newTodayNum,
+        speed: 1000,
+        refreshInterval: 50,
+      })
+      todayNum = newTodayNum
 
-    $('#totalOrderNumber').countTo({
-      from: totalNum,
-      to: newTotalNum,
-      speed: 1000,
-      refreshInterval: 50,
-    })
-    totalNum = newTotalNum
+      $('#totalOrderNumber').countTo({
+        from: totalNum,
+        to: newTotalNum,
+        speed: 1000,
+        refreshInterval: 50,
+      })
+      totalNum = newTotalNum
 
-    if (message.payloadString) {
-      line.createFirework(message.payloadString)
+      if (message.payloadString) {
+        line.createFirework(placeId)
+      }
     }
   }
 
@@ -603,3 +604,51 @@ $(window).load(function () {
     },
   })
 })
+
+function filterObj(obj, arr) {
+  if (typeof obj !== 'object' || !Array.isArray(arr)) {
+    throw new Error('参数格式不正确')
+  }
+  const result = {}
+  Object.keys(obj)
+    .filter(key => arr.includes(key))
+    .forEach(key => {
+      result[key] = obj[key]
+    })
+  return result
+}
+
+var glyphs = {}
+
+let newObj = filterObj(glyphs, [
+  '辉',
+  '县',
+  '市',
+  '经',
+  '开',
+  '区',
+  '牧',
+  '野',
+  '卫',
+  '滨',
+  '长',
+  '垣',
+  '高',
+  '新',
+  '红',
+  '旗',
+  '封',
+  '丘',
+  '凤',
+  '泉',
+  '延',
+  '津',
+  '原',
+  '阳',
+  '乡',
+  '获',
+  '嘉',
+  '平',
+])
+
+console.log(newObj)

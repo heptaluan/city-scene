@@ -27,6 +27,7 @@ export const option1 = {
           color: 'rgba(255,255,255,.6)',
           fontSize: 11,
         },
+        interval: 1,
         rotate: '45',
       },
       axisTick: {
@@ -124,7 +125,13 @@ export const option1 = {
 
 export const formatOption1 = (data, option, name) => {
   const list = data.countyList ? data.countyList : data.placeList
-  const newList = move(move(list, 0, 6), 3, 8)
+  let newList = []
+
+  if (data.countyList && data.countyList.length > 0) {
+    newList = move(move(list, 0, 6), 3, 8)
+  } else {
+    newList = list
+  }
 
   const xAxisData = []
   const seriesData = []
@@ -133,15 +140,15 @@ export const formatOption1 = (data, option, name) => {
     xAxisData.push(newList[i].name)
     seriesData.push(newList[i].num)
   }
-
-  // if (data.countyList && data.countyList.length > 0) {
-  //   option.grid.bottom = '25%'
-  // } else {
-  //   option.grid.bottom = '35%'
-  // }
-
+  
   option.xAxis.find(item => item.type === 'category').data = xAxisData.map(item => item.replace(name, ''))
   option.series.find(item => item.type === 'line').data = seriesData
+  
+  if (option.xAxis.find(item => item.type === 'category').data.length < 6) {
+    option.xAxis.find(item => item.type === 'category').axisLabel.interval = 0
+  } else {
+    option.xAxis.find(item => item.type === 'category').axisLabel.interval = 1
+  }
 
   return option
 }
@@ -186,6 +193,7 @@ export const option2 = {
         textStyle: {
           fontSize: 12,
         },
+        interval: 1,
         rotate: '45',
       },
       axisTick: {
@@ -291,7 +299,7 @@ export const option31 = {
       name: '占比',
       type: 'pie',
       selectedMode: 'single',
-      radius: ['55%', '80%'],
+      radius: ['42%', '80%'],
       label: {
         position: 'inner',
         fontSize: 14,
@@ -342,7 +350,7 @@ export const option32 = {
       name: '年龄段',
       type: 'pie',
       selectedMode: 'single',
-      radius: ['55%', '80%'],
+      radius: ['42%', '80%'],
       label: {
         position: 'inner',
         fontSize: 12,
@@ -863,23 +871,11 @@ export const option61 = {
       barWidth: '40%',
       itemStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(
-            0,
-            0,
-            0,
-            1,
-            [
-              {
-                offset: 0,
-                color: '#9529FB',
-              },
-              {
-                offset: 1,
-                color: '#2D35EA',
-              },
-            ],
-            false
-          ),
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: '#2378f7' },
+            { offset: 0.7, color: '#0be7cd' },
+            { offset: 1, color: '#13dcca' },
+          ]),
         },
       },
     },

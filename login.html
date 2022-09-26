@@ -15,7 +15,7 @@
         <form>
           <div class="inpGroup">
             <span class="loginIco1"></span>
-            <input type="text" class="user" placeholder="请输入您的用户名" />
+            <input type="text" class="user loginInput" placeholder="请输入您的用户名" />
           </div>
           <div class="prompt">
             <p class="error">用户名错误或不存在</p>
@@ -23,7 +23,7 @@
 
           <div class="inpGroup">
             <span class="loginIco2"></span>
-            <input type="password" class="password" placeholder="请输入您的密码" />
+            <input type="password" class="password loginInput" placeholder="请输入您的密码" />
           </div>
           <div class="prompt">
             <p class="success">输入正确</p>
@@ -32,7 +32,7 @@
           <div class="inpGroupWrap">
             <div class="inpGroup code">
               <span class="loginIco2"></span>
-              <input type="text" class="captcha-code" placeholder="请输入验证码" maxlength="4" />
+              <input type="text" class="captcha-code loginInput" placeholder="请输入验证码" maxlength="4" />
               <img src="" class="captcha-image" style="width: 120px; height: 40px" />
             </div>
           </div>
@@ -218,6 +218,16 @@
     })
 
     $('.submit').click(function () {
+      login()
+    })
+
+    $('.loginInput').keydown(function (event) {
+      if (event.keyCode == 13) {
+        login()
+      }
+    })
+
+    function login() {
       if ($('.user').val() === '' || $('.password').val() === '') {
         $('.tips').html(`请输入用户名和密码`)
         return false
@@ -250,6 +260,7 @@
           }
         },
       })
-    })
+    }
+
   </script>
 </html>

@@ -359,7 +359,6 @@ export class lineMap {
 
   createFirework(id) {
     // calculate objects intersecting that picking ray
-    // const intersects = this.raycaster.intersectObjects(this.scene.children, true)
     const fireworkPoint = {
       x: null,
       y: null,
@@ -370,7 +369,6 @@ export class lineMap {
         fireworkPoint.y = -ele.longitude
       }
     })
-    // console.log(fireworkPoint)
 
     let index = 0
     const time = setInterval(() => {
@@ -495,8 +493,10 @@ export class lineMap {
         this.districtMeshList.forEach(ele => {
           if (ele.properties.adcode !== city.adcode) {
             const item = ele.children[0]
+            const districtBox = new THREE.Box3().setFromObject(ele, 0xffff00)
+            console.log(districtBox)
             // this.setupObjectScaleAnimation(item, item.scale, { x: 0, y: 0, z: 0 }, 1000, 100, TWEEN.Easing.Quadratic.Out)
-            new TWEEN.Tween(item.position)
+            new TWEEN.Tween(districtBox.min)
                 .to({ y: -20 }, 1000)
                 .delay(100)
                 .easing(TWEEN.Easing.Quadratic.Out)
@@ -514,33 +514,53 @@ export class lineMap {
     }
   }
 
+  showDistrictData(id, name) {
+    handleGetCityData({marketId: id, name: name})
+  }
+
+  showAllDistrictData() {
+    handleGetAllData()
+  }
+
   highlightDistrict() {
-    let intersects = this.raycaster.intersectObjects(this.scene.children, true)
-    // 显示监测点的信息
-    // console.log(intersects)
-    if (intersects.length > 0 && intersects[0].object.parent.properties) {
-      const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
-      if (target) {
-        console.log('target', target)
-        this.isHighlight = true
-        const city = target.object.parent.properties
-        this.districtMeshList.forEach(ele => {
-          if (ele.properties.adcode !== city.adcode) {
-            // mesh - top & side
-            ele.properties.isFadeOut = true
-            this.meshFade(ele.children[0], this.fadeOutColor, true, false)
-            // line
-            // ele.children[1].material.color.set('rgba(2,51,121)')
-            // ele.children[1].material.transparent = true
-            // ele.children[1].material.opacity = 0.5
-          } else {
-            ele.properties.isFadeOut = false
-          }
-        })
-        // console.log('city: ', city, ', target:', target)
+    if (window.flag) {
+      let intersects = this.raycaster.intersectObjects(this.scene.children, true)
+      let target = null
+      // 显示监测点的信息
+      if (intersects.length > 0 && intersects[0].object.parent.properties) {
+        target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
+        if (target) {
+          // console.log('target', target)
+          this.isHighlight = true
+          const city = target.object.parent.properties
+          this.showDistrictData(city.id, city.name)
+
+          this.districtMeshList.forEach(ele => {
+            if (ele.properties.adcode !== city.adcode) {
+              // mesh - top & side
+              ele.properties.isFadeOut = true
+              this.meshFade(ele.children[0], this.fadeOutColor, true, false)
+              // line
+              // ele.children[1].material.color.set('rgba(2,51,121)')
+              // ele.children[1].material.transparent = true
+              // ele.children[1].material.opacity = 0.5
+            } else {
+              ele.properties.isFadeOut = false
+            }
+          })
+          // console.log('city: ', city, ', target:', target)
+        }
+      } else if (intersects.length <= 0) {
+        if(this.isHighlight) {
+          this.showAllDistrictData()
+        }
+        this.cancelMeshHighlight()
       }
-    } else if (intersects.length <= 0) {
-      this.cancelMeshHighlight()
+      if (target) {
+        window.targetPlaceId = target.object.parent.properties.id
+      } else {
+        window.targetPlaceId = null
+      }
     }
   }
 
