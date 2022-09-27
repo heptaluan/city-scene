@@ -9,7 +9,7 @@ export const option1 = {
     trigger: 'axis',
     axisPointer: {
       lineStyle: {
-        color: '#dddc6b',
+        color: 'rgba(206, 0, 128, 1)',
       },
     },
   },
@@ -84,7 +84,7 @@ export const option1 = {
       showSymbol: false,
       lineStyle: {
         normal: {
-          color: '#0184d5',
+          color: 'rgba(206, 0, 128, 1)',
           width: 2,
         },
       },
@@ -98,21 +98,21 @@ export const option1 = {
             [
               {
                 offset: 0,
-                color: 'rgba(1, 132, 213, 0.4)',
+                color: 'rgba(206, 0, 128, 0.6)',
               },
               {
-                offset: 0.8,
-                color: 'rgba(1, 132, 213, 0.1)',
+                offset: 1,
+                color: 'rgba(206, 0, 128, 0.02)',
               },
             ],
             false
           ),
-          shadowColor: 'rgba(0, 0, 0, 0.1)',
+          // shadowColor: 'rgba(0, 0, 0, 0.1)',
         },
       },
       itemStyle: {
         normal: {
-          color: '#00d887',
+          color: 'rgba(206, 0, 128, 1)',
           borderColor: 'rgba(221, 220, 107, .1)',
           borderWidth: 12,
         },
@@ -140,10 +140,10 @@ export const formatOption1 = (data, option, name) => {
     xAxisData.push(newList[i].name)
     seriesData.push(newList[i].num)
   }
-  
+
   option.xAxis.find(item => item.type === 'category').data = xAxisData.map(item => item.replace(name, ''))
   option.series.find(item => item.type === 'line').data = seriesData
-  
+
   if (option.xAxis.find(item => item.type === 'category').data.length < 6) {
     option.xAxis.find(item => item.type === 'category').axisLabel.interval = 0
   } else {
@@ -293,7 +293,16 @@ export const option31 = {
   tooltip: {
     trigger: 'item',
   },
-  color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
+  color: [
+    new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      { offset: 0, color: 'rgba(0, 90, 201)' },
+      { offset: 1, color: 'rgba(6, 239, 252)' },
+    ]),
+    new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      { offset: 0, color: 'rgba(206, 0, 128)' },
+      { offset: 1, color: 'rgba(0, 90, 201)' },
+    ]),
+  ],
   series: [
     {
       name: '占比',
@@ -479,11 +488,11 @@ export const option4 = {
           colorStops: [
             {
               offset: 0,
-              color: 'rgba(19,138,179,1)', // 0% 处的颜色
+              color: 'rgba(206, 0, 128, 1)',
             },
             {
               offset: 1,
-              color: 'rgba(10,73,98,0)', // 100% 处的颜色
+              color: 'rgba(0, 90, 201, 1)',
             },
           ],
           global: false, // 缺省为 false
@@ -540,7 +549,6 @@ export const option5 = {
         type: 'solid',
       },
     },
-
     axisLine: {
       // 坐标轴线
       show: false,
@@ -600,8 +608,286 @@ export const option5 = {
       coordinateSystem: 'polar',
       name: '区县目标完成度',
       stack: 'a',
-      color: 'rgba(37,213,232,1)',
-      z: 0,
+      itemStyle: {
+        normal: {
+          // 定制显示（按顺序）
+          color(params) {
+            const colorList = [
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 0,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+            ]
+            return colorList[params.dataIndex]
+          },
+        },
+      },
     },
   ],
   animationDelay: function (idx) {
@@ -691,7 +977,7 @@ export const option51 = {
         { offset: 0, color: '#324791' },
         { offset: 1, color: '#449090' },
       ]),
-      data: [0.4, 0.4, 0.4],
+      data: [],
       backgroundStyle: {
         borderWidth: 1,
         color: 'transparent',
@@ -722,20 +1008,18 @@ export const option51 = {
       coordinateSystem: 'polar',
       itemStyle: {
         normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0.5, 1, [
-            {
-              offset: 0,
-              color: '#5acef2',
-            },
-            {
-              offset: 0.7,
-              color: '#5073fb',
-            },
-            {
-              offset: 1,
-              color: '#6ae8d8',
-            },
-          ]),
+          color: new echarts.graphic.LinearGradient(
+            0,
+            0,
+            0,
+            1,
+            [
+              { offset: 0, color: 'rgba(6, 239, 252, 1)' },
+              { offset: 0.5, color: 'rgba(167, 14, 144, 1)' },
+              { offset: 1, color: 'rgba(0, 90, 201, 1)' },
+            ],
+            false
+          ),
         },
       },
     },
@@ -748,6 +1032,7 @@ export const option51 = {
 export const formatOption51 = (data, option) => {
   const value = data.completionNum
   option.title.find(item => item.id === 'title').text = value + '%'
+  option.series.find(item => item.type === 'liquidFill').data = [value / 100, value / 100, value / 100]
   return option
 }
 
@@ -755,7 +1040,7 @@ export const formatOption51 = (data, option) => {
 export const option6 = {
   tooltip: {},
   angleAxis: {
-    max: Math.max(...config.seriesData) * 1.2,
+    max: config.maxData,
     splitLine: {
       show: false,
     },
@@ -781,15 +1066,14 @@ export const option6 = {
     {
       type: 'bar',
       data: config.seriesData,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#2378f7' },
-            { offset: 0.7, color: '#0be7cd' },
-            { offset: 1, color: '#13dcca' },
-          ]),
-        },
-      },
+      // itemStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //       { offset: 0, color: 'rgba(0, 90, 201, 1)' },
+      //       { offset: 1, color: 'rgba(6, 238, 201, 1)' },
+      //     ]),
+      //   },
+      // },
       coordinateSystem: 'polar',
       stack: 'a',
     },
@@ -872,9 +1156,8 @@ export const option61 = {
       itemStyle: {
         normal: {
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#2378f7' },
-            { offset: 0.7, color: '#0be7cd' },
-            { offset: 1, color: '#13dcca' },
+            { offset: 0, color: 'rgba(0, 90, 201, 1)' },
+            { offset: 1, color: 'rgba(206, 0, 128, 1)' },
           ]),
         },
       },

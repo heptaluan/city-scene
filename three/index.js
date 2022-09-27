@@ -5,21 +5,21 @@ export class lineMap {
     this.container = document.body
 
     this.rangeColorList = [
-      '#244779',
-      '#244c81',
-      '#244e85',
-      '#24518a',
-      '#24548e',
-      '#245996',
-      '#245c9b',
-      '#2460a1',
-      '#2463a6',
-      '#2466ab',
-      '#2469b0',
-      '#246cb5',
-      '#256fba',
-      '#2572bf',
-      '#2884db',
+      '#034cb4',
+      '#034cb4',
+      '#034cb4',
+      '#005ac9',
+      '#005ac9',
+      '#005ac9',
+      '#0f7be8',
+      '#0f7be8',
+      '#0f7be8',
+      '#44a2fb',
+      '#44a2fb',
+      '#44a2fb',
+      '#62bffd',
+      '#62bffd',
+      '#62bffd',
     ]
   }
 
@@ -39,7 +39,7 @@ export class lineMap {
     })
     // 相机 透视相机
     this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000)
-    this.camera.position.set(0, -170, 110)
+    this.camera.position.set(0, -140, 150)
     this.camera.lookAt(0, 0, 0)
 
     this.setController() // 设置控制
@@ -62,13 +62,13 @@ export class lineMap {
     this.districtDataList = []
     this.districtColorList = []
     this.waveArr = []
-    this.itemHeight = 15 //柱子最大的高度，以此作为比例映射显示高度
+    this.itemHeight = 27 //柱子最大的高度，以此作为比例映射显示高度
     this.boxR = 0.3 //柱子半径
     this.gapWidth = 0.5 //柱子间隙
     this.textOffset = 0.8 //显示数量偏移柱子量
     this.fontSize = 12
     this.counter1 = 0
-    this.districtMeshColor = '#739fce'
+    this.districtMeshColor = '#8fd7ff'
     this.districtSideColor = '#28316c'
     this.fadeOutColor = 'rgba(2,51,121)'
     this.isHighlight = false
@@ -147,9 +147,12 @@ export class lineMap {
     let _this = this
     // 墨卡托投影转换
     const projection = d3.geoMercator().center([114.1, 35.21]).scale(5200).translate([-12, 20])
-    this.districtDataList = this.data.completionList.map(ele =>
-      ele.name.includes('新乡市') ? { ...ele, name: ele.name.replace('新乡市', '') } : ele
+    this.districtDataList = this.data.completionList.map(ele => {
+          ele.num = ele.num.replace('%', '')
+          return ele.name.includes('新乡市') ? { ...ele, name: ele.name.replace('新乡市', '') } : ele
+        }
     )
+    this.districtDataList.sort((x,y) => { return y.num - x.num})
 
     chinaJson.features.forEach(elem => {
       // 定一个省份3D对象
@@ -165,7 +168,7 @@ export class lineMap {
         multiPolygon.forEach(polygon => {
           const shape = new THREE.Shape()
           const lineMaterial = new THREE.LineBasicMaterial({
-            color: '#207fce',
+            color: '#2953af',
           })
           const lineGeometry = new THREE.Geometry()
 
@@ -263,7 +266,7 @@ export class lineMap {
       _this.renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
-    window.addEventListener('click', this.highlightDistrict.bind(this), false)
+    window.addEventListener('dblclick', this.highlightDistrict.bind(this), false)
     // window.addEventListener('click', this.worldCrash.bind(this), false)
     window.addEventListener('mousemove', onMouseMove, false)
     window.addEventListener('resize', onWindowResize, false)
@@ -407,11 +410,10 @@ export class lineMap {
 
   setController() {
     this.controller = new THREE.OrbitControls(this.camera, this.renderer.domElement)
-    /* this.controller.enablePan = false; // 禁止右键拖拽
-
+    this.controller.enablePan = false; // 禁止右键拖拽
     this.controller.enableZoom = true; // false-禁止右键缩放
-    
-    this.controller.maxDistance = 200; // 最大缩放 适用于 PerspectiveCamera
+
+    /* this.controller.maxDistance = 200; // 最大缩放 适用于 PerspectiveCamera
     this.controller.minDistance = 50; // 最大缩放
 
     this.controller.enableRotate = true; // false-禁止旋转 */
@@ -422,6 +424,7 @@ export class lineMap {
 
   districtColorHandle(elem) {
     let tempColor = null
+    const colorList = this.districtDataList
     for (let i = 0; i < this.districtDataList.length; i++) {
       if (elem.properties.name === this.districtDataList[i].name) {
         tempColor = this.rangeColorList[i]
@@ -488,21 +491,23 @@ export class lineMap {
     if (intersects.length > 0 && intersects[0].object.parent.properties) {
       const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
       if (target) {
-        this.isHighlight = true
         const city = target.object.parent.properties
         this.districtMeshList.forEach(ele => {
-          if (ele.properties.adcode !== city.adcode) {
+          if (ele.properties.adcode === city.adcode) {
             const item = ele.children[0]
-            const districtBox = new THREE.Box3().setFromObject(ele, 0xffff00)
-            console.log(districtBox)
+            const districtBox = new THREE.Box3().setFromObject(ele)
+            // let container = new THREE.Mesh(item.geometry, new THREE.MeshBasicMaterial( { color: 0x0080ff, side: THREE.DoubleSide } ))
+            // this.scene.add(container)
+            const helper = new THREE.Box3Helper( new THREE.Box3().setFromObject( item ), 0xffff00 );
+            this.scene.add( helper );
             // this.setupObjectScaleAnimation(item, item.scale, { x: 0, y: 0, z: 0 }, 1000, 100, TWEEN.Easing.Quadratic.Out)
-            new TWEEN.Tween(districtBox.min)
-                .to({ y: -20 }, 1000)
+            new TWEEN.Tween(helper.scale)
+                .to({ x: 0.2, y: 0.2, z: 0.2 }, 1000)
                 .delay(100)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onUpdate(function () {
-                  // object.scale.copy( source );
-                  // that.counter1 ++
+                  console.log(helper.scale)
+                  helper.scale.set( helper.scale );
                 })
                 .start()
           } else {
