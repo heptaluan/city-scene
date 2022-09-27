@@ -1,6 +1,7 @@
 ﻿import { config } from '../config.js'
 
-const animationDelay = 300
+const idxTime = 30
+const delay = 1500
 
 // 左上
 export const option1 = {
@@ -8,13 +9,14 @@ export const option1 = {
     trigger: 'axis',
     axisPointer: {
       lineStyle: {
-        color: '#dddc6b',
+        color: 'rgba(206, 0, 128, 1)',
       },
     },
   },
   grid: {
     top: '10',
     right: '2%',
+    bottom: '25%',
   },
   xAxis: [
     {
@@ -25,11 +27,16 @@ export const option1 = {
           color: 'rgba(255,255,255,.6)',
           fontSize: 11,
         },
+        interval: 1,
         rotate: '45',
+      },
+      axisTick: {
+        show: false,
       },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255,255,255,.2)',
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
         },
       },
       data: [],
@@ -44,19 +51,21 @@ export const option1 = {
   yAxis: [
     {
       type: 'value',
-      axisTick: { show: false },
+      axisTick: {
+        show: false,
+      },
       axisLine: {
         lineStyle: {
           color: 'rgba(255,255,255,.1)',
         },
       },
-      axisLabel: {
-        textStyle: {
-          color: 'rgba(255,255,255,.6)',
-          fontSize: 12,
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
         },
       },
-
       splitLine: {
         show: false,
         lineStyle: {
@@ -75,7 +84,7 @@ export const option1 = {
       showSymbol: false,
       lineStyle: {
         normal: {
-          color: '#0184d5',
+          color: 'rgba(206, 0, 128, 1)',
           width: 2,
         },
       },
@@ -89,21 +98,21 @@ export const option1 = {
             [
               {
                 offset: 0,
-                color: 'rgba(1, 132, 213, 0.4)',
+                color: 'rgba(206, 0, 128, 0.6)',
               },
               {
-                offset: 0.8,
-                color: 'rgba(1, 132, 213, 0.1)',
+                offset: 1,
+                color: 'rgba(206, 0, 128, 0.02)',
               },
             ],
             false
           ),
-          shadowColor: 'rgba(0, 0, 0, 0.1)',
+          // shadowColor: 'rgba(0, 0, 0, 0.1)',
         },
       },
       itemStyle: {
         normal: {
-          color: '#00d887',
+          color: 'rgba(206, 0, 128, 1)',
           borderColor: 'rgba(221, 220, 107, .1)',
           borderWidth: 12,
         },
@@ -111,23 +120,43 @@ export const option1 = {
       data: [],
     },
   ],
-  animationDelay: animationDelay,
+  animationDelay: delay,
 }
 
-export const formatOption1 = (data, option) => {
-  const list = data.countyList
+export const formatOption1 = (data, option, name) => {
+  const list = data.countyList ? data.countyList : data.placeList
+  let newList = []
+
+  if (data.countyList && data.countyList.length > 0) {
+    newList = move(move(list, 0, 6), 3, 8)
+  } else {
+    newList = list
+  }
+
   const xAxisData = []
   const seriesData = []
 
-  for (let i = 0; i < list.length; i++) {
-    xAxisData.push(list[i].name)
-    seriesData.push(list[i].num)
+  for (let i = 0; i < newList.length; i++) {
+    xAxisData.push(newList[i].name)
+    seriesData.push(newList[i].num)
   }
 
-  option.xAxis.find(item => item.type === 'category').data = xAxisData
+  option.xAxis.find(item => item.type === 'category').data = xAxisData.map(item => item.replace(name, ''))
   option.series.find(item => item.type === 'line').data = seriesData
 
+  if (option.xAxis.find(item => item.type === 'category').data.length < 6) {
+    option.xAxis.find(item => item.type === 'category').axisLabel.interval = 0
+  } else {
+    option.xAxis.find(item => item.type === 'category').axisLabel.interval = 1
+  }
+
   return option
+}
+
+function move(arr, a, b) {
+  let arr_temp = [].concat(arr)
+  arr_temp.splice(b, 0, arr_temp.splice(a, 1)[0])
+  return arr_temp
 }
 
 // 左中
@@ -164,6 +193,8 @@ export const option2 = {
         textStyle: {
           fontSize: 12,
         },
+        interval: 1,
+        rotate: '45',
       },
       axisTick: {
         show: false,
@@ -236,6 +267,9 @@ export const option2 = {
       },
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption2 = (data, option) => {
@@ -254,57 +288,53 @@ export const formatOption2 = (data, option) => {
   return option
 }
 
-// 左下
-export const option3 = {
+// 左下一
+export const option31 = {
   tooltip: {
     trigger: 'item',
-    // formatter: '{a} <br/>{b}: {c} ({d}%)',
   },
-  color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
+  color: [
+    new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      { offset: 0, color: 'rgba(0, 90, 201)' },
+      { offset: 1, color: 'rgba(6, 239, 252)' },
+    ]),
+    new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      { offset: 0, color: 'rgba(206, 0, 128)' },
+      { offset: 1, color: 'rgba(0, 90, 201)' },
+    ]),
+  ],
   series: [
     {
       name: '占比',
       type: 'pie',
       selectedMode: 'single',
-      radius: [0, '30%'],
+      radius: ['42%', '80%'],
       label: {
         position: 'inner',
         fontSize: 14,
+        color: '#fff',
       },
       labelLine: {
         show: false,
       },
-      data: [],
-    },
-    {
-      name: '年龄段',
-      type: 'pie',
-      radius: ['60%', '85%'],
-      labelLine: {
-        length: 30,
-      },
-      label: {
-        position: 'inner',
-        fontSize: 12,
-      },
-      data: [],
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' },
+      ],
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
-export const formatOption3 = (data, option) => {
-  const ageList = data.ageList
+export const formatOption31 = (data, option) => {
   const sexList = data.sexList
 
-  const ageData = []
   const sexData = []
-
-  for (let i = 0; i < ageList.length; i++) {
-    ageData.push({
-      name: ageList[i].age,
-      value: ageList[i].num,
-    })
-  }
 
   for (let i = 0; i < sexList.length; i++) {
     sexData.push({
@@ -313,8 +343,68 @@ export const formatOption3 = (data, option) => {
     })
   }
 
-  option.series.find(item => item.name === '年龄段').data = ageData
   option.series.find(item => item.name === '占比').data = sexData
+
+  return option
+}
+
+// 左下二
+export const option32 = {
+  tooltip: {
+    trigger: 'item',
+  },
+  color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
+  series: [
+    {
+      name: '年龄段',
+      type: 'pie',
+      selectedMode: 'single',
+      radius: ['42%', '80%'],
+      label: {
+        position: 'inner',
+        fontSize: 12,
+        color: '#fff',
+        lineHeight: 15,
+        formatter: params => {
+          if (params.data.name === '30岁及以下') {
+            return '30岁' + '\n' + '及以下'
+          } else if (params.data.name === '61岁及以上') {
+            return '61岁' + '\n' + '及以上'
+          } else {
+            return params.data.name
+          }
+        },
+      },
+      labelLine: {
+        show: false,
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' },
+      ],
+      animationDelay: function (idx) {
+        return idx * idxTime + delay
+      },
+    },
+  ],
+}
+
+export const formatOption32 = (data, option) => {
+  const ageList = data.ageList
+
+  const ageData = []
+
+  for (let i = 0; i < ageList.length; i++) {
+    ageData.push({
+      name: ageList[i].age,
+      value: ageList[i].num,
+    })
+  }
+
+  option.series.find(item => item.name === '年龄段').data = ageData
 
   return option
 }
@@ -364,6 +454,9 @@ export const option4 = {
     splitLine: {
       show: false,
     },
+    axisTick: {
+      show: false,
+    },
     axisLine: {
       show: true,
       lineStyle: {
@@ -395,11 +488,11 @@ export const option4 = {
           colorStops: [
             {
               offset: 0,
-              color: 'rgba(19,138,179,1)', // 0% 处的颜色
+              color: 'rgba(206, 0, 128, 1)',
             },
             {
               offset: 1,
-              color: 'rgba(10,73,98,0)', // 100% 处的颜色
+              color: 'rgba(0, 90, 201, 1)',
             },
           ],
           global: false, // 缺省为 false
@@ -407,6 +500,9 @@ export const option4 = {
       },
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption4 = (data, option) => {
@@ -439,7 +535,6 @@ export const option5 = {
     extraCssText: 'box-shadow:0 0 18px rgba(255,255,255,0.2)',
     formatter: '{a} <br/>{b}: {c} %',
   },
-
   angleAxis: {
     type: 'category',
     data: [],
@@ -454,7 +549,6 @@ export const option5 = {
         type: 'solid',
       },
     },
-
     axisLine: {
       // 坐标轴线
       show: false,
@@ -514,10 +608,291 @@ export const option5 = {
       coordinateSystem: 'polar',
       name: '区县目标完成度',
       stack: 'a',
-      color: 'rgba(37,213,232,1)',
-      z: 0,
+      itemStyle: {
+        normal: {
+          // 定制显示（按顺序）
+          color(params) {
+            const colorList = [
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 0,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 1,
+                y: 1,
+                x2: 0,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 1,
+                y2: 0,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+              {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'rgba(6, 239, 252, 1)',
+                  },
+                  {
+                    offset: 1,
+                    color: 'rgba(0, 90, 201, 1)',
+                  },
+                ],
+                global: false,
+              },
+            ]
+            return colorList[params.dataIndex]
+          },
+        },
+      },
     },
   ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption5 = (data, option) => {
@@ -530,9 +905,134 @@ export const formatOption5 = (data, option) => {
     seriesData.push(parseFloat(list[i].num))
   }
 
-  option.angleAxis.data = angleAxisData
+  option.angleAxis.data = angleAxisData.map(item => item.replace('新乡市', ''))
   option.series.find(item => item.type === 'bar').data = seriesData
 
+  return option
+}
+
+export const option51 = {
+  title: [
+    {
+      id: 'title',
+      text: (0.55 * 100).toFixed(0) + '%',
+      left: '50%',
+      top: '40%',
+      textAlign: 'center',
+      textStyle: {
+        fontSize: '32',
+        fontWeight: '400',
+        color: '#fff',
+        textAlign: 'center',
+        textBorderColor: 'rgba(0, 0, 0, 0)',
+        textShadowColor: '#000',
+        textShadowBlur: '0',
+        textShadowOffsetX: 0,
+        textShadowOffsetY: 1,
+      },
+    },
+  ],
+  polar: {
+    radius: ['80%', '72%'],
+    center: ['50%', '50%'],
+  },
+  angleAxis: {
+    max: 100,
+    clockwise: false,
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
+    axisLabel: {
+      show: false,
+    },
+    splitLine: {
+      show: false,
+    },
+  },
+  radiusAxis: {
+    type: 'category',
+    show: true,
+    axisLabel: {
+      show: false,
+    },
+    axisLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
+  },
+  series: [
+    {
+      type: 'liquidFill',
+      radius: '75%',
+      z: 1,
+      center: ['50%', '50%'],
+      amplitude: 20,
+      // color: '#2378f7',
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        { offset: 0, color: '#324791' },
+        { offset: 1, color: '#449090' },
+      ]),
+      data: [],
+      backgroundStyle: {
+        borderWidth: 1,
+        color: 'transparent',
+      },
+      label: {
+        normal: {
+          formatter: '',
+        },
+      },
+      outline: {
+        show: true,
+        itemStyle: {
+          borderWidth: 0,
+        },
+        borderDistance: 0,
+      },
+    },
+    {
+      name: 'bar',
+      type: 'bar',
+      roundCap: true,
+      z: 2,
+      showBackground: true,
+      backgroundStyle: {
+        color: '#15181e',
+      },
+      data: [80],
+      coordinateSystem: 'polar',
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(
+            0,
+            0,
+            0,
+            1,
+            [
+              { offset: 0, color: 'rgba(6, 239, 252, 1)' },
+              { offset: 0.5, color: 'rgba(167, 14, 144, 1)' },
+              { offset: 1, color: 'rgba(0, 90, 201, 1)' },
+            ],
+            false
+          ),
+        },
+      },
+    },
+  ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
+}
+
+export const formatOption51 = (data, option) => {
+  const value = data.completionNum
+  option.title.find(item => item.id === 'title').text = value + '%'
+  option.series.find(item => item.type === 'liquidFill').data = [value / 100, value / 100, value / 100]
   return option
 }
 
@@ -540,6 +1040,7 @@ export const formatOption5 = (data, option) => {
 export const option6 = {
   tooltip: {},
   angleAxis: {
+    max: config.maxData,
     splitLine: {
       show: false,
     },
@@ -551,6 +1052,9 @@ export const option6 = {
     },
     data: config.radiusAxisData,
     z: 10,
+    axisLabel: {
+      interval: 0,
+    },
   },
   polar: {
     radius: '80%',
@@ -562,15 +1066,14 @@ export const option6 = {
     {
       type: 'bar',
       data: config.seriesData,
-      itemStyle: {
-        normal: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: '#2378f7' },
-            { offset: 0.7, color: '#0be7cd' },
-            { offset: 1, color: '#13dcca' },
-          ]),
-        },
-      },
+      // itemStyle: {
+      //   normal: {
+      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+      //       { offset: 0, color: 'rgba(0, 90, 201, 1)' },
+      //       { offset: 1, color: 'rgba(6, 238, 201, 1)' },
+      //     ]),
+      //   },
+      // },
       coordinateSystem: 'polar',
       stack: 'a',
     },
@@ -578,165 +1081,106 @@ export const option6 = {
   textStyle: {
     color: 'black',
   },
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
 export const formatOption6 = (data, option) => {
   return option
 }
 
-// 中间地图
-var rangeColorList = [
-  '#244779',
-  '#244c81',
-  '#244e85',
-  '#24518a',
-  '#24548e',
-  '#245996',
-  '#245c9b',
-  '#2460a1',
-  '#2463a6',
-  '#2466ab',
-  '#2469b0',
-  '#246cb5',
-  '#256fba',
-  '#2572bf',
-  '#2884db',
-]
-
-export const option7 = {
-  geo3D: {
-    map: 'xinxiang',
-    boxDepth: 80,
-    regionHeight: 2,
-    shading: 'realistic',
-    // realisticMaterial: {
-    //   detailTexture: '../images/map-bg.jpg',
-    //   roughness: 0,
-    // },
-    itemStyle: {
-      opacity: 1, // 透明度
-      borderWidth: 1, //分界线宽度
-      borderColor: '#207fce', //分界线颜色
+export const option61 = {
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
     },
-    viewControl: {
-      distance: 100,
-      center: [0, -10, 0],
-    },
-    label: {
-      show: true, //是否显示市
-      color: '#fff', //文字颜色
-      fontSize: 12, //文字大小
-      fontFamily: '微软雅黑',
-      backgroundColor: 'rgba(0,0,0,0)', //透明度0清空文字背景
-    },
-    emphasis: {
-      label: {
-        show: true, //是否显示高亮
-        textStyle: {
-          color: '#fff', //高亮文字颜色
+  },
+  grid: {
+    top: '10',
+    right: '2%',
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: [],
+      axisLine: {
+        lineStyle: {
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
         },
       },
-      itemStyle: {
-        color: '#0489d6', //地图高亮颜色
-      },
-    },
-    // 光照
-    light: {
-      main: {
+      axisLabel: {
+        show: true,
         color: '#fff',
-        intensity: 1.5,
-        shadowQuality: 'high',
-        shadow: false,
-        alpha: 55,
-        beta: 10,
+        fontSize: 14,
+        rotate: '45',
       },
-      ambient: {
-        intensity: 0.3,
+      axisTick: {
+        show: false,
       },
-    },
-    regions: [],
-  },
-  visualMap: {
-    max: 40,
-    show: false,
-    calculable: true,
-    realtime: false,
-    inRange: {
-      color: ['#313695', '#4575b4', '#74add1'],
-    },
-    outOfRange: {
-      colorAlpha: 0,
-    },
-  },
-  tooltip: {
-    show: true,
-    formatter: params => {
-      let data = params.name + '<br/>' + '累计数:' + params.value[2]
-      return data
-    },
-  },
-  series: [
-    {
-      name: 'bar3D',
-      type: 'bar3D',
-      coordinateSystem: 'geo3D',
-      barSize: 0.4,
-      shading: 'lambert',
-      opacity: 1,
-      bevelSize: 0.8,
-      minHeight: 1.5,
-      data: [],
     },
   ],
+  yAxis: [
+    {
+      type: 'value',
+      nameTextStyle: {
+        color: '#fff',
+        fontSize: 16,
+      },
+      axisLabel: {
+        formatter: '{value}',
+        color: '#fff',
+      },
+      axisTick: {
+        show: false,
+      },
+      splitLine: {
+        show: false,
+      },
+      axisLine: {
+        show: true,
+        lineStyle: {
+          color: 'rgba(255, 255, 255,0.5)',
+          type: 'dashed',
+        },
+      },
+    },
+  ],
+  series: [
+    {
+      type: 'bar',
+      data: [],
+      barWidth: '40%',
+      itemStyle: {
+        normal: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(0, 90, 201, 1)' },
+            { offset: 1, color: 'rgba(206, 0, 128, 1)' },
+          ]),
+        },
+      },
+    },
+  ],
+  animationDelay: function (idx) {
+    return idx * idxTime + delay
+  },
 }
 
-export const formatOption7 = (data, option) => {
-  const list = data.completionList
-  const place = data.placeList
-  const angleAxisData = []
+export const formatOption61 = (data, option) => {
+  const list = data.statusList
+
+  const xAxisData = []
   const seriesData = []
 
-  console.log(data)
-  console.log(option)
-
-  // 处理区域颜色
-  const cityList = []
-  const city = list.sort(compare)
-  for (let i = 0; i < city.length; i++) {
-    cityList.push({
-      name: city[i].name.replace('新乡市', ''),
-      itemStyle: { color: rangeColorList[i] },
-    })
+  for (let i = 0; i < list.length; i++) {
+    xAxisData.push(list[i].name)
+    seriesData.push(list[i].num)
   }
 
-  // 处理柱状图
-  const barData = []
-  for (let i = 0; i < place.length; i++) {
-    barData.push({
-      name: place[i].name,
-      value: [place[i].longitude, place[i].latitude, place[i].num],
-    })
-  }
-
-  // for (let i = 0; i < list.length; i++) {
-  //   angleAxisData.push(list[i].name)
-  //   seriesData.push(parseFloat(list[i].num))
-  // }
-
-  option.geo3D.regions = cityList
-  option.series.find(item => item.type === 'bar3D').data = barData
+  option.xAxis.find(item => item.type === 'category').data = xAxisData
+  option.series.find(item => item.type === 'bar').data = seriesData
 
   return option
-}
-
-function compare(obj1, obj2) {
-  var val1 = parseFloat(obj1.num)
-  var val2 = parseFloat(obj2.num)
-  if (val1 < val2) {
-    return 1
-  } else if (val1 > val2) {
-    return -1
-  } else {
-    return 0
-  }
 }

@@ -7,7 +7,7 @@ var canvas = document.getElementById('canvas'),
   hue = 217,
   stars = [],
   count = 0,
-  maxStars = 1300 //星星数量
+  maxStars = 500 //星星数量
 
 var canvas2 = document.createElement('canvas'),
   ctx2 = canvas2.getContext('2d')
@@ -87,7 +87,10 @@ for (var i = 0; i < maxStars; i++) {
 function animation() {
   ctx.globalCompositeOperation = 'source-over'
   ctx.globalAlpha = 0.5 //尾巴
-  ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)'
+  const gradient = ctx.createRadialGradient(w / 2,h / 2,h /36, w / 2,h / 2, h / 3);
+  gradient.addColorStop(0,"rgb(7, 48, 92)");
+  gradient.addColorStop(1,"rgb(3,24,66)");
+  ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, w, h)
 
   ctx.globalCompositeOperation = 'lighter'

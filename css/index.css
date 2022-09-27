@@ -10,17 +10,23 @@ body {
   padding: 0px;
   margin: 0px;
   color: #222;
-  font-family: '微软雅黑';
+  font-family: siyuanheiti;
+  font-weight: normal;
 }
 html,
 body {
   overflow: hidden;
   width: 100%;
   height: 100%;
+  user-select: none;
 }
 @font-face {
   font-family: electronicFont;
   src: url(../font/DS-DIGIT.TTF);
+}
+@font-face {
+  font-family: siyuanheiti;
+  src: url(../font/SourceHanSansCN-Normal.ttf);
 }
 body {
   background: #000d4a url(../images/bg.png) center top;
@@ -71,12 +77,15 @@ a:hover {
   display: table;
   content: ' ';
 }
+
 .clearfix:after {
   clear: both;
 }
+
 .pulll_left {
   float: left;
 }
+
 .pulll_right {
   float: right;
 }
@@ -87,9 +96,11 @@ a:hover {
   height: 5px;
   position: absolute;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #5bc0de;
 }
+
 ::-webkit-scrollbar-track {
   background-color: #ddd;
 }
@@ -127,51 +138,59 @@ a:hover {
   position: relative;
   z-index: 100;
   transform: translateY(-150%);
-  transition-duration: 1s;
 }
+
 .head h1 {
   color: #fff;
   text-align: center;
   font-size: 0.32rem;
-  padding-top: 0.3em;
+  padding-top: 0.2em;
 }
+
 .head h4 {
   color: #fff;
   text-align: center;
   font-size: 0.28rem;
-  padding-top: 0.1em;
+  margin-top: -0.1em;
 }
+
 .head h1 img {
   width: 1.5rem;
   display: inline-block;
   vertical-align: middle;
   margin-right: 0.2rem;
 }
+
 .weather {
   position: absolute;
   right: 0.3rem;
   top: 0;
   line-height: 0.5rem;
 }
+
 .weather img {
   width: 0.3rem;
   display: inline-block;
   vertical-align: middle;
   margin-right: 0.01em;
 }
+
 .weather span {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.18rem;
   padding-right: 0.1rem;
 }
+
 .mainbox {
   width: 100%;
   height: calc(100% - 15.5em);
   padding: 0 0.1rem;
 }
+
 .mainbox > ul {
   height: 100%;
 }
+
 .mainbox > ul > li {
   float: left;
   padding: 0 0.1rem;
@@ -180,16 +199,23 @@ a:hover {
 .mainbox > ul > li {
   width: 25%;
 }
+
 .mainbox > ul > li:nth-child(2) {
   width: 50%;
   padding: 0;
 }
+
 .mainbox .left-box {
   position: relative;
   z-index: 10;
   height: 100%;
   transform: translateX(-150%);
 }
+
+.mainbox .center-box .bar {
+  position: relative;
+}
+
 .mainbox .right-box {
   position: relative;
   z-index: 10;
@@ -207,6 +233,7 @@ a:hover {
   z-index: 10;
   height: 33.3%;
 }
+
 .boxall:before,
 .boxall:after {
   position: absolute;
@@ -216,16 +243,19 @@ a:hover {
   border-top: 2px solid #02a6b5;
   top: 0;
 }
+
 .boxall:before,
 .boxfoot:before {
   border-left: 2px solid #02a6b5;
   left: 0;
 }
+
 .boxall:after,
 .boxfoot:after {
   border-right: 2px solid #02a6b5;
   right: 0;
 }
+
 .alltitle {
   font-size: 0.2rem;
   color: #fff;
@@ -239,6 +269,7 @@ a:hover {
   width: 100%;
   left: 0;
 }
+
 .boxfoot:before,
 .boxfoot:after {
   position: absolute;
@@ -254,6 +285,7 @@ a:hover {
   padding: 0.15rem;
   opacity: 0;
 }
+
 .barbox li,
 .barbox2 li {
   width: 50%;
@@ -261,6 +293,7 @@ a:hover {
   position: relative;
   z-index: 100;
 }
+
 .barbox:before,
 .barbox:after {
   position: absolute;
@@ -268,11 +301,13 @@ a:hover {
   height: 0.1rem;
   content: '';
 }
+
 .barbox:before {
   border-left: 2px solid #02a6b5;
   left: 0;
   border-top: 2px solid #02a6b5;
 }
+
 .barbox:after {
   border-right: 2px solid #02a6b5;
   right: 0;
@@ -294,6 +329,7 @@ a:hover {
   border: 1px solid rgba(25, 186, 139, 0.17);
   position: relative;
 }
+
 .barbox li {
   font-size: 0.7rem;
   color: #20dbfd;
@@ -302,30 +338,41 @@ a:hover {
   font-family: electronicFont;
   font-weight: bold;
 }
+
 .barbox2 li {
   font-size: 0.19rem;
   color: rgba(255, 255, 255, 0.7);
   padding-top: 0.1rem;
 }
 
+.mapContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
 .map {
-  position: relative;
+  position: absolute;
   height: 7.2rem;
   z-index: 9;
   opacity: 0;
 }
+
 .map4 {
   width: 100%;
   height: 100%;
   position: relative;
   z-index: 5;
 }
+
 .map1,
 .map2,
 .map3 {
   position: absolute;
   opacity: 0.5;
 }
+
 .map1 {
   width: 6.43rem;
   z-index: 2;
@@ -333,6 +380,7 @@ a:hover {
   left: 0.7rem;
   animation: myfirst2 15s infinite linear;
 }
+
 .map2 {
   width: 5.66rem;
   top: 0.85rem;
@@ -341,6 +389,7 @@ a:hover {
   opacity: 0.2;
   animation: myfirst 10s infinite linear;
 }
+
 .map3 {
   width: 5.18rem;
   top: 1.07rem;
@@ -352,6 +401,7 @@ a:hover {
   text-align: center;
   padding: 0.1rem 0 0 0;
 }
+
 .tabs a {
   position: relative;
   display: inline-block;
@@ -361,9 +411,11 @@ a:hover {
   transition: all 0.3s ease-out 0s;
   font-size: 14px;
 }
+
 .tabs li {
   display: inline-block;
 }
+
 .tabs a:after {
   position: absolute;
   width: 1px;
@@ -374,6 +426,7 @@ a:hover {
   right: -1px;
   margin-top: 7px;
 }
+
 .tabs li a.active {
   border: 1px solid rgba(25, 186, 139, 0.17);
   background: rgba(255, 255, 255, 0.05);
@@ -385,6 +438,7 @@ a:hover {
   margin: 0.1rem 0;
   position: relative;
 }
+
 .tit02 span {
   border: 1px solid rgba(25, 186, 139, 0.17);
   letter-spacing: 2px;
@@ -393,6 +447,7 @@ a:hover {
   font-size: 0.18rem;
   color: #49bcf7;
 }
+
 .tit02:before,
 .tit02:after {
   position: absolute;
@@ -402,9 +457,11 @@ a:hover {
   content: '';
   top: 0.12rem;
 }
+
 .tit02:after {
   right: 0;
 }
+
 .tit02:before {
   left: 0;
 }
@@ -413,6 +470,7 @@ a:hover {
   height: 2.54rem;
   overflow: hidden;
 }
+
 .wrap li {
   line-height: 0.42rem;
   height: 0.42rem;
@@ -420,10 +478,12 @@ a:hover {
   text-indent: 0.24rem;
   margin-bottom: 0.1rem;
 }
+
 .wrap li p {
   border: 1px solid rgba(25, 186, 139, 0.17);
   color: rgba(255, 255, 255, 0.6);
 }
+
 .sy {
   float: left;
   width: 33%;
@@ -435,9 +495,11 @@ a:hover {
   height: 1.5rem;
   overflow: hidden;
 }
+
 .adduser li {
   height: 0.5rem;
 }
+
 .adduser img {
   width: 0.4rem;
   border-radius: 0.5rem;
@@ -445,6 +507,7 @@ a:hover {
   display: inline-block;
   vertical-align: middle;
 }
+
 .adduser span {
   line-height: 0.5rem;
   font-size: 0.18rem;
@@ -456,12 +519,14 @@ a:hover {
   margin-right: -0.5rem;
   padding: 0.16rem 0;
 }
+
 .sycm li {
   float: left;
   width: 33.33%;
   text-align: center;
   position: relative;
 }
+
 .sycm li:before {
   position: absolute;
   content: '';
@@ -471,6 +536,7 @@ a:hover {
   right: 0;
   top: 15%;
 }
+
 .sycm li:last-child:before {
   width: 0;
 }
@@ -479,6 +545,7 @@ a:hover {
   font-size: 0.3rem;
   color: #c5ccff;
 }
+
 .sycm li span {
   font-size: 0.18rem;
   color: #fff;
@@ -521,6 +588,7 @@ a:hover {
   left: 0;
   cursor: move;
 }
+
 .str_move_clone {
   display: inline-block;
   vertical-align: top;
@@ -528,24 +596,29 @@ a:hover {
   left: 100%;
   top: 0;
 }
+
 .str_vertical .str_move_clone {
   left: 0;
   top: 100%;
 }
+
 .str_down .str_move_clone {
   left: 0;
   bottom: 100%;
 }
+
 .str_vertical .str_move,
 .str_down .str_move {
   white-space: normal;
   width: 100%;
 }
+
 .str_static .str_move,
 .no_drag .str_move,
 .noStop .str_move {
   cursor: inherit;
 }
+
 .str_wrap img {
   max-width: none !important;
 }
@@ -568,11 +641,13 @@ a:hover {
   width: 365px;
   height: 365px;
 }
+
 .load_img img {
   position: absolute;
   left: 0;
   top: 0;
 }
+
 .load_img .jzxz1 {
   animation: xz1 8s infinite linear;
 }
@@ -587,6 +662,7 @@ a:hover {
     transform: rotate(360deg);
   }
 }
+
 .load_img .jzxz2 {
   animation: xz2 7s infinite linear;
 }
@@ -602,17 +678,19 @@ a:hover {
   }
 }
 
-#showBarChart {
+#showBarChart,
+#fire1,
+#fire2,
+#mapShine,
+#endW {
   position: absolute;
   right: 0;
-  top: 20px;
+  bottom: -56px;
   line-height: 1.5715;
   display: inline-block;
   font-weight: 400;
   white-space: nowrap;
   text-align: center;
-  background-image: none;
-  border: 1px solid transparent;
   box-shadow: 0 2px #00000004;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -621,19 +699,67 @@ a:hover {
   -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  height: 32px;
-  padding: 4px 10px;
-  font-size: 14px;
+  padding: 8px 20px;
+  font-size: 16px;
   border-radius: 2px;
   color: #fff;
-  border-color: #d9d9d9;
-  background: transparent;
+  border-color: transparent;
+  background: rgba(101, 132, 226, 0.1);
   outline: 0;
   cursor: pointer;
   z-index: 999;
 }
 
-#showBarChart:hover {
-  color: #40a9ff;
-  border-color: #40a9ff;
+#mapShine {
+  right: 100px;
+}
+#endW {
+  right: 220px;
+}
+#fire1 {
+  right: 160px;
+}
+
+#fire2 {
+  right: 240px;
+}
+
+#showBarChart:hover, #mapShine:hover {
+  background-color: rgba(101 132 226 / 45%);
+}
+
+.header-time {
+  width: fit-content;
+  margin-right: 25px;
+  height: 8em;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-time #time {
+  color: #fff;
+  font-size: 16px;
+}
+
+.box1,
+.box2 {
+  width: 49%;
+  display: inline-block;
+}
+
+.header-wrap {
+  width: 100%;
+  height: 10em;
+  position: absolute;
+  left: 35px;
+  top: 5px;
+}
+
+.header-wrap img {
+  max-width: 100%;
+  max-height: 7em;
 }
