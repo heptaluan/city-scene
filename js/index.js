@@ -3,10 +3,8 @@ import {
   formatOption1,
   option2,
   formatOption2,
-  option31,
-  formatOption31,
-  option32,
-  formatOption32,
+  option3,
+  formatOption3,
   option4,
   formatOption4,
   option5,
@@ -86,11 +84,6 @@ $(window).load(function () {
 
   // ===========================================================
 
-  // 两小时刷新一次页面
-  setInterval(function () {
-    window.location.reload()
-  }, 1000 * 120 * 60)
-
   // ===========================================================
 
   // echarts.registerMap('xinxiang', geoData)
@@ -98,8 +91,7 @@ $(window).load(function () {
 
   let echart1 = echarts.init(document.getElementById('echart1'))
   let echart2 = echarts.init(document.getElementById('echart2'))
-  let echart31 = echarts.init(document.getElementById('echart31'))
-  let echart32 = echarts.init(document.getElementById('echart32'))
+  let echart3 = echarts.init(document.getElementById('echart3'))
   let echart4 = echarts.init(document.getElementById('echart4'))
   let echart5 = echarts.init(document.getElementById('echart5'))
   let echart6 = echarts.init(document.getElementById('echart6'))
@@ -111,17 +103,7 @@ $(window).load(function () {
   handleGetAllData(true)
   initAllAnime()
 
-  // $('#totalOrderNumber').click(function () {
-  //   handleGetAllData()
-  // })
-
-  // $('#todayOrderNumber').click(function () {
-  //   handleGetCityData({
-  //     marketId: '1548974747355426818',
-  //     name: '延津县',
-  //   })
-  // })
-
+  // 空白区域点击事件
   function handleGetAllData(type) {
     $.ajax({
       url: getAllDataUrl(),
@@ -148,6 +130,7 @@ $(window).load(function () {
     })
   }
 
+  // 区县点击事件
   function handleGetCityData(city) {
     $.ajax({
       url: getCityDataUrl(),
@@ -211,23 +194,21 @@ $(window).load(function () {
 
     const newOption1 = formatOption1(data, option1)
     const newOption2 = formatOption2(data, option2)
-    const newOption31 = formatOption31(data, option31)
-    const newOption32 = formatOption32(data, option32)
+    const newOption3 = formatOption3(data, option3)
     const newOption4 = formatOption4(data, option4)
     const newOption5 = formatOption5(data, option5)
     const newOption6 = formatOption6(data, option6)
 
     echart1.setOption(newOption1, true)
     echart2.setOption(newOption2, true)
-    echart31.setOption(newOption31, true)
-    echart32.setOption(newOption32, true)
+    echart3.setOption(newOption3, true)
     echart4.setOption(newOption4, true)
     echart5.setOption(newOption5, true)
     echart6.setOption(newOption6, true)
 
-    $('#title1').html('区县累计数')
+    $('#title1').html('区县检测累计数')
     $('#title2').html('月度检测数量')
-    $('#title3').html('男女年龄比例分布')
+    $('#title3').html('区县当日检测量排名')
     $('#title4').html('机构检测累计量排名')
     $('#title5').html('区县目标完成度')
     $('#title6').html('高风险复查比')
@@ -235,8 +216,7 @@ $(window).load(function () {
     window.addEventListener('resize', function () {
       echart1.resize()
       echart2.resize()
-      echart31.resize()
-      echart32.resize()
+      echart3.resize()
       echart4.resize()
       echart5.resize()
       echart6.resize()
@@ -290,11 +270,8 @@ $(window).load(function () {
         echart2.clear()
         echart2 = echarts.init(document.getElementById('echart2'))
 
-        echart31.clear()
-        echart31 = echarts.init(document.getElementById('echart31'))
-
-        echart32.clear()
-        echart32 = echarts.init(document.getElementById('echart32'))
+        echart3.clear()
+        echart3 = echarts.init(document.getElementById('echart3'))
 
         echart4.clear()
         echart4 = echarts.init(document.getElementById('echart4'))
@@ -307,23 +284,21 @@ $(window).load(function () {
 
         const newOption1 = formatOption1(data, option1)
         const newOption2 = formatOption2(data, option2)
-        const newOption31 = formatOption31(data, option31)
-        const newOption32 = formatOption32(data, option32)
+        const newOption3 = formatOption3(data, option3)
         const newOption4 = formatOption4(data, option4)
         const newOption5 = formatOption5(data, option5)
         const newOption6 = formatOption6(data, option6)
 
         echart1.setOption(newOption1, true)
         echart2.setOption(newOption2, true)
-        echart31.setOption(newOption31, true)
-        echart32.setOption(newOption32, true)
+        echart3.setOption(newOption3, true)
         echart4.setOption(newOption4, true)
         echart5.setOption(newOption5, true)
         echart6.setOption(newOption6, true)
 
-        $('#title1').html('区县累计数')
+        $('#title1').html('区县检测累计数')
         $('#title2').html('月度检测数量')
-        $('#title3').html('男女年龄比例分布')
+        $('#title3').html('区县当日检测量排名')
         $('#title4').html('机构检测累计量排名')
         $('#title5').html('区县目标完成度')
         $('#title6').html('高风险复查比')
@@ -391,11 +366,8 @@ $(window).load(function () {
         echart2.clear()
         echart2 = echarts.init(document.getElementById('echart2'))
 
-        echart31.clear()
-        echart31 = echarts.init(document.getElementById('echart31'))
-
-        echart32.clear()
-        echart32 = echarts.init(document.getElementById('echart32'))
+        echart3.clear()
+        echart3 = echarts.init(document.getElementById('echart3'))
 
         echart4.clear()
         echart4 = echarts.init(document.getElementById('echart4'))
@@ -408,23 +380,21 @@ $(window).load(function () {
 
         const newOption1 = formatOption1(data, option1, name)
         const newOption2 = formatOption2(data, option2)
-        const newOption31 = formatOption31(data, option31)
-        const newOption32 = formatOption32(data, option32)
+        const newOption3 = formatOption3(data, option3, name)
         const newOption4 = formatOption4(data, option4)
         const newOption51 = formatOption51(data, option51)
         const newOption61 = formatOption61(data, option61)
 
         echart1.setOption(newOption1, true)
         echart2.setOption(newOption2, true)
-        echart31.setOption(newOption31, true)
-        echart32.setOption(newOption32, true)
+        echart3.setOption(newOption3, true)
         echart4.setOption(newOption4, true)
         echart5.setOption(newOption51, true)
         echart6.setOption(newOption61, true)
 
-        $('#title1').html(`${name}累计数`)
+        $('#title1').html(`${name}检测累计数`)
         $('#title2').html(`${name}月度检测数量`)
-        $('#title3').html(`${name}男女年龄比例分布`)
+        $('#title3').html(`${name}当日检测量排名`)
         $('#title4').html(`${name}机构检测累计量排名`)
         $('#title5').html(`${name}目标完成度`)
         $('#title6').html(`${name}订单状态统计数`)
@@ -492,6 +462,218 @@ $(window).load(function () {
 
   // ===========================================================
 
+  // 半小时重新请求一次数据
+  setInterval(function () {
+    if (window.targetPlaceId) {
+      updateCityData({
+        marketId: window.targetPlaceId,
+        name: window.targetPlaceName,
+      })
+    } else {
+      updateAllData()
+    }
+  }, 1000 * 60 * 30)
+
+  // ===========================================================
+
+  // ===========================================================
+
+  // $('#totalOrderNumber').click(function () {
+  //   updateAllData()
+  // })
+
+  // $('#todayOrderNumber').click(function () {
+  //   if (window.targetPlaceId) {
+  //     updateCityData({
+  //       marketId: window.targetPlaceId,
+  //       name: window.targetPlaceName,
+  //     })
+  //   }
+  // })
+
+  function updateAllData() {
+    $.ajax({
+      url: getAllDataUrl(),
+      type: 'POST',
+      contentType: 'application/json;charset=UTF-8',
+      headers: { 'X-Access-Token': localStorage.getItem('token') },
+      success: function (res) {
+        if (res.code === 200) {
+          updateAll(res.data)
+        } else {
+          console.log(`连接超时`)
+        }
+      },
+      error: function (res) {
+        if (res.responseJSON.code === 500) {
+          localStorage.setItem('token', '')
+          window.location = './login.html'
+        }
+      },
+    })
+  }
+
+  function updateAll(data) {
+    if (!data) {
+      return false
+    }
+
+    // 保存之前的数据
+    todayNum = data.todayOrderNumber
+    totalNum = data.totalOrderNumber
+
+    $('#todayOrderNumber').countTo({
+      from: 0,
+      to: data.todayOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderNumber').countTo({
+      from: 0,
+      to: data.totalOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderTitle').html('总订单数')
+    $('#todayOrderTitle').html('当日订单数')
+
+    echart1.clear()
+    echart1 = echarts.init(document.getElementById('echart1'))
+
+    echart2.clear()
+    echart2 = echarts.init(document.getElementById('echart2'))
+
+    echart3.clear()
+    echart3 = echarts.init(document.getElementById('echart3'))
+
+    echart4.clear()
+    echart4 = echarts.init(document.getElementById('echart4'))
+
+    echart5.clear()
+    echart5 = echarts.init(document.getElementById('echart5'))
+
+    echart6.clear()
+    echart6 = echarts.init(document.getElementById('echart6'))
+
+    const newOption1 = formatOption1(data, option1)
+    const newOption2 = formatOption2(data, option2)
+    const newOption3 = formatOption3(data, option3)
+    const newOption4 = formatOption4(data, option4)
+    const newOption5 = formatOption5(data, option5)
+    const newOption6 = formatOption6(data, option6)
+
+    echart1.setOption(newOption1, true)
+    echart2.setOption(newOption2, true)
+    echart3.setOption(newOption3, true)
+    echart4.setOption(newOption4, true)
+    echart5.setOption(newOption5, true)
+    echart6.setOption(newOption6, true)
+
+    $('#title1').html('区县检测累计数')
+    $('#title2').html('月度检测数量')
+    $('#title3').html('区县当日检测量排名')
+    $('#title4').html('机构检测累计量排名')
+    $('#title5').html('区县目标完成度')
+    $('#title6').html('高风险复查比')
+  }
+
+  function updateCityData(city) {
+    $.ajax({
+      url: getCityDataUrl(),
+      data: {
+        marketId: city.marketId,
+      },
+      type: 'POST',
+      contentType: 'application/x-www-form-urlencoded',
+      headers: { 'X-Access-Token': localStorage.getItem('token') },
+      success: function (res) {
+        if (res.code === 200) {
+          updateCity(res.data, city.name)
+        } else {
+          console.log(`连接超时`)
+        }
+      },
+      error: function (res) {
+        if (res.responseJSON.code === 500) {
+          localStorage.setItem('token', '')
+          window.location = './login.html'
+        }
+      },
+    })
+  }
+
+  function updateCity(data, name) {
+    if (!data) {
+      return false
+    }
+
+    // 保存之前的数据
+    todayNum = data.todayOrderNumber
+    totalNum = data.totalOrderNumber
+
+    $('#todayOrderNumber').countTo({
+      from: 0,
+      to: data.todayOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderNumber').countTo({
+      from: 0,
+      to: data.totalOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderTitle').html(`${name}总订单数`)
+    $('#todayOrderTitle').html(`${name}当日订单数`)
+
+    echart1.clear()
+    echart1 = echarts.init(document.getElementById('echart1'))
+
+    echart2.clear()
+    echart2 = echarts.init(document.getElementById('echart2'))
+
+    echart3.clear()
+    echart3 = echarts.init(document.getElementById('echart3'))
+
+    echart4.clear()
+    echart4 = echarts.init(document.getElementById('echart4'))
+
+    echart5.clear()
+    echart5 = echarts.init(document.getElementById('echart5'))
+
+    echart6.clear()
+    echart6 = echarts.init(document.getElementById('echart6'))
+
+    const newOption1 = formatOption1(data, option1, name)
+    const newOption2 = formatOption2(data, option2)
+    const newOption3 = formatOption3(data, option3, name)
+    const newOption4 = formatOption4(data, option4)
+    const newOption51 = formatOption51(data, option51)
+    const newOption61 = formatOption61(data, option61)
+
+    echart1.setOption(newOption1, true)
+    echart2.setOption(newOption2, true)
+    echart3.setOption(newOption3, true)
+    echart4.setOption(newOption4, true)
+    echart5.setOption(newOption51, true)
+    echart6.setOption(newOption61, true)
+
+    $('#title1').html(`${name}检测累计数`)
+    $('#title2').html(`${name}月度检测数量`)
+    $('#title3').html(`${name}当日检测量排名`)
+    $('#title4').html(`${name}机构检测累计量排名`)
+    $('#title5').html(`${name}目标完成度`)
+    $('#title6').html(`${name}订单状态统计数`)
+  }
+
+  // ===========================================================
+
+  // ===========================================================
+
   $('#showBarChart').click(function () {
     if ($(this).html() === '隐藏检测点') {
       $(this).html('显示检测点')
@@ -526,7 +708,7 @@ $(window).load(function () {
   //   line.createFirework('4134944077340737677')
   //   line.createFirework('4134944077340737555')
   // })
-  
+
   // ===========================================================
 
   var getMqttConfig = {

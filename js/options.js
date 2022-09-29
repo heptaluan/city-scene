@@ -24,7 +24,7 @@ export const option1 = {
       boundaryGap: false,
       axisLabel: {
         textStyle: {
-          color: 'rgba(255,255,255,.6)',
+          color: 'rgba(255, 255, 255, 0.8)',
           fontSize: 11,
         },
         interval: 1,
@@ -35,7 +35,7 @@ export const option1 = {
       },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255, 255, 255,0.5)',
+          color: 'rgba(255, 255, 255, 0.8)',
           type: 'dashed',
         },
       },
@@ -54,15 +54,21 @@ export const option1 = {
       axisTick: {
         show: false,
       },
+      axisLabel: {
+        textStyle: {
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: 11,
+        },
+      },
       axisLine: {
         lineStyle: {
-          color: 'rgba(255,255,255,.1)',
+          color: 'rgba(255, 255, 255, 0.8)',
         },
       },
       axisLine: {
         show: true,
         lineStyle: {
-          color: 'rgba(255, 255, 255,0.5)',
+          color: 'rgba(255, 255, 255, 0.8)',
           type: 'dashed',
         },
       },
@@ -174,7 +180,7 @@ export const option2 = {
     borderWidth: 1,
   },
   grid: {
-    top: '30',
+    top: '25',
     right: '2%',
   },
   xAxis: [
@@ -184,14 +190,14 @@ export const option2 = {
       axisLine: {
         lineStyle: {
           type: 'dashed',
-          color: 'rgba(255, 255, 255,0.5)',
+          color: 'rgba(255, 255, 255,0.8)',
         },
       },
       axisLabel: {
         margin: 10,
-        color: '#e2e9ff',
         textStyle: {
-          fontSize: 12,
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: 11,
         },
         interval: 1,
         rotate: '45',
@@ -205,7 +211,10 @@ export const option2 = {
     {
       axisLabel: {
         formatter: '{value}',
-        color: '#e2e9ff',
+        textStyle: {
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: 11,
+        },
       },
       axisTick: {
         show: false,
@@ -214,14 +223,11 @@ export const option2 = {
         show: true,
         lineStyle: {
           type: 'dashed',
-          color: 'rgba(255, 255, 255,0.5)',
+          color: 'rgba(255, 255, 255,0.8)',
         },
       },
       splitLine: {
         show: false,
-        lineStyle: {
-          color: 'rgba(255,255,255,0.12)',
-        },
       },
     },
   ],
@@ -240,11 +246,11 @@ export const option2 = {
             [
               {
                 offset: 0,
-                color: 'rgba(0,244,255,1)',
+                color: 'rgba(0, 239, 252, 1)',
               },
               {
                 offset: 1,
-                color: 'rgba(0,77,167,1)',
+                color: 'rgba(0, 90, 201, 1)',
               },
             ],
             false
@@ -254,16 +260,9 @@ export const option2 = {
         },
       },
       label: {
-        normal: {
-          show: true,
-          lineHeight: 10,
-          formatter: '{c}',
-          position: 'top',
-          textStyle: {
-            color: '#00D6F9',
-            fontSize: 12,
-          },
-        },
+        show: true,
+        color: '#fff',
+        position: 'top',
       },
     },
   ],
@@ -288,42 +287,102 @@ export const formatOption2 = (data, option) => {
   return option
 }
 
-// 左下一
-export const option31 = {
+// 左下
+export const option3 = {
   tooltip: {
-    trigger: 'item',
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow',
+    },
+    backgroundColor: 'rgba(9, 24, 48, 0.5)',
+    borderColor: 'rgba(75, 253, 238, 0.4)',
+    textStyle: {
+      color: '#CFE3FC',
+    },
+    borderWidth: 1,
   },
-  color: [
-    new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      { offset: 0, color: 'rgba(0, 90, 201)' },
-      { offset: 1, color: 'rgba(6, 239, 252)' },
-    ]),
-    new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      { offset: 0, color: 'rgba(206, 0, 128)' },
-      { offset: 1, color: 'rgba(0, 90, 201)' },
-    ]),
-  ],
+  grid: {
+    top: '25',
+    right: '2%',
+  },
+  xAxis: {
+    data: [],
+    axisLabel: {
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
+      rotate: '30',
+      interval: 1,
+    },
+    axisTick: {
+      show: false,
+    },
+    axisLine: {
+      lineStyle: {
+        type: 'dashed',
+        color: 'rgba(255, 255, 255, 0.8)',
+      },
+    },
+  },
+  yAxis: {
+    axisLabel: {
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
+    },
+    nameTextStyle: {
+      color: '#fff',
+      fontSize: 15,
+    },
+    splitLine: {
+      show: false,
+    },
+    axisTick: {
+      show: false,
+    },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        type: 'dashed',
+        color: 'rgba(255, 255, 255, 0.8)',
+      },
+    },
+  },
   series: [
     {
-      name: '占比',
-      type: 'pie',
-      selectedMode: 'single',
-      radius: ['42%', '80%'],
+      type: 'bar',
+      barWidth: '40%',
+      data: [],
       label: {
-        position: 'inner',
-        fontSize: 14,
-        color: '#fff',
+        show: true,
+        // formatter: '{c}%', //格式化文字
+        color: '#fff', //文字的颜色
+        position: 'top', //文字的位置
       },
-      labelLine: {
-        show: false,
+      itemStyle: {
+        //图形的样式
+        color: {
+          //渐变色配置
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: 'rgba(0, 90, 201, 1)',
+            },
+            {
+              offset: 1,
+              color: 'rgba(206, 0, 128, 1)',
+            },
+          ],
+          global: false, // 缺省为 false
+        },
       },
-      data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' },
-      ],
     },
   ],
   animationDelay: function (idx) {
@@ -331,80 +390,25 @@ export const option31 = {
   },
 }
 
-export const formatOption31 = (data, option) => {
-  const sexList = data.sexList
+export const formatOption3 = (data, option, name) => {
+  const list = data.todayCountList
+  const xAxisData = []
+  const seriesData = []
 
-  const sexData = []
-
-  for (let i = 0; i < sexList.length; i++) {
-    sexData.push({
-      name: sexList[i].sex,
-      value: sexList[i].num,
-    })
+  for (let i = 0; i < list.length; i++) {
+    xAxisData.push(list[i].name)
+    seriesData.push(list[i].num)
   }
 
-  option.series.find(item => item.name === '占比').data = sexData
+  option.xAxis.data = xAxisData
+  // option.xAxis.data = xAxisData.map(item => item.replace(name, ''))
+  option.series.find(item => item.type === 'bar').data = seriesData
 
-  return option
-}
-
-// 左下二
-export const option32 = {
-  tooltip: {
-    trigger: 'item',
-  },
-  color: ['#0f63d6', '#0f8cd6', '#0fa0d6', '#0fb4d6', '#0f78d6'],
-  series: [
-    {
-      name: '年龄段',
-      type: 'pie',
-      selectedMode: 'single',
-      radius: ['42%', '80%'],
-      label: {
-        position: 'inner',
-        fontSize: 12,
-        color: '#fff',
-        lineHeight: 15,
-        formatter: params => {
-          if (params.data.name === '30岁及以下') {
-            return '30岁' + '\n' + '及以下'
-          } else if (params.data.name === '61岁及以上') {
-            return '61岁' + '\n' + '及以上'
-          } else {
-            return params.data.name
-          }
-        },
-      },
-      labelLine: {
-        show: false,
-      },
-      data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' },
-      ],
-      animationDelay: function (idx) {
-        return idx * idxTime + delay
-      },
-    },
-  ],
-}
-
-export const formatOption32 = (data, option) => {
-  const ageList = data.ageList
-
-  const ageData = []
-
-  for (let i = 0; i < ageList.length; i++) {
-    ageData.push({
-      name: ageList[i].age,
-      value: ageList[i].num,
-    })
+  if (xAxisData.length < 6) {
+    option.xAxis.axisLabel.interval = 0
+  } else {
+    option.xAxis.axisLabel.interval = 1
   }
-
-  option.series.find(item => item.name === '年龄段').data = ageData
 
   return option
 }
@@ -424,13 +428,16 @@ export const option4 = {
     borderWidth: 1,
   },
   grid: {
-    top: '10',
+    top: '25',
     right: '2%',
   },
   xAxis: {
     data: [],
     axisLabel: {
-      color: '#e2e9ff',
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
       rotate: '30',
     },
     axisTick: {
@@ -439,13 +446,16 @@ export const option4 = {
     axisLine: {
       lineStyle: {
         type: 'dashed',
-        color: 'rgba(255, 255, 255,0.5)',
+        color: 'rgba(255, 255, 255, 0.8)',
       },
     },
   },
   yAxis: {
     axisLabel: {
-      color: '#e2e9ff',
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
     },
     nameTextStyle: {
       color: '#fff',
@@ -461,7 +471,7 @@ export const option4 = {
       show: true,
       lineStyle: {
         type: 'dashed',
-        color: 'rgba(255, 255, 255,0.5)',
+        color: 'rgba(255, 255, 255, 0.8)',
       },
     },
   },
@@ -472,9 +482,8 @@ export const option4 = {
       data: [],
       label: {
         show: true,
-        // formatter: '{c}%', //格式化文字
-        color: '#fff', //文字的颜色
-        position: 'top', //文字的位置
+        color: '#fff',
+        position: 'top',
       },
       itemStyle: {
         //图形的样式
@@ -571,7 +580,10 @@ export const option5 = {
       },
     },
     axisLabel: {
-      color: '#fff',
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
     },
   },
   radiusAxis: {
@@ -582,7 +594,10 @@ export const option5 = {
       },
     },
     axisLabel: {
-      color: '#fff',
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
     },
     axisTick: {
       // 坐标轴小标记
@@ -610,7 +625,6 @@ export const option5 = {
       stack: 'a',
       itemStyle: {
         normal: {
-          // 定制显示（按顺序）
           color(params) {
             const colorList = [
               {
@@ -651,10 +665,10 @@ export const option5 = {
               },
               {
                 type: 'linear',
-                x: 0,
+                x: 1,
                 y: 0,
                 x2: 0,
-                y2: 1,
+                y2: 0,
                 colorStops: [
                   {
                     offset: 0,
@@ -706,7 +720,7 @@ export const option5 = {
               {
                 type: 'linear',
                 x: 1,
-                y: 1,
+                y: 0,
                 x2: 0,
                 y2: 0,
                 colorStops: [
@@ -974,8 +988,8 @@ export const option51 = {
       amplitude: 20,
       // color: '#2378f7',
       color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        { offset: 0, color: '#324791' },
-        { offset: 1, color: '#449090' },
+        { offset: 0, color: 'rgba(0, 90, 201, 1)' },
+        { offset: 1, color: 'rgba(0, 239, 252, 1)' },
       ]),
       data: [],
       backgroundStyle: {
@@ -1032,7 +1046,7 @@ export const option51 = {
 export const formatOption51 = (data, option) => {
   const value = data.completionNum
   option.title.find(item => item.id === 'title').text = value + '%'
-  option.series.find(item => item.type === 'liquidFill').data = [value / 100, value / 100, value / 100]
+  option.series.find(item => item.type === 'liquidFill').data = [value / 100, value / 100, value / 100, value / 100]
   return option
 }
 
@@ -1044,6 +1058,12 @@ export const option6 = {
     splitLine: {
       show: false,
     },
+    axisLabel: {
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
+    },
   },
   radiusAxis: {
     type: 'category',
@@ -1054,6 +1074,10 @@ export const option6 = {
     z: 10,
     axisLabel: {
       interval: 0,
+      textStyle: {
+        color: 'rgba(255, 255, 255, 0.8)',
+        fontSize: 11,
+      },
     },
   },
   polar: {
@@ -1098,7 +1122,7 @@ export const option61 = {
     },
   },
   grid: {
-    top: '10',
+    top: '25',
     right: '2%',
   },
   xAxis: [
@@ -1113,9 +1137,11 @@ export const option61 = {
       },
       axisLabel: {
         show: true,
-        color: '#fff',
-        fontSize: 14,
         rotate: '45',
+        textStyle: {
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: 11,
+        },
       },
       axisTick: {
         show: false,
@@ -1130,8 +1156,10 @@ export const option61 = {
         fontSize: 16,
       },
       axisLabel: {
-        formatter: '{value}',
-        color: '#fff',
+        textStyle: {
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: 11,
+        },
       },
       axisTick: {
         show: false,
@@ -1152,6 +1180,11 @@ export const option61 = {
     {
       type: 'bar',
       data: [],
+      label: {
+        show: true,
+        color: '#fff',
+        position: 'top',
+      },
       barWidth: '40%',
       itemStyle: {
         normal: {
