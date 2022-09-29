@@ -101,7 +101,7 @@ export class lineMap {
     const geometry = new THREE.ShapeBufferGeometry(shapes)
     const material = new THREE.MeshBasicMaterial()
     const textMesh = new THREE.Mesh(geometry, material)
-    textMesh.position.set(position.x, position.y, position.z)
+    textMesh.position.set(position.x, position.y, position.z - 0.6)
     // textMesh.rotateX(Math.PI / 2)
     this.scene.add(textMesh)
   }
@@ -267,15 +267,15 @@ export class lineMap {
     }
 
     window.addEventListener('dblclick', this.highlightDistrict.bind(this), false)
-    // window.addEventListener('click', this.worldCrash.bind(this), false)
     window.addEventListener('mousemove', onMouseMove, false)
     window.addEventListener('resize', onWindowResize, false)
+
+    // don't open it
+    // window.addEventListener('click', this.worldCrash.bind(this), false)
   }
 
   animate() {
     requestAnimationFrame(this.animate.bind(this))
-    // this.cube.rotation.x += 0.05;
-    // this.cube.rotation.y += 0.05;
     this.raycaster.setFromCamera(this.mouse, this.camera)
 
     // calculate objects intersecting the picking ray
@@ -492,29 +492,60 @@ export class lineMap {
       const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
       if (target) {
         const city = target.object.parent.properties
+
         this.districtMeshList.forEach(ele => {
-          if (ele.properties.adcode === city.adcode) {
-            const item = ele.children[0]
-            const districtBox = new THREE.Box3().setFromObject(ele)
-            // let container = new THREE.Mesh(item.geometry, new THREE.MeshBasicMaterial( { color: 0x0080ff, side: THREE.DoubleSide } ))
-            // this.scene.add(container)
-            const helper = new THREE.Box3Helper( new THREE.Box3().setFromObject( item ), 0xffff00 );
-            this.scene.add( helper );
-            // this.setupObjectScaleAnimation(item, item.scale, { x: 0, y: 0, z: 0 }, 1000, 100, TWEEN.Easing.Quadratic.Out)
-            new TWEEN.Tween(helper.scale)
-                .to({ x: 0.2, y: 0.2, z: 0.2 }, 1000)
+          const rX = THREE.Math.randInt(0, 0)
+          const rY = THREE.Math.randInt(0, 10)
+          const rZ = THREE.Math.randInt(0, 10)
+          if (ele.properties.adcode !== city.adcode) {
+            const item = ele
+            const itemMesh = ele.children[0]
+            let pivot = new THREE.Group();
+            this.scene.add(pivot);
+            pivot.add(itemMesh);
+            pivot.properties = ele.properties
+            const box = new THREE.Box3().setFromObject(itemMesh);
+            box.center(itemMesh.position);
+            itemMesh.position.multiplyScalar(-1)
+            box.center(pivot.position);
+            new TWEEN.Tween(pivot.position)
+                .to({
+                  z: -240,
+                  isVector3: true}, 10000)
                 .delay(100)
-                .easing(TWEEN.Easing.Quadratic.Out)
+                .easing(TWEEN.Easing.Quadratic.In)
                 .onUpdate(function () {
-                  console.log(helper.scale)
-                  helper.scale.set( helper.scale );
+
+                })
+                .start()
+            new TWEEN.Tween(pivot.rotation)
+                .to({
+                  x: rX,
+                  y: rY,
+                  z: rZ,
+                  isVector3: true}, 8000)
+                .delay(100)
+                .easing(TWEEN.Easing.Quadratic.In)
+                .onUpdate(function () {
+                  // geometry.rotate(rX)
                 })
                 .start()
           } else {
+            const item = ele.children[0]
+            const itemColor = item.material[0].color
+            new TWEEN.Tween(itemColor)
+                .to({r: 0.8,
+                  g: 0.08,
+                  b: 0.02,
+                  isColor: true}, 1000)
+                .delay(100)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .onUpdate(function () {
+                })
+                .start()
             ele.properties.isFadeOut = false
           }
         })
-        // console.log('city: ', city, ', target:', target)
       }
     }
   }
@@ -563,6 +594,7 @@ export class lineMap {
       }
       if (target) {
         window.targetPlaceId = target.object.parent.properties.id
+        window.targetPlaceName = target.object.parent.properties.name
       } else {
         window.targetPlaceId = null
       }
