@@ -148,11 +148,12 @@ export class lineMap {
     // 墨卡托投影转换
     const projection = d3.geoMercator().center([114.1, 35.21]).scale(5200).translate([-12, 20])
     this.districtDataList = this.data.completionList.map(ele => {
-          ele.num = ele.num.replace('%', '')
-          return ele.name.includes('新乡市') ? { ...ele, name: ele.name.replace('新乡市', '') } : ele
-        }
-    )
-    this.districtDataList.sort((x,y) => { return y.num - x.num})
+      ele.num = ele.num.replace('%', '')
+      return ele.name.includes('新乡市') ? { ...ele, name: ele.name.replace('新乡市', '') } : ele
+    })
+    this.districtDataList.sort((x, y) => {
+      return y.num - x.num
+    })
 
     chinaJson.features.forEach(elem => {
       // 定一个省份3D对象
@@ -266,6 +267,52 @@ export class lineMap {
       _this.renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
+    var raycaster = new THREE.Raycaster()
+    var mouse = new THREE.Vector2()
+    function raycasterEvent(event) {
+      event.preventDefault()
+
+      debugger
+      if (event.touches) {
+        mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1
+        mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1
+      } else {
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+      }
+
+      raycaster.setFromCamera(mouse, _this.camera)
+
+      var intersect = raycaster.intersectObjects(_this.scene.children, true)
+      debugger
+      intersect[0].object.material.color.set(0xff0000)
+    }
+
+    // 移动端必须使用移动端事件，否则无法检测
+    let clicked = 1
+    let clickedTime = {
+      timeA: '',
+      timeB: '',
+    }
+    window.addEventListener(
+      'touchstart',
+      function (e) {
+        if (clicked === 1) {
+          clickedTime.timeA = new Date()
+          clicked++
+        } else if (clicked === 2) {
+          clickedTime.timeB = new Date()
+          if (Math.abs(clickedTime.timeA - clickedTime.timeB) < 300) {
+            _this.highlightDistrict(e)
+            clicked = 1
+          } else {
+            clickedTime.timeA = new Date()
+          }
+        }
+      },
+      false
+    )
+
     window.addEventListener('dblclick', this.highlightDistrict.bind(this), false)
     window.addEventListener('mousemove', onMouseMove, false)
     window.addEventListener('resize', onWindowResize, false)
@@ -289,9 +336,9 @@ export class lineMap {
         // 将所选区的颜色比对后恢复
         this.districtColorList.forEach(district => {
           if (
-              element.object.parent &&
-              element.object.geometry.type !== 'CylinderGeometry' &&
-              element.object.parent.properties.adcode === district.code
+            element.object.parent &&
+            element.object.geometry.type !== 'CylinderGeometry' &&
+            element.object.parent.properties.adcode === district.code
           ) {
             if (this.isHighlight) {
               if (element.object.parent.properties.isFadeOut) {
@@ -322,20 +369,27 @@ export class lineMap {
     this.activeInstersect = [] // 设置为空
     this.activeInstersectBar = [] // 设置为空
     this.placeInfo.style.visibility = 'hidden'
-    for (let i = 0; i < intersects.length; i++) {
-      if (intersects[i].object.material && intersects[i].object.material.length === 2) {
-        this.activeInstersect.push(intersects[i])
-        intersects[i].object.material[0].color.set(this.districtMeshColor)
-        intersects[i].object.material[1].color.set(this.districtMeshColor)
-        break // 只取第一个
+
+    if (
+      !window.navigator.userAgent.match(
+        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+      )
+    ) {
+      for (let i = 0; i < intersects.length; i++) {
+        if (intersects[i].object.material && intersects[i].object.material.length === 2) {
+          this.activeInstersect.push(intersects[i])
+          intersects[i].object.material[0].color.set(this.districtMeshColor)
+          intersects[i].object.material[1].color.set(this.districtMeshColor)
+          break // 只取第一个
+        }
       }
     }
 
     for (let i = 0; i < intersectBars.length; i++) {
       if (intersectBars[i].object.material.type === 'MeshPhongMaterial') {
         if (
-            intersectBars[i].object.geometry.type === 'CylinderGeometry' &&
-            intersects[i].object.parent.type === 'Object3D'
+          intersectBars[i].object.geometry.type === 'CylinderGeometry' &&
+          intersects[i].object.parent.type === 'Object3D'
         ) {
           this.activeInstersectBar.push(intersectBars[i])
           this.createPlaceInfo()
@@ -352,7 +406,6 @@ export class lineMap {
 
     this.renderer.render(this.scene, this.camera)
   }
-
 
   calcShowHeight(count) {
     // if(count < this.itemHeight) return count;
@@ -410,8 +463,8 @@ export class lineMap {
 
   setController() {
     this.controller = new THREE.OrbitControls(this.camera, this.renderer.domElement)
-    this.controller.enablePan = false; // 禁止右键拖拽
-    this.controller.enableZoom = true; // false-禁止右键缩放
+    this.controller.enablePan = false // 禁止右键拖拽
+    this.controller.enableZoom = true // false-禁止右键缩放
 
     /* this.controller.maxDistance = 200; // 最大缩放 适用于 PerspectiveCamera
     this.controller.minDistance = 50; // 最大缩放
@@ -465,7 +518,9 @@ export class lineMap {
   createDistrict(intersects) {
     // 显示监测点的信息
     if (intersects.length > 0 && intersects[0].object.parent.properties) {
-      const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
+      const target = intersects.find(
+        item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry'
+      )
       if (target) {
         this.districtInfo.style.visibility = 'visible'
         const city = target.object.parent.properties
@@ -480,7 +535,7 @@ export class lineMap {
       this.isHighlight = false
       this.districtColorList.forEach(colorEle => {
         if (ele.properties.adcode === colorEle.code) {
-          this.meshFade(ele.children[0], colorEle.color,false, true)
+          this.meshFade(ele.children[0], colorEle.color, false, true)
         }
       })
     })
@@ -489,7 +544,9 @@ export class lineMap {
   worldCrash() {
     let intersects = this.raycaster.intersectObjects(this.scene.children, true)
     if (intersects.length > 0 && intersects[0].object.parent.properties) {
-      const target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
+      const target = intersects.find(
+        item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry'
+      )
       if (target) {
         const city = target.object.parent.properties
 
@@ -500,49 +557,51 @@ export class lineMap {
           if (ele.properties.adcode !== city.adcode) {
             const item = ele
             const itemMesh = ele.children[0]
-            let pivot = new THREE.Group();
-            this.scene.add(pivot);
-            pivot.add(itemMesh);
+            let pivot = new THREE.Group()
+            this.scene.add(pivot)
+            pivot.add(itemMesh)
             pivot.properties = ele.properties
-            const box = new THREE.Box3().setFromObject(itemMesh);
-            box.center(itemMesh.position);
+            const box = new THREE.Box3().setFromObject(itemMesh)
+            box.center(itemMesh.position)
             itemMesh.position.multiplyScalar(-1)
-            box.center(pivot.position);
+            box.center(pivot.position)
             new TWEEN.Tween(pivot.position)
-                .to({
+              .to(
+                {
                   z: -240,
-                  isVector3: true}, 10000)
-                .delay(100)
-                .easing(TWEEN.Easing.Quadratic.In)
-                .onUpdate(function () {
-
-                })
-                .start()
+                  isVector3: true,
+                },
+                10000
+              )
+              .delay(100)
+              .easing(TWEEN.Easing.Quadratic.In)
+              .onUpdate(function () {})
+              .start()
             new TWEEN.Tween(pivot.rotation)
-                .to({
+              .to(
+                {
                   x: rX,
                   y: rY,
                   z: rZ,
-                  isVector3: true}, 8000)
-                .delay(100)
-                .easing(TWEEN.Easing.Quadratic.In)
-                .onUpdate(function () {
-                  // geometry.rotate(rX)
-                })
-                .start()
+                  isVector3: true,
+                },
+                8000
+              )
+              .delay(100)
+              .easing(TWEEN.Easing.Quadratic.In)
+              .onUpdate(function () {
+                // geometry.rotate(rX)
+              })
+              .start()
           } else {
             const item = ele.children[0]
             const itemColor = item.material[0].color
             new TWEEN.Tween(itemColor)
-                .to({r: 0.8,
-                  g: 0.08,
-                  b: 0.02,
-                  isColor: true}, 1000)
-                .delay(100)
-                .easing(TWEEN.Easing.Quadratic.Out)
-                .onUpdate(function () {
-                })
-                .start()
+              .to({ r: 0.8, g: 0.08, b: 0.02, isColor: true }, 1000)
+              .delay(100)
+              .easing(TWEEN.Easing.Quadratic.Out)
+              .onUpdate(function () {})
+              .start()
             ele.properties.isFadeOut = false
           }
         })
@@ -551,22 +610,35 @@ export class lineMap {
   }
 
   showDistrictData(id, name) {
-    handleGetCityData({marketId: id, name: name})
+    handleGetCityData({ marketId: id, name: name })
   }
 
   showAllDistrictData() {
     handleGetAllData()
   }
 
-  highlightDistrict() {
+  highlightDistrict(e) {
     if (window.flag) {
-      let intersects = this.raycaster.intersectObjects(this.scene.children, true)
+      var raycaster = new THREE.Raycaster()
+      var mouse = new THREE.Vector2()
+      if (e.touches) {
+        mouse.x = (e.touches[0].pageX / window.innerWidth) * 2 - 1
+        mouse.y = -(e.touches[0].pageY / window.innerHeight) * 2 + 1
+      } else {
+        mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+        mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+      }
+
+      raycaster.setFromCamera(mouse, this.camera)
+
+      let intersects = raycaster.intersectObjects(this.scene.children, true)
       let target = null
       // 显示监测点的信息
       if (intersects.length > 0 && intersects[0].object.parent.properties) {
         target = intersects.find(item => item.object.type === 'Mesh' && item.object.geometry.type === 'ExtrudeGeometry')
         if (target) {
-          // console.log('target', target)
+          //console.log('target', target)
+          this.cancelMeshHighlight()
           this.isHighlight = true
           const city = target.object.parent.properties
           this.showDistrictData(city.id, city.name)
@@ -582,12 +654,15 @@ export class lineMap {
               // ele.children[1].material.opacity = 0.5
             } else {
               ele.properties.isFadeOut = false
+              this.meshFade(ele.children[0], this.districtMeshColor, false, true)
             }
           })
           // console.log('city: ', city, ', target:', target)
+        } else {
+          this.cancelMeshHighlight()
         }
       } else if (intersects.length <= 0) {
-        if(this.isHighlight) {
+        if (this.isHighlight) {
           this.showAllDistrictData()
         }
         this.cancelMeshHighlight()
