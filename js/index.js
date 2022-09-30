@@ -260,8 +260,8 @@ $(window).load(function () {
         refreshInterval: 50,
       })
 
-      $('#totalOrderTitle').html('总订单数')
-      $('#todayOrderTitle').html('当日订单数')
+      $('#totalOrderTitle').html('总检测数')
+      $('#todayOrderTitle').html('当日检测数')
 
       setTimeout(() => {
         echart1.clear()
@@ -356,8 +356,8 @@ $(window).load(function () {
         refreshInterval: 50,
       })
 
-      $('#totalOrderTitle').html(`${name}总订单数`)
-      $('#todayOrderTitle').html(`${name}当日订单数`)
+      $('#totalOrderTitle').html(`${name}总检测数`)
+      $('#todayOrderTitle').html(`${name}当日检测数`)
 
       setTimeout(() => {
         echart1.clear()
@@ -397,7 +397,7 @@ $(window).load(function () {
         $('#title3').html(`${name}当日检测量排名`)
         $('#title4').html(`${name}机构检测累计量排名`)
         $('#title5').html(`${name}目标完成度`)
-        $('#title6').html(`${name}订单状态统计数`)
+        $('#title6').html(`${name}检测状态统计数`)
       }, 800)
 
       anime({
@@ -462,7 +462,7 @@ $(window).load(function () {
 
   // ===========================================================
 
-  // 半小时重新请求一次数据
+  // 数据同步
   setInterval(function () {
     if (window.targetPlaceId) {
       updateCityData({
@@ -472,7 +472,7 @@ $(window).load(function () {
     } else {
       updateAllData()
     }
-  }, 1000 * 60 * 30)
+  }, 1000 * 60 * 5)
 
   // ===========================================================
 
@@ -536,8 +536,8 @@ $(window).load(function () {
       refreshInterval: 50,
     })
 
-    $('#totalOrderTitle').html('总订单数')
-    $('#todayOrderTitle').html('当日订单数')
+    $('#totalOrderTitle').html('总检测数')
+    $('#todayOrderTitle').html('当日检测数')
 
     echart1.clear()
     echart1 = echarts.init(document.getElementById('echart1'))
@@ -627,8 +627,8 @@ $(window).load(function () {
       refreshInterval: 50,
     })
 
-    $('#totalOrderTitle').html(`${name}总订单数`)
-    $('#todayOrderTitle').html(`${name}当日订单数`)
+    $('#totalOrderTitle').html(`${name}总检测数`)
+    $('#todayOrderTitle').html(`${name}当日检测数`)
 
     echart1.clear()
     echart1 = echarts.init(document.getElementById('echart1'))
@@ -667,7 +667,7 @@ $(window).load(function () {
     $('#title3').html(`${name}当日检测量排名`)
     $('#title4').html(`${name}机构检测累计量排名`)
     $('#title5').html(`${name}目标完成度`)
-    $('#title6').html(`${name}订单状态统计数`)
+    $('#title6').html(`${name}检测状态统计数`)
   }
 
   // ===========================================================
@@ -765,9 +765,55 @@ $(window).load(function () {
         refreshInterval: 50,
       })
       totalNum = newTotalNum
+    }
 
-      if (message.payloadString) {
-        line.createFirework(placeId)
+    if (message.payloadString) {
+      line.createFirework(placeId)
+    }
+
+    // 更新左下图表
+    const list = $.extend(true, [], window.chartList)
+    const option = $.extend(true, {}, window.chartOption)
+
+    if (window.targetPlaceId) {
+      if (window.targetPlaceId && window.targetPlaceId === marketId) {
+        const currentItem = list.find(item => item.placeId === placeId)
+        currentItem.num++
+        list.sort(compare('num'))
+
+        option.xAxis.data = list.map(item => item.name)
+        option.series.data = list.map(item => item.num)
+
+        if (option.xAxis.data.length < 6) {
+          option.xAxis.axisLabel.interval = 0
+        } else {
+          option.xAxis.axisLabel.interval = 1
+        }
+
+        window.chartList = list
+        window.chartOption = option
+
+        echart3.setOption(option, true)
+      }
+    } else {
+      if (marketId) {
+        const currentItem = list.find(item => item.marketId === marketId)
+        currentItem.num++
+        list.sort(compare('num'))
+
+        option.xAxis.data = list.map(item => item.name)
+        option.series.data = list.map(item => item.num)
+
+        if (option.xAxis.data.length < 6) {
+          option.xAxis.axisLabel.interval = 0
+        } else {
+          option.xAxis.axisLabel.interval = 1
+        }
+
+        window.chartList = list
+        window.chartOption = option
+
+        echart3.setOption(option, true)
       }
     }
   }
@@ -787,50 +833,11 @@ $(window).load(function () {
   })
 })
 
-function filterObj(obj, arr) {
-  if (typeof obj !== 'object' || !Array.isArray(arr)) {
-    throw new Error('参数格式不正确')
+function compare(p) {
+  return function (m, n) {
+    var a = m[p]
+    var b = n[p]
+    return b - a
   }
-  const result = {}
-  Object.keys(obj)
-    .filter(key => arr.includes(key))
-    .forEach(key => {
-      result[key] = obj[key]
-    })
-  return result
 }
 
-var glyphs = {}
-
-let newObj = filterObj(glyphs, [
-  '辉',
-  '县',
-  '市',
-  '经',
-  '开',
-  '区',
-  '牧',
-  '野',
-  '卫',
-  '滨',
-  '长',
-  '垣',
-  '高',
-  '新',
-  '红',
-  '旗',
-  '封',
-  '丘',
-  '凤',
-  '泉',
-  '延',
-  '津',
-  '原',
-  '阳',
-  '乡',
-  '获',
-  '嘉',
-  '平',
-])
-
-console.log(newObj)

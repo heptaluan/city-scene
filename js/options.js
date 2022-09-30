@@ -306,6 +306,7 @@ export const option3 = {
     right: '2%',
   },
   xAxis: {
+    type: 'category',
     data: [],
     axisLabel: {
       textStyle: {
@@ -326,6 +327,7 @@ export const option3 = {
     },
   },
   yAxis: {
+    type: 'value',
     axisLabel: {
       textStyle: {
         color: 'rgba(255, 255, 255, 0.8)',
@@ -350,65 +352,62 @@ export const option3 = {
       },
     },
   },
-  series: [
-    {
-      type: 'bar',
-      barWidth: '40%',
-      data: [],
-      label: {
-        show: true,
-        // formatter: '{c}%', //格式化文字
-        color: '#fff', //文字的颜色
-        position: 'top', //文字的位置
-      },
-      itemStyle: {
-        //图形的样式
-        color: {
-          //渐变色配置
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            {
-              offset: 0,
-              color: 'rgba(0, 90, 201, 1)',
-            },
-            {
-              offset: 1,
-              color: 'rgba(206, 0, 128, 1)',
-            },
-          ],
-          global: false, // 缺省为 false
-        },
+  series: {
+    type: 'bar',
+    barWidth: '40%',
+    data: [],
+    label: {
+      show: true,
+      // formatter: '{c}%', //格式化文字
+      color: '#fff', //文字的颜色
+      position: 'top', //文字的位置
+    },
+    itemStyle: {
+      //图形的样式
+      color: {
+        //渐变色配置
+        type: 'linear',
+        x: 0,
+        y: 0,
+        x2: 0,
+        y2: 1,
+        colorStops: [
+          {
+            offset: 0,
+            color: 'rgba(0, 90, 201, 1)',
+          },
+          {
+            offset: 1,
+            color: 'rgba(206, 0, 128, 1)',
+          },
+        ],
+        global: false, // 缺省为 false
       },
     },
-  ],
+  },
   animationDelay: function (idx) {
     return idx * idxTime + delay
   },
 }
 
 export const formatOption3 = (data, option, name) => {
-  const list = data.todayCountList
-  const xAxisData = []
-  const seriesData = []
+  let list = data.todayCountList
 
-  for (let i = 0; i < list.length; i++) {
-    xAxisData.push(list[i].name)
-    seriesData.push(list[i].num)
+  if (window.targetPlaceId) {
+    list.length = 5
   }
 
-  option.xAxis.data = xAxisData
-  // option.xAxis.data = xAxisData.map(item => item.replace(name, ''))
-  option.series.find(item => item.type === 'bar').data = seriesData
+  option.xAxis.data = list.map(item => item.name)
+  option.series.data = list.map(item => item.num)
 
-  if (xAxisData.length < 6) {
+  if (option.xAxis.data.length < 6) {
     option.xAxis.axisLabel.interval = 0
   } else {
     option.xAxis.axisLabel.interval = 1
   }
+
+  window.chartList = list
+  window.chartOption = option
 
   return option
 }
@@ -925,6 +924,13 @@ export const formatOption5 = (data, option) => {
   return option
 }
 
+function fontSize(res) {
+  const clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
+  if (!clientWidth) return
+  let fontSize = clientWidth / 1920
+  return res * fontSize
+}
+
 export const option51 = {
   title: [
     {
@@ -934,7 +940,7 @@ export const option51 = {
       top: '40%',
       textAlign: 'center',
       textStyle: {
-        fontSize: '32',
+        fontSize: fontSize(32),
         fontWeight: '400',
         color: '#fff',
         textAlign: 'center',
