@@ -311,3 +311,35 @@ select:-webkit-autofill {
   -o-transition: 0.3s ease-in-out;
   transition: 0.3s ease-in-out;
 }
+
+/* 移动端兼容 */
+.mobile.wp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile .boardLogin {
+  width: auto;
+  height: auto;
+  top: 0;
+  transform: none;
+  margin-top: -12%;
+}
+
+.mobile .boardLogin .title {
+  font-size: 1.4em;
+}
+
+.mobile .boardLogin .sub-title {
+  font-size: 1.2em;
+}
+
+.mobile form {
+  width: 80vw;
+  margin: 0 auto;
+}
+
+.mobile .boardLogin .inpGroup.code {
+  width: 48%;
+}

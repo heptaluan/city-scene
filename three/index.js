@@ -267,28 +267,7 @@ export class lineMap {
       _this.renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
-    var raycaster = new THREE.Raycaster()
-    var mouse = new THREE.Vector2()
-    function raycasterEvent(event) {
-      event.preventDefault()
-
-      debugger
-      if (event.touches) {
-        mouse.x = (event.touches[0].pageX / window.innerWidth) * 2 - 1
-        mouse.y = -(event.touches[0].pageY / window.innerHeight) * 2 + 1
-      } else {
-        mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-      }
-
-      raycaster.setFromCamera(mouse, _this.camera)
-
-      var intersect = raycaster.intersectObjects(_this.scene.children, true)
-      debugger
-      intersect[0].object.material.color.set(0xff0000)
-    }
-
-    // 移动端必须使用移动端事件，否则无法检测
+    // 移动端必须使用 touch 事件，否则无法检测
     let clicked = 1
     let clickedTime = {
       timeA: '',
@@ -610,11 +589,11 @@ export class lineMap {
   }
 
   showDistrictData(id, name) {
-    handleGetCityData({ marketId: id, name: name })
+    handleGetCityData && handleGetCityData({ marketId: id, name: name })
   }
 
   showAllDistrictData() {
-    handleGetAllData()
+    handleGetAllData && handleGetAllData()
   }
 
   highlightDistrict(e) {

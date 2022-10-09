@@ -1,7 +1,30 @@
 ﻿import { config } from '../config.js'
 
-const idxTime = 30
-const delay = 1500
+let idxTime = 30
+let delay = 1500
+
+var os = (function () {
+  var ua = navigator.userAgent,
+    isWindowsPhone = /(?:Windows Phone)/.test(ua),
+    isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+    isAndroid = /(?:Android)/.test(ua),
+    isFireFox = /(?:Firefox)/.test(ua),
+    isTablet =
+      /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+    isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+    isPc = !isPhone && !isAndroid && !isSymbian
+  return {
+    isTablet: isTablet,
+    isPhone: isPhone,
+    isAndroid: isAndroid,
+    isPc: isPc,
+  }
+})()
+
+if (os.isAndroid || os.isPhone) {
+  idxTime = 10
+  delay = 800
+}
 
 // 左上
 export const option1 = {
@@ -14,9 +37,10 @@ export const option1 = {
     },
   },
   grid: {
-    top: '10',
+    top: '20',
     right: '2%',
-    bottom: '25%',
+    left: '12%',
+    bottom: '20%',
   },
   xAxis: [
     {
@@ -130,33 +154,176 @@ export const option1 = {
 }
 
 export const formatOption1 = (data, option, name) => {
-  const list = data.countyList ? data.countyList : data.placeList
-  let newList = []
+  if (os.isAndroid || os.isPhone) {
+    const list = data.countyList ? data.countyList : data.placeList
 
-  if (data.countyList && data.countyList.length > 0) {
-    newList = move(move(list, 0, 6), 3, 8)
+    const xAxisData = []
+    const seriesData = []
+
+    for (let i = 0; i < list.length; i++) {
+      xAxisData.push(list[i].name)
+      seriesData.push({
+        value: list[i].num,
+        groupId: list[i].id,
+        name: list[i].name
+      })
+    }
+
+    const newOption = {
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+        },
+        backgroundColor: 'rgba(9, 24, 48, 0.5)',
+        borderColor: 'rgba(75, 253, 238, 0.4)',
+        textStyle: {
+          color: '#CFE3FC',
+        },
+        borderWidth: 1,
+      },
+      grid: {
+        top: '20',
+        right: '2%',
+        left: '12%',
+        bottom: '20%',
+      },
+      xAxis: {
+        data: ['Animals', 'Fruits', 'Cars'],
+        axisLine: {
+          lineStyle: {
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.8)',
+          },
+        },
+        axisLabel: {
+          margin: 10,
+          textStyle: {
+            color: 'rgba(255, 255, 255, 0.8)',
+            fontSize: 11,
+          },
+          interval: 1,
+          rotate: '45',
+        },
+        axisTick: {
+          show: false,
+        },
+      },
+      yAxis: {
+        axisLabel: {
+          formatter: '{value}',
+          textStyle: {
+            color: 'rgba(255, 255, 255, 0.8)',
+            fontSize: 11,
+          },
+        },
+        axisTick: {
+          show: false,
+        },
+        axisLine: {
+          show: true,
+          lineStyle: {
+            type: 'dashed',
+            color: 'rgba(255, 255, 255,0.8)',
+          },
+        },
+        splitLine: {
+          show: false,
+        },
+      },
+      dataGroupId: '',
+      series: {
+        type: 'bar',
+        barWidth: '30%',
+        itemStyle: {
+          normal: {
+            color: new echarts.graphic.LinearGradient(
+              0,
+              0,
+              0,
+              1,
+              [
+                {
+                  offset: 0,
+                  color: 'rgba(0, 239, 252, 1)',
+                },
+                {
+                  offset: 1,
+                  color: 'rgba(0, 90, 201, 1)',
+                },
+              ],
+              false
+            ),
+            shadowColor: 'rgba(0,160,221,1)',
+            shadowBlur: 4,
+          },
+        },
+        label: {
+          show: true,
+          color: '#fff',
+          position: 'top',
+        },
+        data: [
+          {
+            value: 5,
+            groupId: 'animals',
+          },
+          {
+            value: 2,
+            groupId: 'fruits',
+          },
+          {
+            value: 4,
+            groupId: 'cars',
+          },
+        ],
+        universalTransition: {
+          enabled: true,
+          divideShape: 'clone',
+        },
+      },
+      animationDelay: delay,
+    }
+
+    newOption.xAxis.data = xAxisData.map(item => item.replace(name, ''))
+    newOption.series.data = seriesData
+
+    if (newOption.xAxis.data.length < 6) {
+      newOption.xAxis.axisLabel.interval = 0
+    } else {
+      newOption.xAxis.axisLabel.interval = 1
+    }
+
+    return newOption
   } else {
-    newList = list
+    const list = data.countyList ? data.countyList : data.placeList
+    let newList = []
+
+    if (data.countyList && data.countyList.length > 0) {
+      newList = move(move(list, 0, 6), 3, 8)
+    } else {
+      newList = list
+    }
+
+    const xAxisData = []
+    const seriesData = []
+
+    for (let i = 0; i < newList.length; i++) {
+      xAxisData.push(newList[i].name)
+      seriesData.push(newList[i].num)
+    }
+
+    option.xAxis.find(item => item.type === 'category').data = xAxisData.map(item => item.replace(name, ''))
+    option.series.find(item => item.type === 'line').data = seriesData
+
+    if (option.xAxis.find(item => item.type === 'category').data.length < 6) {
+      option.xAxis.find(item => item.type === 'category').axisLabel.interval = 0
+    } else {
+      option.xAxis.find(item => item.type === 'category').axisLabel.interval = 1
+    }
+
+    return option
   }
-
-  const xAxisData = []
-  const seriesData = []
-
-  for (let i = 0; i < newList.length; i++) {
-    xAxisData.push(newList[i].name)
-    seriesData.push(newList[i].num)
-  }
-
-  option.xAxis.find(item => item.type === 'category').data = xAxisData.map(item => item.replace(name, ''))
-  option.series.find(item => item.type === 'line').data = seriesData
-
-  if (option.xAxis.find(item => item.type === 'category').data.length < 6) {
-    option.xAxis.find(item => item.type === 'category').axisLabel.interval = 0
-  } else {
-    option.xAxis.find(item => item.type === 'category').axisLabel.interval = 1
-  }
-
-  return option
 }
 
 function move(arr, a, b) {
@@ -180,8 +347,10 @@ export const option2 = {
     borderWidth: 1,
   },
   grid: {
-    top: '25',
+    top: '20',
     right: '2%',
+    left: '12%',
+    bottom: '20%',
   },
   xAxis: [
     {
@@ -397,7 +566,7 @@ export const formatOption3 = (data, option, name) => {
     list.length = 5
   }
 
-  option.xAxis.data = list.map(item => item.name)
+  option.xAxis.data = list.map(item => item.name.replace(name, ''))
   option.series.data = list.map(item => item.num)
 
   if (option.xAxis.data.length < 6) {
@@ -427,8 +596,10 @@ export const option4 = {
     borderWidth: 1,
   },
   grid: {
-    top: '25',
+    top: '20',
     right: '2%',
+    left: '12%',
+    bottom: '20%',
   },
   xAxis: {
     data: [],
@@ -924,13 +1095,6 @@ export const formatOption5 = (data, option) => {
   return option
 }
 
-function fontSize(res) {
-  const clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-  if (!clientWidth) return
-  let fontSize = clientWidth / 1920
-  return res * fontSize
-}
-
 export const option51 = {
   title: [
     {
@@ -940,7 +1104,7 @@ export const option51 = {
       top: '40%',
       textAlign: 'center',
       textStyle: {
-        fontSize: fontSize(32),
+        fontSize: 36,
         fontWeight: '400',
         color: '#fff',
         textAlign: 'center',
@@ -1128,8 +1292,10 @@ export const option61 = {
     },
   },
   grid: {
-    top: '25',
+    top: '20',
     right: '2%',
+    left: '12%',
+    bottom: '16%',
   },
   xAxis: [
     {
