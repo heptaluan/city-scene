@@ -165,7 +165,7 @@ export const formatOption1 = (data, option, name) => {
       seriesData.push({
         value: list[i].num,
         groupId: list[i].id,
-        name: list[i].name
+        name: list[i].name,
       })
     }
 
@@ -764,6 +764,7 @@ export const option5 = {
       },
     },
     axisLabel: {
+      show: false,
       textStyle: {
         color: 'rgba(255, 255, 255, 0.8)',
         fontSize: 11,
@@ -776,8 +777,13 @@ export const option5 = {
       length: 5, // 属性length控制线长
       lineStyle: {
         // 属性lineStyle控制线条样式
-        color: 'rgba(207,238,252,1)',
+        color: 'rgba(255, 255, 255, 0.2)',
         width: 1,
+      },
+    },
+    axisLine: {
+      lineStyle: {
+        color: 'rgba(255, 255, 255, 0.2)',
       },
     },
   },
@@ -1224,7 +1230,7 @@ export const formatOption51 = (data, option) => {
 export const option6 = {
   tooltip: {},
   angleAxis: {
-    max: config.maxData,
+    max: Number(Math.max(...config.seriesData)) * 1.2,
     splitLine: {
       show: false,
     },
@@ -1232,6 +1238,12 @@ export const option6 = {
       textStyle: {
         color: 'rgba(255, 255, 255, 0.8)',
         fontSize: 11,
+      },
+    },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        color: 'rgba(207,238,252,0.2)',
       },
     },
   },
@@ -1249,6 +1261,11 @@ export const option6 = {
         fontSize: 11,
       },
     },
+    axisLine: {
+      lineStyle: {
+        color: 'rgba(255, 255, 255, 0.2)',
+      },
+    },
   },
   polar: {
     radius: '80%',
@@ -1259,15 +1276,36 @@ export const option6 = {
   series: [
     {
       type: 'bar',
-      data: config.seriesData,
-      // itemStyle: {
-      //   normal: {
-      //     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-      //       { offset: 0, color: 'rgba(0, 90, 201, 1)' },
-      //       { offset: 1, color: 'rgba(6, 238, 201, 1)' },
-      //     ]),
-      //   },
-      // },
+      data: [
+        { value: 0, itemStyle: { color: 'transparent' } },
+        { value: 0, itemStyle: { color: 'transparent' } },
+        {
+          value: config.seriesData[2],
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+              { offset: 0, color: 'rgba(206, 0, 128, 1)' },
+              { offset: 1, color: 'rgba(0, 90, 201, 1)' },
+            ]),
+          },
+        },
+        {
+          value: config.seriesData[3],
+          itemStyle: {
+            color: new echarts.graphic.LinearGradient(
+              0,
+              0,
+              0,
+              1,
+              [
+                { offset: 0, color: 'rgba(0, 90, 201, 1)' },
+                { offset: 0.9, color: 'rgba(6, 239, 252, 1)' },
+                { offset: 1, color: 'rgba(6, 239, 252, 1)' },
+              ],
+              false
+            ),
+          },
+        },
+      ],
       coordinateSystem: 'polar',
       stack: 'a',
     },
