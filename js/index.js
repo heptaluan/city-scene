@@ -26,6 +26,29 @@ $(window).load(function () {
     window.location = './login.html'
   }
 
+  var os = (function () {
+    var ua = navigator.userAgent,
+      isWindowsPhone = /(?:Windows Phone)/.test(ua),
+      isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+      isAndroid = /(?:Android)/.test(ua),
+      isFireFox = /(?:Firefox)/.test(ua),
+      isTablet =
+        /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+      isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+      isPc = !isPhone && !isAndroid && !isSymbian
+    return {
+      isTablet: isTablet,
+      isPhone: isPhone,
+      isAndroid: isAndroid,
+      isPc: isPc,
+    }
+  })()
+
+  if (os.isAndroid || os.isPhone) {
+    document.querySelector('body').classList.add('mobile')
+    document.getElementById('showBarChart').style.display = 'none'
+  }
+
   var whei = $(window).width()
   $('html').css({ fontSize: whei / 20 })
   $(window).resize(function () {
@@ -418,9 +441,17 @@ $(window).load(function () {
   }
 
   function initAllAnime() {
+    let offset = ''
+
+    if (os.isAndroid || os.isPhone) {
+      offset = '151.5%'
+    } else {
+      offset = '153%'
+    }
+
     anime({
       targets: '.left-box .boxall',
-      translateX: '153%',
+      translateX: offset,
       easing: 'easeInOutQuad',
       delay: function (el, i, l) {
         return i * 300 + 1000
@@ -432,7 +463,7 @@ $(window).load(function () {
 
     anime({
       targets: '.right-box .boxall',
-      translateX: '-153%',
+      translateX: '-' + offset,
       easing: 'easeInOutQuad',
       delay: function (el, i, l) {
         return i * 300 + 1000
@@ -450,6 +481,13 @@ $(window).load(function () {
     })
 
     anime({
+      targets: '#selectButton',
+      opacity: 1,
+      easing: 'easeInOutQuad',
+      delay: 1000,
+    })
+
+    anime({
       targets: '.head',
       translateY: ['-150%', 0],
       easing: 'easeInOutQuad',
@@ -459,6 +497,224 @@ $(window).load(function () {
 
   window.handleGetAllData = handleGetAllData
   window.handleGetCityData = handleGetCityData
+
+  // ===========================================================
+
+  // ===========================================================
+
+  // 移动端柱状图点击事件
+  if (os.isAndroid || os.isPhone) {
+    window.handleGetAllData = null
+    window.handleGetCityData = null
+
+    new MobileSelect({
+      trigger: document.querySelector('#selectButton'),
+      title: '区县选择',
+      wheels: [
+        {
+          data: [
+            { id: 'null', value: '全部区县' },
+            { id: '1548972812246167553', value: '辉县市' },
+            { id: '1548969216754561025', value: '经开区' },
+            { id: '1548976790476402690', value: '牧野区' },
+            { id: '1548976492823425025', value: '卫滨区' },
+            { id: '1548955005760548866', value: '长垣市' },
+            { id: '1548971701611245570', value: '高新区' },
+            { id: '1548976200065200130', value: '红旗区' },
+            { id: '1548975651899027457', value: '封丘县' },
+            { id: '1548977101446295553', value: '凤泉区' },
+            { id: '1548974747355426818', value: '延津县' },
+            { id: '1548962832692523010', value: '原阳县' },
+            { id: '1548977250742546434', value: '新乡县' },
+            { id: '1548972316814979074', value: '卫辉市' },
+            { id: '1548975926726602754', value: '获嘉县' },
+            { id: '1548962078510526465', value: '平原新' },
+          ],
+        },
+      ],
+      initValue: '全部区县',
+      onChange: function (data, indexArr, msInstance) {
+        if (data[0].id !== 'null') {
+          $.ajax({
+            url: getCityDataUrl(),
+            data: {
+              marketId: data[0].id,
+            },
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded',
+            headers: { 'X-Access-Token': localStorage.getItem('token') },
+            success: function (res) {
+              if (res.code === 200) {
+                updateMobileChart(res.data, data[0].value)
+              } else {
+                console.log(`连接超时`)
+              }
+            },
+            error: function (res) {
+              if (res.responseJSON.code === 500) {
+                localStorage.setItem('token', '')
+                window.location = './login.html'
+              }
+            },
+          })
+        } else {
+          $.ajax({
+            url: getAllDataUrl(),
+            type: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            headers: { 'X-Access-Token': localStorage.getItem('token') },
+            success: function (res) {
+              if (res.code === 200) {
+                updateMobileAllChart(res.data, null)
+              } else {
+                console.log(`连接超时`)
+              }
+            },
+            error: function (res) {
+              if (res.responseJSON.code === 500) {
+                localStorage.setItem('token', '')
+                window.location = './login.html'
+              }
+            },
+          })
+        }
+      },
+    })
+  }
+
+  function updateMobileChart(data, name) {
+    if (!data) {
+      return false
+    }
+
+    // 保存之前的数据
+    todayNum = data.todayOrderNumber
+    totalNum = data.totalOrderNumber
+
+    $('#todayOrderNumber').countTo({
+      from: 0,
+      to: data.todayOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderNumber').countTo({
+      from: 0,
+      to: data.totalOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderTitle').html(`${name}总检测数`)
+    $('#todayOrderTitle').html(`${name}当日检测数`)
+
+    echart1.clear()
+    echart1 = echarts.init(document.getElementById('echart1'))
+
+    echart2.clear()
+    echart2 = echarts.init(document.getElementById('echart2'))
+
+    echart3.clear()
+    echart3 = echarts.init(document.getElementById('echart3'))
+
+    echart4.clear()
+    echart4 = echarts.init(document.getElementById('echart4'))
+
+    echart5.clear()
+    echart5 = echarts.init(document.getElementById('echart5'))
+
+    echart6.clear()
+    echart6 = echarts.init(document.getElementById('echart6'))
+
+    const newOption1 = formatOption1(data, option1, name)
+    const newOption2 = formatOption2(data, option2)
+    const newOption3 = formatOption3(data, option3, name)
+    const newOption4 = formatOption4(data, option4)
+    const newOption51 = formatOption51(data, option51)
+    const newOption61 = formatOption61(data, option61)
+
+    echart1.setOption(newOption1, true)
+    echart2.setOption(newOption2, true)
+    echart3.setOption(newOption3, true)
+    echart4.setOption(newOption4, true)
+    echart5.setOption(newOption51, true)
+    echart6.setOption(newOption61, true)
+
+    $('#title1').html(`${name}检测累计数`)
+    $('#title2').html(`${name}月度检测数量`)
+    $('#title3').html(`${name}当日检测量排名`)
+    $('#title4').html(`${name}机构检测累计量排名`)
+    $('#title5').html(`${name}目标完成度`)
+    $('#title6').html(`${name}检测状态统计数`)
+  }
+
+  function updateMobileAllChart(data) {
+    if (!data) {
+      return false
+    }
+
+    // 保存之前的数据
+    todayNum = data.todayOrderNumber
+    totalNum = data.totalOrderNumber
+
+    $('#todayOrderNumber').countTo({
+      from: 0,
+      to: data.todayOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderNumber').countTo({
+      from: 0,
+      to: data.totalOrderNumber,
+      speed: 1500,
+      refreshInterval: 50,
+    })
+
+    $('#totalOrderTitle').html('总检测数')
+    $('#todayOrderTitle').html('当日检测数')
+
+    echart1.clear()
+    echart1 = echarts.init(document.getElementById('echart1'))
+
+    echart2.clear()
+    echart2 = echarts.init(document.getElementById('echart2'))
+
+    echart3.clear()
+    echart3 = echarts.init(document.getElementById('echart3'))
+
+    echart4.clear()
+    echart4 = echarts.init(document.getElementById('echart4'))
+
+    echart5.clear()
+    echart5 = echarts.init(document.getElementById('echart5'))
+
+    echart6.clear()
+    echart6 = echarts.init(document.getElementById('echart6'))
+
+    const newOption1 = formatOption1(data, option1)
+    const newOption2 = formatOption2(data, option2)
+    const newOption3 = formatOption3(data, option3)
+    const newOption4 = formatOption4(data, option4)
+    const newOption5 = formatOption5(data, option5)
+    const newOption6 = formatOption6(data, option6)
+
+    echart1.setOption(newOption1, true)
+    echart2.setOption(newOption2, true)
+    echart3.setOption(newOption3, true)
+    echart4.setOption(newOption4, true)
+    echart5.setOption(newOption5, true)
+    echart6.setOption(newOption6, true)
+
+    $('#title1').html('区县检测累计数')
+    $('#title2').html('月度检测数量')
+    $('#title3').html('区县当日检测量排名')
+    $('#title4').html('机构检测累计量排名')
+    $('#title5').html('区县目标完成度')
+    $('#title6').html('高风险复查比')
+  }
+
+  // ===========================================================
 
   // ===========================================================
 
@@ -840,4 +1096,3 @@ function compare(p) {
     return b - a
   }
 }
-

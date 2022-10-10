@@ -2,9 +2,11 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>健康中国·新乡行动</title>
     <script type="text/javascript" src="./js/jquery.js"></script>
     <link rel="stylesheet" href="./css/index.css" />
+    <link rel="stylesheet" type="text/css" href="./css/mobile-select.css" />
   </head>
 
   <body>
@@ -42,7 +44,7 @@
       <div class="map">
         <div class="map4" id="echart7" style="display: none"></div>
       </div>
-      <ul class="clearfix">
+      <ul class="clearfix main-box">
         <li class="left-box">
           <div class="boxall">
             <div class="alltitle" id="title1">区县累计数</div>
@@ -65,9 +67,6 @@
         <li class="center-box">
           <div class="bar">
             <button id="showBarChart">隐藏检测点</button>
-<!--            <button id="mapShine">恢复地图全亮</button>-->
-<!--            <button id="fire1">fire1</button>-->
-<!--            <button id="fire2">fire2</button>-->
             <div class="barbox">
               <ul class="clearfix">
                 <li class="pulll_left counter num-scroll-1" id="totalOrderNumber">1234567890</li>
@@ -84,6 +83,7 @@
           <div class="map">
             <div class="map4" id="echart7"></div>
           </div>
+          <div id="selectButton"></div>
         </li>
         <li class="right-box">
           <div class="boxall">
@@ -110,6 +110,7 @@
 
     <script type="text/javascript" src="./js/echarts/echarts.min.js"></script>
     <script type="text/javascript" src="./js/echarts-liquidfill.min.js"></script>
+    <script type="text/javascript" src="./js/mobile-select.iife.min.js" ></script>
     <!-- <script type="text/javascript" src="./js/echarts/echarts-gl.min.js"></script> -->
     <script type="text/javascript" src="./js/anime.min.js"></script>
     <script type="text/javascript" src="./js/jquery.countTo.js"></script>
