@@ -47,6 +47,11 @@ $(window).load(function () {
   if (os.isAndroid || os.isPhone) {
     document.querySelector('body').classList.add('mobile')
     document.getElementById('showBarChart').style.display = 'none'
+    document.getElementById('provinceInfo').style.display = 'none'
+    document.getElementById('districtInfo').style.display = 'none'
+    document.getElementById('placeInfo').style.display = 'none'
+  } else {
+    document.getElementById('selectButton').style.display = 'none'
   }
 
   var whei = $(window).width()
@@ -502,7 +507,7 @@ $(window).load(function () {
 
   // ===========================================================
 
-  // 移动端柱状图点击事件
+  // 移动端下拉框事件
   if (os.isAndroid || os.isPhone) {
     window.handleGetAllData = null
     window.handleGetCityData = null
@@ -528,13 +533,15 @@ $(window).load(function () {
             { id: '1548977250742546434', value: '新乡县' },
             { id: '1548972316814979074', value: '卫辉市' },
             { id: '1548975926726602754', value: '获嘉县' },
-            { id: '1548962078510526465', value: '平原新' },
+            { id: '1548962078510526465', value: '平原新区' },
           ],
         },
       ],
       initValue: '全部区县',
       onChange: function (data, indexArr, msInstance) {
         if (data[0].id !== 'null') {
+          window.targetPlaceId = data[0].id
+          window.targetPlaceName = data[0].value
           $.ajax({
             url: getCityDataUrl(),
             data: {
@@ -558,6 +565,8 @@ $(window).load(function () {
             },
           })
         } else {
+          window.targetPlaceId = null
+          window.targetPlaceName = ''
           $.ajax({
             url: getAllDataUrl(),
             type: 'POST',

@@ -634,6 +634,7 @@ a:hover {
   left: 0;
   z-index: 999;
 }
+
 #load .load_img {
   position: absolute;
   left: calc(50% - 182px);
@@ -790,7 +791,7 @@ a:hover {
 
 .mobile .head, .mobile .header-wrap {
   width: 100%;
-  height: 32em;
+  height: 4.4rem;
   position: inherit;
   left: inherit;
   top: inherit;
@@ -801,7 +802,7 @@ a:hover {
 
 .mobile .header-wrap img {
   max-width: 100%;
-  max-height: 20em;
+  max-height: 2.9rem;
 }
 
 .mobile .main-box {
@@ -813,14 +814,13 @@ a:hover {
   width: 100% !important;
   height: auto;
   order: 1;
-  margin-top: 7em;
 }
 
 .mobile .center-box {
   position: relative;
   width: 100% !important;
   order: 0;
-  margin-bottom: 16.5em;
+  margin-bottom: 3em;
 }
 
 .mobile .center-box .barbox li {
@@ -842,12 +842,13 @@ a:hover {
   height: 40vh;
 }
 
+.mobile .boxall:last-child {
+  margin-bottom: 4em;
+}
+
 #selectButton {
   opacity: 0;
-  position: absolute;
-  right: 5px;
-  bottom: -40px;
-  display: inline-block;
+  float: right;
   font-weight: 400;
   white-space: nowrap;
   text-align: center;
@@ -859,8 +860,9 @@ a:hover {
   -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
-  padding: 8px 15px;
-  font-size: 0.15rem;
+  padding: 0.4rem 0.6rem;
+  margin: 0.3rem 0.1rem 0;
+  font-size: 0.75rem;
   border-radius: 2px;
   color: #fff;
   border-color: transparent;
