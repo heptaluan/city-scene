@@ -44,14 +44,65 @@ $(window).load(function () {
     }
   })()
 
+  const selectButton = document.getElementById('selectButton')
+
   if (os.isAndroid || os.isPhone) {
     document.querySelector('body').classList.add('mobile')
     document.getElementById('showBarChart').style.display = 'none'
     document.getElementById('provinceInfo').style.display = 'none'
     document.getElementById('districtInfo').style.display = 'none'
     document.getElementById('placeInfo').style.display = 'none'
+    document.getElementById('mark').style.opacity = '1'
+    // 添加点击提示
+    if (localStorage.getItem('clicked') !== 'true') {
+      const top = selectButton.getBoundingClientRect().top
+      $('.tips').css({
+        top: top - 3 + 'px',
+      })
+      setTimeout(() => {
+        $('.tips-box').fadeIn(800)
+        $('#selectButton').css({
+          background: 'rgb(130 154 231 / 60%)',
+        })
+      }, 2500)
+      $('.mobile').css('overflow', 'hidden')
+    }
+
+    $(document).on('click', function () {
+      if (os.isAndroid || os.isPhone) {
+        localStorage.setItem('clicked', 'true')
+        $('.mobile').css({
+          'overflow-y': 'auto',
+          'overflow-x': 'hidden',
+        })
+        $('.tips-box').fadeOut(500)
+        $('#selectButton').css({
+          background: 'rgba(101, 132, 226, 0.1)',
+        })
+      }
+    })
+
+    window.addEventListener('orientationchange', windowResize)
+
+    windowResize()
+    function windowResize() {
+      let box = document.querySelector('#box')
+      if (window.orientation == 90 || window.orientation == -90) {
+        // 横屏
+        $('body').css({
+          background: '#000',
+        })
+      } else {
+        // 竖屏
+        $('body').css({
+          background: 'url(../images/loginBg.jpg)',
+          backgroundSize: '100% 100%',
+        })
+      }
+    }
   } else {
-    document.getElementById('selectButton').style.display = 'none'
+    document.getElementById('mark').style.display = 'none'
+    selectButton.style.display = 'none'
   }
 
   var whei = $(window).width()
@@ -409,7 +460,7 @@ $(window).load(function () {
         const newOption1 = formatOption1(data, option1, name)
         const newOption2 = formatOption2(data, option2)
         const newOption3 = formatOption3(data, option3, name)
-        const newOption4 = formatOption4(data, option4)
+        const newOption4 = formatOption4(data, option4, name)
         const newOption51 = formatOption51(data, option51)
         const newOption61 = formatOption61(data, option61)
 
@@ -638,7 +689,7 @@ $(window).load(function () {
     const newOption1 = formatOption1(data, option1, name)
     const newOption2 = formatOption2(data, option2)
     const newOption3 = formatOption3(data, option3, name)
-    const newOption4 = formatOption4(data, option4)
+    const newOption4 = formatOption4(data, option4, name)
     const newOption51 = formatOption51(data, option51)
     const newOption61 = formatOption61(data, option61)
 
@@ -916,7 +967,7 @@ $(window).load(function () {
     const newOption1 = formatOption1(data, option1, name)
     const newOption2 = formatOption2(data, option2)
     const newOption3 = formatOption3(data, option3, name)
-    const newOption4 = formatOption4(data, option4)
+    const newOption4 = formatOption4(data, option4, name)
     const newOption51 = formatOption51(data, option51)
     const newOption61 = formatOption61(data, option61)
 

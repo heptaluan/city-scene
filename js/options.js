@@ -155,7 +155,17 @@ export const option1 = {
 
 export const formatOption1 = (data, option, name) => {
   if (os.isAndroid || os.isPhone) {
-    const list = data.countyList ? data.countyList : data.placeList
+    let list = data.countyList ? data.countyList : data.placeList
+    let newList = []
+
+    if (list.length > 16) {
+      for (let i = 0; i < list.length; i++) {
+        if (i % 2 === 0) {
+          newList.push(list[i])
+        }
+      }
+      list = newList
+    }
 
     const xAxisData = []
     const seriesData = []
@@ -197,7 +207,6 @@ export const formatOption1 = (data, option, name) => {
           },
         },
         axisLabel: {
-          margin: 10,
           textStyle: {
             color: 'rgba(255, 255, 255, 0.8)',
             fontSize: 11,
@@ -562,7 +571,7 @@ export const option3 = {
 export const formatOption3 = (data, option, name) => {
   let list = data.todayCountList
 
-  if (window.targetPlaceId) {
+  if (window.targetPlaceId && list.length > 5) {
     list.length = 5
   }
 
@@ -684,13 +693,13 @@ export const option4 = {
   },
 }
 
-export const formatOption4 = (data, option) => {
+export const formatOption4 = (data, option, name) => {
   const list = data.placeTop5List
   const xAxisData = []
   const seriesData = []
 
   for (let i = 0; i < list.length; i++) {
-    xAxisData.push(list[i].name)
+    xAxisData.push(list[i].name.replace(name, ''))
     seriesData.push(list[i].num)
   }
 
