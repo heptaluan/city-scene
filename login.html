@@ -46,6 +46,13 @@
       </div>
     </div>
     <div id="particles-js"></div>
+    <!-- 提醒用户竖屏 -->
+    <div id="mark">
+      <div class="mark-box">
+        <i class="icon-phone"></i>
+        <p class="message">为了更好的体验，请使用竖屏方式浏览</p>
+      </div>
+    </div>
   </body>
   <script type="text/javascript" src="./js/jquery.js"></script>
   <script type="text/javascript" src="./js/jquery.animsition.js"></script>
@@ -178,12 +185,48 @@
       window.location = './index.html'
     }
 
-    if (
-      window.navigator.userAgent.match(
-        /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
-      )
-    ) {
+    var os = (function () {
+      var ua = navigator.userAgent,
+        isWindowsPhone = /(?:Windows Phone)/.test(ua),
+        isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+        isAndroid = /(?:Android)/.test(ua),
+        isFireFox = /(?:Firefox)/.test(ua),
+        isTablet =
+          /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+        isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+        isPc = !isPhone && !isAndroid && !isSymbian
+      return {
+        isTablet: isTablet,
+        isPhone: isPhone,
+        isAndroid: isAndroid,
+        isPc: isPc,
+      }
+    })()
+
+    if (os.isAndroid || os.isPhone) {
       document.querySelector('.wp').classList.add('mobile')
+      document.getElementById('mark').style.opacity = '1'
+
+      window.addEventListener('orientationchange', windowResize)
+
+      windowResize()
+      function windowResize() {
+        let box = document.querySelector('#box')
+        if (window.orientation == 90 || window.orientation == -90) {
+          // 横屏
+          $('body').css({
+            background: '#000',
+          })
+        } else {
+          // 竖屏
+          $('body').css({
+            background: 'url(../images/loginBg.jpg)',
+            backgroundSize: '100% 100%',
+          })
+        }
+      }
+    } else {
+      document.getElementById('mark').style.display = 'none'
     }
 
     $('.animsition').animsition({

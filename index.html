@@ -2,11 +2,12 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>健康中国·新乡行动</title>
     <script type="text/javascript" src="./js/jquery.js"></script>
     <link rel="stylesheet" href="./css/index.css" />
     <link rel="stylesheet" type="text/css" href="./css/mobile-select.css" />
+    <link rel="stylesheet" type="text/css" href="./css/tips.css" />
   </head>
 
   <body>
@@ -34,7 +35,7 @@
         <span id="time"></span>
       </div>
       <div class="header-wrap">
-        <img src="./images/title.png" alt="标题">
+        <img src="./images/title.png" alt="标题" />
       </div>
       <h1>泛肿瘤普早筛</h1>
       <h4>全域智慧管理数字系统</h4>
@@ -106,11 +107,27 @@
     </div>
     <div class="back"></div>
 
+    <!-- 区县切换提示 -->
+    <div class="tips-box">
+      <div class="tips">
+        <span>点击这里可以进行区县的切换选择</span>
+        <div class="arrowDown"></div>
+      </div>
+    </div>
+
+    <!-- 提醒用户竖屏 -->
+    <div id="mark">
+      <div class="mark-box">
+        <i class="icon-phone"></i>
+        <p class="message">为了更好的体验，请使用竖屏方式浏览</p>
+      </div>
+    </div>
+
     <canvas id="canvas" style="position: absolute; top: 0; left: 0; z-index: -1"></canvas>
 
     <script type="text/javascript" src="./js/echarts/echarts.min.js"></script>
     <script type="text/javascript" src="./js/echarts-liquidfill.min.js"></script>
-    <script type="text/javascript" src="./js/mobile-select.iife.min.js" ></script>
+    <script type="text/javascript" src="./js/mobile-select.iife.min.js"></script>
     <!-- <script type="text/javascript" src="./js/echarts/echarts-gl.min.js"></script> -->
     <script type="text/javascript" src="./js/anime.min.js"></script>
     <script type="text/javascript" src="./js/jquery.countTo.js"></script>
