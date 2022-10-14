@@ -261,8 +261,12 @@ $(window).load(function () {
       })
     }, 1000)
 
-    line = new lineMap(data, geoData)
-    line.init()
+    if (os.isAndroid || os.isPhone) {
+      console.log(`移动端`)
+    } else {
+      line = new lineMap(data, geoData)
+      line.init()
+    }
 
     anime({
       targets: '.mapContainer',
